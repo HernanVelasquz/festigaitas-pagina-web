@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Menu, X } from 'lucide-react';
 
-type Page = 'home' | 'historia' | 'documentos';
+type Page = 'home' | 'documentos';
 
 interface NavbarProps {
   onNavigate: (page: Page) => void;
@@ -11,11 +11,9 @@ interface NavbarProps {
 const scrollLinks = [
   { label: 'Inicio',       href: '#inicio' },
   { label: 'Ganadores',    href: '#ganadores' },
-  { label: 'Experiencias', href: '#experiencias' },
 ];
 
 const pageLinks: { label: string; page: Page }[] = [
-  { label: 'Historia',   page: 'historia' },
   { label: 'Documentos', page: 'documentos' },
 ];
 
@@ -54,9 +52,9 @@ export default function Navbar({ onNavigate, activePage }: NavbarProps) {
         {/* Logo */}
         <button
           onClick={() => { setMobileOpen(false); onNavigate('home'); }}
-          className="font-display font-black text-sm tracking-widest3 uppercase text-white hover:text-brand-400 transition-colors"
+          className="flex items-center transition-opacity hover:opacity-85"
         >
-          Festival de Gaitas
+          <img src="/logo.png" alt="Festival de Gaitas" className="h-9 w-auto object-contain" />
         </button>
 
         {/* Desktop nav */}
@@ -90,12 +88,7 @@ export default function Navbar({ onNavigate, activePage }: NavbarProps) {
             </button>
           ))}
 
-          <button
-            onClick={() => goSection('#ganadores')}
-            className="ml-4 px-5 py-2 bg-brand-500 hover:bg-brand-400 text-ink-900 font-display font-bold text-xs tracking-widest uppercase transition-colors duration-200"
-          >
-            Tickets
-          </button>
+
         </div>
 
         {/* Mobile toggle */}
@@ -136,12 +129,7 @@ export default function Navbar({ onNavigate, activePage }: NavbarProps) {
             ))}
           </div>
 
-          <button
-            onClick={() => goSection('#ganadores')}
-            className="block w-full mt-3 py-3 px-5 bg-brand-500 text-ink-900 font-display font-bold text-xs tracking-widest uppercase text-center"
-          >
-            Tickets
-          </button>
+
         </div>
       )}
     </nav>

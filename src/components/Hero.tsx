@@ -26,21 +26,7 @@ export default function Hero() {
             Francisco Llirene
           </p>
 
-          <div className="mt-10 flex items-center gap-6 flex-wrap">
-            <button
-              onClick={() => go('#historia')}
-              className="px-7 py-3 border border-brand-500 text-white font-display font-bold text-xs tracking-widest uppercase hover:bg-brand-500/10 transition-colors duration-300"
-            >
-              Explorar Programa
-            </button>
-            <button
-              onClick={() => go('#experiencias')}
-              className="font-display font-bold text-xs tracking-widest uppercase text-ink-400 hover:text-white transition-colors duration-300 flex items-center gap-2"
-            >
-              Ver Galería
-              <span className="text-brand-400">→</span>
-            </button>
-          </div>
+
         </div>
 
         {/* Right — hero image */}
@@ -50,7 +36,7 @@ export default function Hero() {
             <div className="absolute left-0 top-0 w-1 h-3/4 bg-brand-500" />
 
             <img
-              src="/WhatsApp_Image_2026-06-12_at_19.12.11_(1).jpeg"
+              src="/principal-image.jpeg"
               alt="Músico en el Festival de Gaitas"
               className="w-full h-[60vh] lg:h-[80vh] object-cover object-center brightness-90"
             />

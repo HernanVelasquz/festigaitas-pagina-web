@@ -6,11 +6,10 @@ import Timeline from './components/Timeline';
 import Momentos from './components/Momentos';
 import Ganadores from './components/Ganadores';
 import Footer from './components/Footer';
-import HistoriaPage from './components/HistoriaPage';
 import DocumentosPage from './components/DocumentosPage';
 import MusicPlayer from './components/MusicPlayer';
 
-type Page = 'home' | 'historia' | 'documentos';
+type Page = 'home' | 'documentos';
 
 function Reveal({ children }: { children: React.ReactNode }) {
   const ref = useRef<HTMLDivElement>(null);
@@ -62,9 +61,7 @@ function App() {
         </>
       )}
 
-      {page === 'historia' && (
-        <HistoriaPage onBack={() => navigate('home')} />
-      )}
+
 
       {page === 'documentos' && (
         <DocumentosPage onBack={() => navigate('home')} />

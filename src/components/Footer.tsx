@@ -1,6 +1,6 @@
 import { ArrowUp } from 'lucide-react';
 
-type Page = 'home' | 'historia' | 'documentos';
+type Page = 'home' | 'documentos';
 
 interface FooterProps {
   onNavigate: (page: Page) => void;
@@ -14,7 +14,6 @@ const explore: ExploreLink[] = [
   { label: 'Programación 2026',     href: '#ganadores' },
   { label: 'Reglamento Competencia', href: '#' },
   { label: 'Prensa & Acreditaciones', href: '#' },
-  { label: 'Historia del Festival',  page: 'historia' },
   { label: 'Documentos Legales',     page: 'documentos' },
 ];
 
