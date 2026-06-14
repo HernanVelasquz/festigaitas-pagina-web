@@ -40,7 +40,7 @@ export default function Latido() {
         {/* Right image */}
         <div className="relative">
           <img
-            src="https://images.pexels.com/photos/1190298/pexels-photo-1190298.jpeg?auto=compress&cs=tinysrgb&w=900"
+            src="/latido.jpeg"
             alt="Vista aérea de la Plaza Francisco Llirene durante el festival"
             className="w-full aspect-[4/5] object-cover grayscale-[30%] contrast-110"
           />
@@ -48,7 +48,7 @@ export default function Latido() {
           <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-ink-900/90 to-transparent p-6 flex items-end justify-between">
             <div>
               <span className="section-label block mb-1">Ubicación Central</span>
-              <p className="font-display font-bold text-lg tracking-wider text-white uppercase">Plaza Francisco Llirene</p>
+              <p className="font-display font-bold text-lg tracking-wider text-white uppercase">Plaza Principal de Ovejas</p>
             </div>
             <span className="text-brand-400 text-xl">📍</span>
           </div>
