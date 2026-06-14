@@ -4,7 +4,6 @@ import Hero from './components/Hero';
 import Latido from './components/Latido';
 import Timeline from './components/Timeline';
 import Momentos from './components/Momentos';
-import Ganadores from './components/Ganadores';
 import Footer from './components/Footer';
 import DocumentosPage from './components/DocumentosPage';
 import MusicPlayer from './components/MusicPlayer';
@@ -29,9 +28,8 @@ function Reveal({ children }: { children: React.ReactNode }) {
   return (
     <div
       ref={ref}
-      className={`transition-all duration-700 ease-out ${
-        visible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-6'
-      }`}
+      className={`transition-all duration-700 ease-out ${visible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-6'
+        }`}
     >
       {children}
     </div>
@@ -56,7 +54,7 @@ function App() {
           <Reveal><Latido /></Reveal>
           <Reveal><Timeline /></Reveal>
           <Reveal><Momentos /></Reveal>
-          <Reveal><Ganadores /></Reveal>
+          {/* <Reveal><Ganadores /></Reveal> */}
           <Footer onNavigate={navigate} />
         </>
       )}

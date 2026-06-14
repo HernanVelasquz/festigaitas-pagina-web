@@ -9,8 +9,8 @@ interface NavbarProps {
 }
 
 const scrollLinks = [
-  { label: 'Inicio',       href: '#inicio' },
-  { label: 'Ganadores',    href: '#ganadores' },
+  { label: 'Inicio', href: '#inicio' },
+  // { label: 'Ganadores',    href: '#ganadores' },
 ];
 
 const pageLinks: { label: string; page: Page }[] = [
@@ -18,7 +18,7 @@ const pageLinks: { label: string; page: Page }[] = [
 ];
 
 export default function Navbar({ onNavigate, activePage }: NavbarProps) {
-  const [scrolled, setScrolled]     = useState(false);
+  const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
 
   useEffect(() => {
@@ -44,9 +44,8 @@ export default function Navbar({ onNavigate, activePage }: NavbarProps) {
 
   return (
     <nav
-      className={`fixed inset-x-0 top-0 z-50 transition-all duration-500 ${
-        scrolled ? 'bg-ink-900/95 backdrop-blur border-b border-white/5' : ''
-      }`}
+      className={`fixed inset-x-0 top-0 z-50 transition-all duration-500 ${scrolled ? 'bg-ink-900/95 backdrop-blur border-b border-white/5' : ''
+        }`}
     >
       <div className="max-w-7xl mx-auto px-6 lg:px-10 h-14 flex items-center justify-between">
         {/* Logo */}
@@ -78,11 +77,10 @@ export default function Navbar({ onNavigate, activePage }: NavbarProps) {
             <button
               key={l.page}
               onClick={() => goPage(l.page)}
-              className={`px-4 py-2 font-display font-semibold text-xs tracking-widest uppercase transition-colors duration-200 ${
-                activePage === l.page
+              className={`px-4 py-2 font-display font-semibold text-xs tracking-widest uppercase transition-colors duration-200 ${activePage === l.page
                   ? 'text-brand-400'
                   : 'text-ink-300 hover:text-white'
-              }`}
+                }`}
             >
               {l.label}
             </button>
@@ -120,9 +118,8 @@ export default function Navbar({ onNavigate, activePage }: NavbarProps) {
               <button
                 key={l.page}
                 onClick={() => goPage(l.page)}
-                className={`block w-full text-left py-2.5 font-display font-semibold text-sm tracking-wider uppercase transition-colors ${
-                  activePage === l.page ? 'text-brand-400' : 'text-ink-300 hover:text-white'
-                }`}
+                className={`block w-full text-left py-2.5 font-display font-semibold text-sm tracking-wider uppercase transition-colors ${activePage === l.page ? 'text-brand-400' : 'text-ink-300 hover:text-white'
+                  }`}
               >
                 {l.label}
               </button>
