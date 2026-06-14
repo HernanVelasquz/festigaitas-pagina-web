@@ -1,0 +1,33 @@
+@import "tailwindcss";
+@config "../tailwind.config.js";
+
+@layer base {
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: 'Barlow', sans-serif;
+    background-color: #232124;
+    color: #ffffff;
+    -webkit-font-smoothing: antialiased;
+  }
+}
+
+@layer utilities {
+  .text-gradient-brand {
+    @apply bg-clip-text text-transparent bg-gradient-to-r from-brand-300 to-brand-500;
+  }
+  .section-label {
+    @apply text-xs font-display font-semibold tracking-widest2 uppercase text-ink-400;
+  }
+  .divider-brand {
+    @apply block w-8 h-px bg-brand-400 mt-3 mb-4;
+  }
+}
+
+::selection {
+  background-color: #C99249;
+  color: #232124;
+}
+
+::-webkit-scrollbar { width: 4px; }
+::-webkit-scrollbar-track { background: #232124; }
+::-webkit-scrollbar-thumb { background: #A8673A; border-radius: 2px; }
