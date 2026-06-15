@@ -59,21 +59,34 @@ export default function MusicPlayer() {
   const [muted, setMuted] = useState(false);
   const [visible, setVisible] = useState(false);
   const [expanded, setExpanded] = useState(false);
-  const [firstClick, setFirstClick] = useState(false);
+  const [firstClick, setFirstClick] = useState(true);
   const [currentIndex, setCurrentIndex] = useState(0);
 
   const currentSong = PLAYLIST[currentIndex];
 
-  // Show the widget after a short delay
+  // Store currentIndex in a ref to avoid stale closures in YouTube callbacks
+  const currentIndexRef = useRef(currentIndex);
   useEffect(() => {
-    const t = setTimeout(() => setVisible(true), 2000);
-    return () => clearTimeout(t);
+    currentIndexRef.current = currentIndex;
+  }, [currentIndex]);
+
+  const playSong = useCallback((index: number) => {
+    setCurrentIndex(index);
+    if (playerRef.current) {
+      setState('loading');
+      playerRef.current.loadVideoById(PLAYLIST[index].id);
+    }
   }, []);
+
+  const handleNext = useCallback(() => {
+    const nextIndex = (currentIndexRef.current + 1) % PLAYLIST.length;
+    playSong(nextIndex);
+  }, [playSong]);
 
   const initPlayer = useCallback(() => {
     if (!window.YT || !window.YT.Player || !containerRef.current) return;
     playerRef.current = new window.YT.Player(containerRef.current, {
-      videoId: currentSong.id,
+      videoId: PLAYLIST[currentIndexRef.current].id,
       playerVars: {
         autoplay: 1,
         loop: 0,
@@ -98,14 +111,14 @@ export default function MusicPlayer() {
           } else if (e.data === 3) {
             setState('loading');
           } else if (e.data === 0) {
-            // Song ended: automatically skip to next song
+            // Automatically play next song
             handleNext();
           }
         },
         onError: () => setState('idle'),
       },
     });
-  }, [currentIndex]);
+  }, [handleNext]);
 
   const loadAPI = useCallback(() => {
     if (window.YT && window.YT.Player) {
@@ -124,6 +137,15 @@ export default function MusicPlayer() {
       document.head.appendChild(tag);
     }
   }, [initPlayer]);
+
+  // Autoplay immediately on mount
+  useEffect(() => {
+    const t = setTimeout(() => setVisible(true), 1500);
+    setState('loading');
+    setExpanded(true);
+    loadAPI();
+    return () => clearTimeout(t);
+  }, [loadAPI]);
 
   const handleMainButton = () => {
     if (!firstClick) {
@@ -151,27 +173,9 @@ export default function MusicPlayer() {
     setMuted(m => !m);
   };
 
-  const playSong = (index: number) => {
-    setCurrentIndex(index);
-    if (playerRef.current) {
-      setState('loading');
-      playerRef.current.loadVideoById(PLAYLIST[index].id);
-    } else {
-      setFirstClick(true);
-      setState('loading');
-      setExpanded(true);
-      loadAPI();
-    }
-  };
-
   const handlePrev = () => {
     const prevIndex = (currentIndex - 1 + PLAYLIST.length) % PLAYLIST.length;
     playSong(prevIndex);
-  };
-
-  const handleNext = () => {
-    const nextIndex = (currentIndex + 1) % PLAYLIST.length;
-    playSong(nextIndex);
   };
 
   const isPlaying = state === 'playing';
@@ -179,9 +183,8 @@ export default function MusicPlayer() {
 
   return (
     <div
-      className={`fixed bottom-6 right-6 z-50 flex flex-col items-end gap-2 transition-all duration-700 ${
-        visible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4 pointer-events-none'
-      }`}
+      className={`fixed bottom-6 right-6 z-50 flex flex-col items-end gap-2 transition-all duration-700 ${visible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4 pointer-events-none'
+        }`}
     >
       {/* Expanded label */}
       {expanded && (
@@ -248,11 +251,10 @@ export default function MusicPlayer() {
         <button
           onClick={handleMainButton}
           title={!firstClick ? 'Reproducir música del festival' : isPlaying ? 'Pausar' : 'Reproducir'}
-          className={`relative flex items-center gap-2.5 pl-3 pr-4 h-10 font-display font-bold text-xs tracking-widest uppercase transition-all duration-300 overflow-hidden ${
-            isPlaying
+          className={`relative flex items-center gap-2.5 pl-3 pr-4 h-10 font-display font-bold text-xs tracking-widest uppercase transition-all duration-300 overflow-hidden ${isPlaying
               ? 'bg-brand-500 border border-brand-400 text-ink-900 hover:bg-brand-400'
               : 'bg-ink-800/90 backdrop-blur border border-white/10 text-ink-300 hover:text-white hover:border-brand-500/40'
-          }`}
+            }`}
         >
           {/* Ripple when playing */}
           {isPlaying && (

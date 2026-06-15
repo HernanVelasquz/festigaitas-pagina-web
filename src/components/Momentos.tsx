@@ -1,4 +1,4 @@
-import { useState, useRef } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 
 interface Moment {
@@ -21,6 +21,23 @@ export default function Momentos() {
   const [offset, setOffset] = useState(0);
   const trackRef = useRef<HTMLDivElement>(null);
   const visible = 3;
+  const [inView, setInView] = useState(false);
+
+  useEffect(() => {
+    const el = trackRef.current;
+    if (!el) return;
+    const obs = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setInView(true);
+          obs.unobserve(el);
+        }
+      },
+      { threshold: 0.05 }
+    );
+    obs.observe(el);
+    return () => obs.disconnect();
+  }, []);
 
   const max = Math.max(0, moments.length - visible);
   const prev = () => setOffset(o => Math.max(0, o - 1));
@@ -64,8 +81,13 @@ export default function Momentos() {
             {moments.map((m, i) => (
               <div
                 key={m.id}
-                className="relative flex-none w-[calc(33.333%-1rem)] aspect-[4/3] overflow-hidden group"
-                style={{ minWidth: 'calc(33.333% - 0.5rem)' }}
+                className="relative flex-none w-[calc(33.333%-1rem)] aspect-[4/3] overflow-hidden group transition-all duration-1000 ease-out"
+                style={{
+                  minWidth: 'calc(33.333% - 0.5rem)',
+                  transform: inView ? 'translateY(0)' : 'translateY(3rem)',
+                  opacity: inView ? 1 : 0,
+                  transitionDelay: `${i * 120}ms`
+                }}
               >
                 <img
                   src={m.image_url}

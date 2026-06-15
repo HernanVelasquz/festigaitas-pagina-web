@@ -51,7 +51,7 @@ export default function Hero() {
             <img
               src="/principal-image.jpeg"
               alt="Músico en el Festival de Gaitas"
-              className="w-full h-[60vh] lg:h-[80vh] object-cover object-center brightness-90"
+              className="w-full h-[60vh] lg:h-[80vh] object-cover object-center brightness-90 animate-fade-in-up"
             />
 
             {/* Fade bottom */}
