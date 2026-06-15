@@ -1,4 +1,25 @@
+import { useEffect, useRef, useState } from 'react';
+
 export default function Latido() {
+  const imgRef = useRef<HTMLDivElement>(null);
+  const [imgVisible, setImgVisible] = useState(false);
+
+  useEffect(() => {
+    const el = imgRef.current;
+    if (!el) return;
+    const obs = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setImgVisible(true);
+          obs.unobserve(el);
+        }
+      },
+      { threshold: 0.1 }
+    );
+    obs.observe(el);
+    return () => obs.disconnect();
+  }, []);
+
   return (
     <section id="historia" className="bg-ink-900 py-24 lg:py-32">
       <div className="max-w-7xl mx-auto px-6 lg:px-10 grid lg:grid-cols-2 gap-16 items-center">
@@ -38,9 +59,14 @@ export default function Latido() {
         </div>
 
         {/* Right image */}
-        <div className="relative">
+        <div
+          ref={imgRef}
+          className={`relative transition-all duration-1000 ease-out ${
+            imgVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-12'
+          }`}
+        >
           <img
-            src="https://images.pexels.com/photos/1190298/pexels-photo-1190298.jpeg?auto=compress&cs=tinysrgb&w=900"
+            src="/latido.jpeg"
             alt="Vista aérea de la Plaza Francisco Llirene durante el festival"
             className="w-full aspect-[4/5] object-cover grayscale-[30%] contrast-110"
           />
@@ -48,7 +74,7 @@ export default function Latido() {
           <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-ink-900/90 to-transparent p-6 flex items-end justify-between">
             <div>
               <span className="section-label block mb-1">Ubicación Central</span>
-              <p className="font-display font-bold text-lg tracking-wider text-white uppercase">Plaza Francisco Llirene</p>
+              <p className="font-display font-bold text-lg tracking-wider text-white uppercase">Plaza Principal de Ovejas</p>
             </div>
             <span className="text-brand-400 text-xl">📍</span>
           </div>

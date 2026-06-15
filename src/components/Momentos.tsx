@@ -1,6 +1,5 @@
 import { useEffect, useState, useRef } from 'react';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
-import { supabase } from '../lib/supabase';
 
 interface Moment {
   id: string;
@@ -8,18 +7,36 @@ interface Moment {
   alt_text: string | null;
 }
 
+const LOCAL_MOMENTS: Moment[] = [
+  { id: '1', image_url: '/moment-one.jpeg', alt_text: 'Momento uno' },
+  { id: '2', image_url: '/moment-two.jpeg', alt_text: 'Momento dos' },
+  { id: '3', image_url: '/moment-three.jpeg', alt_text: 'Momento tres' },
+  { id: '4', image_url: '/moment-for.jpeg', alt_text: 'Momento cuatro' },
+  { id: '5', image_url: '/moment-five.jpeg', alt_text: 'Momento cinco' },
+  { id: '6', image_url: '/moment-six.jpeg', alt_text: 'Momento seis' },
+];
+
 export default function Momentos() {
-  const [moments, setMoments] = useState<Moment[]>([]);
+  const [moments] = useState<Moment[]>(LOCAL_MOMENTS);
   const [offset, setOffset] = useState(0);
   const trackRef = useRef<HTMLDivElement>(null);
   const visible = 3;
+  const [inView, setInView] = useState(false);
 
   useEffect(() => {
-    supabase
-      .from('moments_gallery')
-      .select('*')
-      .order('sort_order', { ascending: true })
-      .then(({ data }) => { if (data) setMoments(data); });
+    const el = trackRef.current;
+    if (!el) return;
+    const obs = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setInView(true);
+          obs.unobserve(el);
+        }
+      },
+      { threshold: 0.05 }
+    );
+    obs.observe(el);
+    return () => obs.disconnect();
   }, []);
 
   const max = Math.max(0, moments.length - visible);
@@ -64,8 +81,13 @@ export default function Momentos() {
             {moments.map((m, i) => (
               <div
                 key={m.id}
-                className="relative flex-none w-[calc(33.333%-1rem)] aspect-[3/4] overflow-hidden group"
-                style={{ minWidth: 'calc(33.333% - 0.5rem)' }}
+                className="relative flex-none w-[calc(33.333%-1rem)] aspect-[4/3] overflow-hidden group transition-all duration-1000 ease-out"
+                style={{
+                  minWidth: 'calc(33.333% - 0.5rem)',
+                  transform: inView ? 'translateY(0)' : 'translateY(3rem)',
+                  opacity: inView ? 1 : 0,
+                  transitionDelay: `${i * 120}ms`
+                }}
               >
                 <img
                   src={m.image_url}
@@ -78,6 +100,13 @@ export default function Momentos() {
               </div>
             ))}
           </div>
+        </div>
+
+        {/* Attribution note */}
+        <div className="mt-6">
+          <p className="text-[11px] font-body text-ink-500 italic">
+            * Imágenes tomadas de los recursos visuales de la alcaldía del municipio de Ovejas.
+          </p>
         </div>
       </div>
     </section>

@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Menu, X } from 'lucide-react';
 
-type Page = 'home' | 'historia' | 'documentos';
+type Page = 'home' | 'documentos';
 
 interface NavbarProps {
   onNavigate: (page: Page) => void;
@@ -9,18 +9,16 @@ interface NavbarProps {
 }
 
 const scrollLinks = [
-  { label: 'Inicio',       href: '#inicio' },
-  { label: 'Ganadores',    href: '#ganadores' },
-  { label: 'Experiencias', href: '#experiencias' },
+  { label: 'Inicio', href: '#inicio' },
+  // { label: 'Ganadores',    href: '#ganadores' },
 ];
 
 const pageLinks: { label: string; page: Page }[] = [
-  { label: 'Historia',   page: 'historia' },
   { label: 'Documentos', page: 'documentos' },
 ];
 
 export default function Navbar({ onNavigate, activePage }: NavbarProps) {
-  const [scrolled, setScrolled]     = useState(false);
+  const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
 
   useEffect(() => {
@@ -46,17 +44,16 @@ export default function Navbar({ onNavigate, activePage }: NavbarProps) {
 
   return (
     <nav
-      className={`fixed inset-x-0 top-0 z-50 transition-all duration-500 ${
-        scrolled ? 'bg-ink-900/95 backdrop-blur border-b border-white/5' : ''
-      }`}
+      className={`fixed inset-x-0 top-0 z-50 transition-all duration-500 ${scrolled ? 'bg-ink-900/95 backdrop-blur border-b border-white/5' : ''
+        }`}
     >
       <div className="max-w-7xl mx-auto px-6 lg:px-10 h-14 flex items-center justify-between">
         {/* Logo */}
         <button
           onClick={() => { setMobileOpen(false); onNavigate('home'); }}
-          className="font-display font-black text-sm tracking-widest3 uppercase text-white hover:text-brand-400 transition-colors"
+          className="flex items-center transition-opacity hover:opacity-85"
         >
-          Festival de Gaitas
+          <img src="/logo.png" alt="Festival de Gaitas" className="h-9 w-auto object-contain" />
         </button>
 
         {/* Desktop nav */}
@@ -80,22 +77,16 @@ export default function Navbar({ onNavigate, activePage }: NavbarProps) {
             <button
               key={l.page}
               onClick={() => goPage(l.page)}
-              className={`px-4 py-2 font-display font-semibold text-xs tracking-widest uppercase transition-colors duration-200 ${
-                activePage === l.page
+              className={`px-4 py-2 font-display font-semibold text-xs tracking-widest uppercase transition-colors duration-200 ${activePage === l.page
                   ? 'text-brand-400'
                   : 'text-ink-300 hover:text-white'
-              }`}
+                }`}
             >
               {l.label}
             </button>
           ))}
 
-          <button
-            onClick={() => goSection('#ganadores')}
-            className="ml-4 px-5 py-2 bg-brand-500 hover:bg-brand-400 text-ink-900 font-display font-bold text-xs tracking-widest uppercase transition-colors duration-200"
-          >
-            Tickets
-          </button>
+
         </div>
 
         {/* Mobile toggle */}
@@ -127,21 +118,15 @@ export default function Navbar({ onNavigate, activePage }: NavbarProps) {
               <button
                 key={l.page}
                 onClick={() => goPage(l.page)}
-                className={`block w-full text-left py-2.5 font-display font-semibold text-sm tracking-wider uppercase transition-colors ${
-                  activePage === l.page ? 'text-brand-400' : 'text-ink-300 hover:text-white'
-                }`}
+                className={`block w-full text-left py-2.5 font-display font-semibold text-sm tracking-wider uppercase transition-colors ${activePage === l.page ? 'text-brand-400' : 'text-ink-300 hover:text-white'
+                  }`}
               >
                 {l.label}
               </button>
             ))}
           </div>
 
-          <button
-            onClick={() => goSection('#ganadores')}
-            className="block w-full mt-3 py-3 px-5 bg-brand-500 text-ink-900 font-display font-bold text-xs tracking-widest uppercase text-center"
-          >
-            Tickets
-          </button>
+
         </div>
       )}
     </nav>
