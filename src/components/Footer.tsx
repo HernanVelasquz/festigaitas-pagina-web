@@ -11,10 +11,10 @@ type ExploreLink =
   | { label: string; page: Page; href?: never };
 
 const explore: ExploreLink[] = [
-  { label: 'Programación 2026',     href: '#ganadores' },
+  { label: 'Programación 2026', href: '#' },
   { label: 'Reglamento Competencia', href: '#' },
   { label: 'Prensa & Acreditaciones', href: '#' },
-  { label: 'Documentos Legales',     page: 'documentos' },
+  { label: 'Documentos Legales', page: 'documentos' },
 ];
 
 export default function Footer({ onNavigate }: FooterProps) {

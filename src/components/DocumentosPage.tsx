@@ -127,6 +127,20 @@ const expiresShortly = (expiry: string | null) => {
   return diff > 0 && diff < 1000 * 60 * 60 * 24 * 90; // 90 days
 };
 
+const getDocumentUrl = (path: string | null): string | null => {
+  if (!path) return null;
+  if (path.startsWith('http://') || path.startsWith('https://')) {
+    return path;
+  }
+  const { data } = supabase.storage
+    .from('digital-assets-statics-documents')
+    .getPublicUrl(path);
+
+  console.log(data?.publicUrl)
+
+  return data?.publicUrl || null;
+};
+
 interface DocumentCardProps {
   doc: LegalDocument;
 }
@@ -136,6 +150,7 @@ function DocumentCard({ doc }: DocumentCardProps) {
   const Icon = cfg.icon;
   const expired = isExpired(doc.expiry_date);
   const soonExpires = expiresShortly(doc.expiry_date);
+  const resolvedUrl = getDocumentUrl(doc.file_url);
 
   return (
     <div
@@ -202,15 +217,16 @@ function DocumentCard({ doc }: DocumentCardProps) {
 
         {/* Action */}
         <div className="pt-2">
-          {doc.file_url ? (
+          {resolvedUrl ? (
             <a
-              href={doc.file_url}
+              href={resolvedUrl}
               target="_blank"
               rel="noopener noreferrer"
+              download
               className={`inline-flex items-center gap-2 px-5 py-2.5 border font-display font-bold text-xs tracking-widest uppercase transition-all duration-200 ${cfg.border} ${cfg.color} hover:bg-white/5`}
             >
               <Download className="w-3.5 h-3.5" />
-              Ver Documento
+              Ver / Descargar Documento
               <ExternalLink className="w-3 h-3 opacity-60" />
             </a>
           ) : (
@@ -249,9 +265,9 @@ export default function DocumentosPage({ onBack }: DocumentosPageProps) {
   const typeKeys = ['todos', ...new Set(docs.map(d => d.document_type))];
   const filtered = filter === 'todos' ? docs : docs.filter(d => d.document_type === filter);
 
-  const totalDocs  = docs.length;
-  const validDocs  = docs.filter(d => !isExpired(d.expiry_date)).length;
-  const withFile   = docs.filter(d => d.file_url).length;
+  const totalDocs = docs.length;
+  const validDocs = docs.filter(d => !isExpired(d.expiry_date)).length;
+  const withFile = docs.filter(d => d.file_url).length;
 
   return (
     <div className="min-h-screen bg-ink-900 text-white">
@@ -295,7 +311,7 @@ export default function DocumentosPage({ onBack }: DocumentosPageProps) {
             {[
               { n: totalDocs, label: 'Documentos registrados' },
               { n: validDocs, label: 'Documentos vigentes' },
-              { n: withFile,  label: 'Disponibles para descarga' },
+              { n: withFile, label: 'Disponibles para descarga' },
             ].map(s => (
               <div key={s.label} className="bg-ink-900 px-6 py-5">
                 <span className="font-display font-black text-3xl text-white">{s.n}</span>
@@ -317,11 +333,10 @@ export default function DocumentosPage({ onBack }: DocumentosPageProps) {
               <button
                 key={key}
                 onClick={() => setFilter(key)}
-                className={`px-4 py-2 font-display font-semibold text-xs tracking-widest uppercase transition-all duration-200 border ${
-                  isActive
+                className={`px-4 py-2 font-display font-semibold text-xs tracking-widest uppercase transition-all duration-200 border ${isActive
                     ? 'bg-brand-500 border-brand-400 text-ink-900'
                     : 'border-white/10 text-ink-500 hover:text-white hover:border-white/20'
-                }`}
+                  }`}
               >
                 {key === 'todos' ? 'Todos' : (cfg?.label ?? key)}
               </button>
