@@ -7,8 +7,7 @@ import Momentos from './components/Momentos';
 import Footer from './components/Footer';
 import DocumentosPage from './components/DocumentosPage';
 import MusicPlayer from './components/MusicPlayer';
-
-type Page = 'home' | 'documentos';
+import { useNavigationViewModel } from './viewModels/useNavigationViewModel';
 
 function Reveal({ children }: { children: React.ReactNode }) {
   const ref = useRef<HTMLDivElement>(null);
@@ -37,12 +36,7 @@ function Reveal({ children }: { children: React.ReactNode }) {
 }
 
 function App() {
-  const [page, setPage] = useState<Page>('home');
-
-  const navigate = (p: Page) => {
-    setPage(p);
-    window.scrollTo({ top: 0, behavior: 'instant' });
-  };
+  const { page, navigate } = useNavigationViewModel();
 
   return (
     <div className="min-h-screen bg-ink-900 font-body">
@@ -59,10 +53,8 @@ function App() {
         </>
       )}
 
-
-
       {page === 'documentos' && (
-        <DocumentosPage onBack={() => navigate('home')} />
+        <DocumentosPage onBack={() => navigate('/')} />
       )}
 
       {/* Persistent music player — state survives page navigation */}

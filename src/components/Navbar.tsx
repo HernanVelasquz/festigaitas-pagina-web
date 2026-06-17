@@ -1,10 +1,10 @@
 import { useState, useEffect } from 'react';
 import { Menu, X } from 'lucide-react';
 
-type Page = 'home' | 'documentos';
+import { Page } from '../viewModels/useNavigationViewModel';
 
 interface NavbarProps {
-  onNavigate: (page: Page) => void;
+  onNavigate: (path: string) => void;
   activePage: Page;
 }
 
@@ -13,8 +13,8 @@ const scrollLinks = [
   // { label: 'Ganadores',    href: '#ganadores' },
 ];
 
-const pageLinks: { label: string; page: Page }[] = [
-  { label: 'Documentos', page: 'documentos' },
+const pageLinks = [
+  { label: 'Documentos', path: '/documents', page: 'documentos' as const },
 ];
 
 export default function Navbar({ onNavigate, activePage }: NavbarProps) {
@@ -30,16 +30,16 @@ export default function Navbar({ onNavigate, activePage }: NavbarProps) {
   const goSection = (href: string) => {
     setMobileOpen(false);
     if (activePage !== 'home') {
-      onNavigate('home');
+      onNavigate('/');
       setTimeout(() => document.querySelector(href)?.scrollIntoView({ behavior: 'smooth' }), 120);
     } else {
       document.querySelector(href)?.scrollIntoView({ behavior: 'smooth' });
     }
   };
 
-  const goPage = (page: Page) => {
+  const goPage = (path: string) => {
     setMobileOpen(false);
-    onNavigate(page);
+    onNavigate(path);
   };
 
   return (
@@ -50,7 +50,7 @@ export default function Navbar({ onNavigate, activePage }: NavbarProps) {
       <div className="max-w-7xl mx-auto px-6 lg:px-10 h-14 flex items-center justify-between">
         {/* Logo */}
         <button
-          onClick={() => { setMobileOpen(false); onNavigate('home'); }}
+          onClick={() => { setMobileOpen(false); onNavigate('/'); }}
           className="flex items-center transition-opacity hover:opacity-85"
         >
           <img src="/logo.png" alt="Festival de Gaitas" className="h-9 w-auto object-contain" />
@@ -75,8 +75,8 @@ export default function Navbar({ onNavigate, activePage }: NavbarProps) {
           {/* Page links */}
           {pageLinks.map(l => (
             <button
-              key={l.page}
-              onClick={() => goPage(l.page)}
+              key={l.path}
+              onClick={() => goPage(l.path)}
               className={`px-4 py-2 font-display font-semibold text-xs tracking-widest uppercase transition-colors duration-200 ${activePage === l.page
                   ? 'text-brand-400'
                   : 'text-ink-300 hover:text-white'
@@ -116,8 +116,8 @@ export default function Navbar({ onNavigate, activePage }: NavbarProps) {
           <div className="pt-1 mt-1 border-t border-white/5 space-y-1">
             {pageLinks.map(l => (
               <button
-                key={l.page}
-                onClick={() => goPage(l.page)}
+                key={l.path}
+                onClick={() => goPage(l.path)}
                 className={`block w-full text-left py-2.5 font-display font-semibold text-sm tracking-wider uppercase transition-colors ${activePage === l.page ? 'text-brand-400' : 'text-ink-300 hover:text-white'
                   }`}
               >
