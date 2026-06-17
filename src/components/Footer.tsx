@@ -1,20 +1,18 @@
 import { ArrowUp } from 'lucide-react';
 
-type Page = 'home' | 'documentos';
-
 interface FooterProps {
-  onNavigate: (page: Page) => void;
+  onNavigate: (path: string) => void;
 }
 
 type ExploreLink =
-  | { label: string; href: string; page?: never }
-  | { label: string; page: Page; href?: never };
+  | { label: string; href: string; path?: never }
+  | { label: string; path: string; href?: never };
 
 const explore: ExploreLink[] = [
   { label: 'Programación 2026', href: '#' },
   { label: 'Reglamento Competencia', href: '#' },
   { label: 'Prensa & Acreditaciones', href: '#' },
-  { label: 'Documentos Legales', page: 'documentos' },
+  { label: 'Documentos Legales', path: '/documents' },
 ];
 
 export default function Footer({ onNavigate }: FooterProps) {
@@ -23,7 +21,7 @@ export default function Footer({ onNavigate }: FooterProps) {
     document.querySelector(href)?.scrollIntoView({ behavior: 'smooth' });
 
   const handleLink = (link: ExploreLink) => {
-    if (link.page) { onNavigate(link.page); }
+    if (link.path) { onNavigate(link.path); }
     else if (link.href && link.href !== '#') { goSection(link.href); }
   };
 
@@ -103,7 +101,7 @@ export default function Footer({ onNavigate }: FooterProps) {
           </p>
           <div className="flex items-center gap-4">
             <button
-              onClick={() => onNavigate('documentos')}
+              onClick={() => onNavigate('/documents')}
               className="text-ink-600 hover:text-white text-[11px] font-body transition-colors"
             >
               Marco Legal
