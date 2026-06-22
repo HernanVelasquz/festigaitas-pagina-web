@@ -12,7 +12,6 @@ const scrollLinks = [
 ];
 
 const pageLinks = [
-  { label: 'Historia', path: '/history', page: 'history' as const },
   { label: 'Documentos', path: '/documents', page: 'documents' as const },
 ];
 
