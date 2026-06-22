@@ -21,8 +21,11 @@ export default function Footer({ onNavigate }: FooterProps) {
     document.querySelector(href)?.scrollIntoView({ behavior: 'smooth' });
 
   const handleLink = (link: ExploreLink) => {
-    if (link.path) { onNavigate(link.path); }
-    else if (link.href && link.href !== '#') { goSection(link.href); }
+    if (link.path) {
+      onNavigate(link.path);
+    } else if (link.href && link.href !== '#') {
+      goSection(link.href);
+    }
   };
 
   return (
@@ -39,7 +42,7 @@ export default function Footer({ onNavigate }: FooterProps) {
               Montes de María desde 1984.
             </p>
             <div className="flex items-center gap-3 mt-6">
-              {['IG', 'FB', 'TW'].map(s => (
+              {['IG', 'FB', 'TW'].map((s) => (
                 <button
                   key={s}
                   className="w-8 h-8 border border-white/10 flex items-center justify-center font-display font-bold text-[10px] text-ink-500 hover:text-white hover:border-brand-500 transition-colors"
@@ -54,11 +57,11 @@ export default function Footer({ onNavigate }: FooterProps) {
           <div>
             <h4 className="section-label mb-4">Explorar</h4>
             <ul className="space-y-2.5">
-              {explore.map(l => (
+              {explore.map((l) => (
                 <li key={l.label}>
                   <button
                     onClick={() => handleLink(l)}
-                    className="text-ink-500 hover:text-white text-xs font-body transition-colors text-left"
+                    className="text-ink-500 hover:text-white text-xs font-body transition-colors text-left cursor-pointer"
                   >
                     {l.label}
                   </button>
@@ -102,13 +105,13 @@ export default function Footer({ onNavigate }: FooterProps) {
           <div className="flex items-center gap-4">
             <button
               onClick={() => onNavigate('/documents')}
-              className="text-ink-600 hover:text-white text-[11px] font-body transition-colors"
+              className="text-ink-600 hover:text-white text-[11px] font-body transition-colors cursor-pointer"
             >
               Marco Legal
             </button>
             <button
               onClick={scrollTop}
-              className="w-8 h-8 border border-white/10 flex items-center justify-center text-ink-500 hover:text-white hover:border-brand-500 transition-colors ml-2"
+              className="w-8 h-8 border border-white/10 flex items-center justify-center text-ink-500 hover:text-white hover:border-brand-500 transition-colors ml-2 cursor-pointer"
               aria-label="Volver arriba"
             >
               <ArrowUp className="w-4 h-4" />

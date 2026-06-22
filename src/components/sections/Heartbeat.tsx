@@ -1,24 +1,7 @@
-import { useEffect, useRef, useState } from 'react';
+import { useHeartbeatViewModel } from '../../viewModels/useHeartbeatViewModel';
 
-export default function Latido() {
-  const imgRef = useRef<HTMLDivElement>(null);
-  const [imgVisible, setImgVisible] = useState(false);
-
-  useEffect(() => {
-    const el = imgRef.current;
-    if (!el) return;
-    const obs = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          setImgVisible(true);
-          obs.unobserve(el);
-        }
-      },
-      { threshold: 0.1 }
-    );
-    obs.observe(el);
-    return () => obs.disconnect();
-  }, []);
+export default function Heartbeat() {
+  const { imgRef, imgVisible } = useHeartbeatViewModel();
 
   return (
     <section id="historia" className="bg-ink-900 py-24 lg:py-32">
@@ -48,11 +31,15 @@ export default function Latido() {
 
           <div className="mt-10 flex items-end gap-12">
             <div>
-              <span className="font-display font-black text-5xl text-white">39<span className="text-brand-400">+</span></span>
+              <span className="font-display font-black text-5xl text-white">
+                39<span className="text-brand-400">+</span>
+              </span>
               <p className="section-label mt-1">Ediciones</p>
             </div>
             <div>
-              <span className="font-display font-black text-5xl text-white">150<span className="text-brand-400">+</span></span>
+              <span className="font-display font-black text-5xl text-white">
+                150<span className="text-brand-400">+</span>
+              </span>
               <p className="section-label mt-1">Agrupaciones</p>
             </div>
           </div>
@@ -68,13 +55,16 @@ export default function Latido() {
           <img
             src="/latido.jpeg"
             alt="Vista aérea de la Plaza Francisco Llirene durante el festival"
+            loading="lazy"
             className="w-full aspect-[4/5] object-cover grayscale-[30%] contrast-110"
           />
           {/* Location tag */}
           <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-ink-900/90 to-transparent p-6 flex items-end justify-between">
             <div>
               <span className="section-label block mb-1">Ubicación Central</span>
-              <p className="font-display font-bold text-lg tracking-wider text-white uppercase">Plaza Principal de Ovejas</p>
+              <p className="font-display font-bold text-lg tracking-wider text-white uppercase">
+                Plaza Principal de Ovejas
+              </p>
             </div>
             <span className="text-brand-400 text-xl">📍</span>
           </div>

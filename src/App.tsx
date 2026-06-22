@@ -1,39 +1,12 @@
-import { useEffect, useRef, useState } from 'react';
-import Navbar from './components/Navbar';
-import Hero from './components/Hero';
-import Latido from './components/Latido';
-import Timeline from './components/Timeline';
-import Momentos from './components/Momentos';
-import Footer from './components/Footer';
-import DocumentosPage from './components/DocumentosPage';
-import MusicPlayer from './components/MusicPlayer';
+import { Suspense, lazy } from 'react';
+import Navbar from './components/layout/Navbar';
+import MusicPlayer from './components/ui/MusicPlayer';
 import { useNavigationViewModel } from './viewModels/useNavigationViewModel';
 
-function Reveal({ children }: { children: React.ReactNode }) {
-  const ref = useRef<HTMLDivElement>(null);
-  const [visible, setVisible] = useState(false);
-
-  useEffect(() => {
-    const el = ref.current;
-    if (!el) return;
-    const obs = new IntersectionObserver(
-      ([entry]) => { if (entry.isIntersecting) { setVisible(true); obs.unobserve(el); } },
-      { threshold: 0.08 }
-    );
-    obs.observe(el);
-    return () => obs.disconnect();
-  }, []);
-
-  return (
-    <div
-      ref={ref}
-      className={`transition-all duration-700 ease-out ${visible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-6'
-        }`}
-    >
-      {children}
-    </div>
-  );
-}
+// Lazy load pages for optimized bundle sizing & faster initial page load
+const HomePage = lazy(() => import('./pages/HomePage'));
+const DocumentsPage = lazy(() => import('./pages/DocumentsPage'));
+const HistoryPage = lazy(() => import('./pages/HistoryPage'));
 
 function App() {
   const { page, navigate } = useNavigationViewModel();
@@ -42,20 +15,17 @@ function App() {
     <div className="min-h-screen bg-ink-900 font-body">
       <Navbar onNavigate={navigate} activePage={page} />
 
-      {page === 'home' && (
-        <>
-          <Hero />
-          <Reveal><Latido /></Reveal>
-          <Reveal><Timeline /></Reveal>
-          <Reveal><Momentos /></Reveal>
-          {/* <Reveal><Ganadores /></Reveal> */}
-          <Footer onNavigate={navigate} />
-        </>
-      )}
-
-      {page === 'documentos' && (
-        <DocumentosPage onBack={() => navigate('/')} />
-      )}
+      <Suspense
+        fallback={
+          <div className="min-h-screen flex items-center justify-center bg-ink-900">
+            <div className="w-8 h-8 border-2 border-ink-600 border-t-brand-500 rounded-full animate-spin" />
+          </div>
+        }
+      >
+        {page === 'home' && <HomePage onNavigate={navigate} />}
+        {page === 'documents' && <DocumentsPage onBack={() => navigate('/')} />}
+        {page === 'history' && <HistoryPage onBack={() => navigate('/')} />}
+      </Suspense>
 
       {/* Persistent music player — state survives page navigation */}
       <MusicPlayer />

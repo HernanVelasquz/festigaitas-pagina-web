@@ -1,7 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Menu, X } from 'lucide-react';
-
-import { Page } from '../viewModels/useNavigationViewModel';
+import { Page } from '../../viewModels/useNavigationViewModel';
 
 interface NavbarProps {
   onNavigate: (path: string) => void;
@@ -10,11 +9,10 @@ interface NavbarProps {
 
 const scrollLinks = [
   { label: 'Inicio', href: '#inicio' },
-  // { label: 'Ganadores',    href: '#ganadores' },
 ];
 
 const pageLinks = [
-  { label: 'Documentos', path: '/documents', page: 'documentos' as const },
+  { label: 'Documentos', path: '/documents', page: 'documents' as const },
 ];
 
 export default function Navbar({ onNavigate, activePage }: NavbarProps) {
@@ -44,13 +42,17 @@ export default function Navbar({ onNavigate, activePage }: NavbarProps) {
 
   return (
     <nav
-      className={`fixed inset-x-0 top-0 z-50 transition-all duration-500 ${scrolled ? 'bg-ink-900/95 backdrop-blur border-b border-white/5' : ''
-        }`}
+      className={`fixed inset-x-0 top-0 z-50 transition-all duration-500 ${
+        scrolled ? 'bg-ink-900/95 backdrop-blur border-b border-white/5' : ''
+      }`}
     >
       <div className="max-w-7xl mx-auto px-6 lg:px-10 h-14 flex items-center justify-between">
         {/* Logo */}
         <button
-          onClick={() => { setMobileOpen(false); onNavigate('/'); }}
+          onClick={() => {
+            setMobileOpen(false);
+            onNavigate('/');
+          }}
           className="flex items-center transition-opacity hover:opacity-85"
         >
           <img src="/logo.png" alt="Festival de Gaitas" className="h-9 w-auto object-contain" />
@@ -58,11 +60,14 @@ export default function Navbar({ onNavigate, activePage }: NavbarProps) {
 
         {/* Desktop nav */}
         <div className="hidden lg:flex items-center gap-1">
-          {scrollLinks.map(l => (
+          {scrollLinks.map((l) => (
             <a
               key={l.href}
               href={l.href}
-              onClick={e => { e.preventDefault(); goSection(l.href); }}
+              onClick={(e) => {
+                e.preventDefault();
+                goSection(l.href);
+              }}
               className="px-4 py-2 font-display font-semibold text-xs tracking-widest uppercase text-ink-300 hover:text-white transition-colors duration-200"
             >
               {l.label}
@@ -73,20 +78,17 @@ export default function Navbar({ onNavigate, activePage }: NavbarProps) {
           <span className="w-px h-4 bg-white/10 mx-1" />
 
           {/* Page links */}
-          {pageLinks.map(l => (
+          {pageLinks.map((l) => (
             <button
               key={l.path}
               onClick={() => goPage(l.path)}
-              className={`px-4 py-2 font-display font-semibold text-xs tracking-widest uppercase transition-colors duration-200 ${activePage === l.page
-                  ? 'text-brand-400'
-                  : 'text-ink-300 hover:text-white'
-                }`}
+              className={`px-4 py-2 font-display font-semibold text-xs tracking-widest uppercase transition-colors duration-200 ${
+                activePage === l.page ? 'text-brand-400' : 'text-ink-300 hover:text-white'
+              }`}
             >
               {l.label}
             </button>
           ))}
-
-
         </div>
 
         {/* Mobile toggle */}
@@ -102,11 +104,14 @@ export default function Navbar({ onNavigate, activePage }: NavbarProps) {
       {/* Mobile menu */}
       {mobileOpen && (
         <div className="lg:hidden bg-ink-900 border-t border-white/5 px-6 py-4 space-y-1">
-          {scrollLinks.map(l => (
+          {scrollLinks.map((l) => (
             <a
               key={l.href}
               href={l.href}
-              onClick={e => { e.preventDefault(); goSection(l.href); }}
+              onClick={(e) => {
+                e.preventDefault();
+                goSection(l.href);
+              }}
               className="block py-2.5 font-display font-semibold text-sm tracking-wider uppercase text-ink-300 hover:text-white transition-colors"
             >
               {l.label}
@@ -114,19 +119,18 @@ export default function Navbar({ onNavigate, activePage }: NavbarProps) {
           ))}
 
           <div className="pt-1 mt-1 border-t border-white/5 space-y-1">
-            {pageLinks.map(l => (
+            {pageLinks.map((l) => (
               <button
                 key={l.path}
                 onClick={() => goPage(l.path)}
-                className={`block w-full text-left py-2.5 font-display font-semibold text-sm tracking-wider uppercase transition-colors ${activePage === l.page ? 'text-brand-400' : 'text-ink-300 hover:text-white'
-                  }`}
+                className={`block w-full text-left py-2.5 font-display font-semibold text-sm tracking-wider uppercase transition-colors ${
+                  activePage === l.page ? 'text-brand-400' : 'text-ink-300 hover:text-white'
+                }`}
               >
                 {l.label}
               </button>
             ))}
           </div>
-
-
         </div>
       )}
     </nav>

@@ -1,43 +1,12 @@
-import { useEffect, useState } from 'react';
 import { ArrowRight } from 'lucide-react';
-import { supabase } from '../lib/supabase';
+import { useWinnersViewModel } from '../../viewModels/useWinnersViewModel';
 
-interface Winner {
-  id: string;
-  year: number;
-  category: string;
-  category_label: string;
-  position: string;
-  group_name: string;
-  origin: string | null;
+interface WinnersProps {
+  onNavigate: (path: string) => void;
 }
 
-const YEARS = [2023, 2022, 2021];
-
-export default function Ganadores() {
-  const [winners, setWinners] = useState<Winner[]>([]);
-  const [loading, setLoading]   = useState(true);
-  const [activeYear, setActiveYear] = useState(2023);
-
-  useEffect(() => {
-    supabase
-      .from('winners')
-      .select('*')
-      .order('sort_order', { ascending: true })
-      .then(({ data }) => {
-        if (data) setWinners(data);
-        setLoading(false);
-      });
-  }, []);
-
-  const filtered = winners.filter(w => w.year === activeYear);
-
-  const categories = [
-    { key: 'gaita_larga', label: 'Gaita Larga' },
-    { key: 'gaita_corta', label: 'Gaita Corta' },
-    { key: 'tradicional', label: 'Tradicional' },
-    { key: 'aparte',      label: 'Aparte' },
-  ];
+export default function Winners({ onNavigate }: WinnersProps) {
+  const { winners, loading, activeYear, setActiveYear, years, categories } = useWinnersViewModel();
 
   return (
     <section id="ganadores" className="bg-ink-900 py-20 lg:py-28 border-t border-white/5">
@@ -53,14 +22,12 @@ export default function Ganadores() {
 
           {/* Year tabs */}
           <div className="flex items-center gap-1 border border-white/10">
-            {YEARS.map(y => (
+            {years.map((y) => (
               <button
                 key={y}
                 onClick={() => setActiveYear(y)}
-                className={`px-5 py-2.5 font-display font-bold text-xs tracking-widest uppercase transition-colors duration-200 ${
-                  activeYear === y
-                    ? 'bg-brand-500 text-ink-900'
-                    : 'text-ink-400 hover:text-white'
+                className={`px-5 py-2.5 font-display font-bold text-xs tracking-widest uppercase transition-colors duration-200 cursor-pointer ${
+                  activeYear === y ? 'bg-brand-500 text-ink-900' : 'text-ink-400 hover:text-white'
                 }`}
               >
                 {y}
@@ -76,10 +43,13 @@ export default function Ganadores() {
           </div>
         ) : (
           <div className="grid grid-cols-2 lg:grid-cols-4 divide-x divide-white/5 border border-white/5">
-            {categories.map(cat => {
-              const winner = filtered.find(w => w.category === cat.key);
+            {categories.map((cat) => {
+              const winner = winners.find((w) => w.category === cat.key);
               return (
-                <div key={cat.key} className="p-6 lg:p-8 border-t border-white/5 group hover:bg-white/[0.02] transition-colors">
+                <div
+                  key={cat.key}
+                  className="p-6 lg:p-8 border-t border-white/5 group hover:bg-white/[0.02] transition-colors"
+                >
                   <span className="section-label">{cat.label}</span>
                   <span className="divider-brand" />
                   {winner ? (
@@ -90,11 +60,7 @@ export default function Ganadores() {
                       <p className="text-ink-500 text-xs font-body mt-2 uppercase tracking-wide">
                         {winner.position}
                       </p>
-                      {winner.origin && (
-                        <p className="text-ink-600 text-xs font-body mt-1">
-                          {winner.origin}
-                        </p>
-                      )}
+                      {winner.origin && <p className="text-ink-600 text-xs font-body mt-1">{winner.origin}</p>}
                     </>
                   ) : (
                     <p className="text-ink-600 text-sm mt-2">No registrado</p>
@@ -107,7 +73,10 @@ export default function Ganadores() {
 
         {/* CTA */}
         <div className="mt-8">
-          <button className="flex items-center gap-2 font-display font-bold text-xs tracking-widest uppercase text-ink-400 hover:text-white transition-colors group">
+          <button
+            onClick={() => onNavigate('/history')}
+            className="flex items-center gap-2 font-display font-bold text-xs tracking-widest uppercase text-ink-400 hover:text-white transition-colors group cursor-pointer"
+          >
             Ver Historial de Ganadores
             <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform text-brand-400" />
           </button>
