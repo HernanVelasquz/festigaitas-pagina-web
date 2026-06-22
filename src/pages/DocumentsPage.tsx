@@ -1,4 +1,3 @@
-import { useEffect, useState } from 'react';
 import {
   ArrowLeft,
   FileText,
@@ -14,19 +13,7 @@ import {
   AlertCircle,
   DollarSign,
 } from 'lucide-react';
-import { supabase } from '../lib/supabase';
-
-interface LegalDocument {
-  id: string;
-  name: string;
-  document_type: string;
-  description: string;
-  issuing_entity: string;
-  issue_date: string | null;
-  expiry_date: string | null;
-  file_url: string | null;
-  is_active: boolean;
-}
+import { useDocumentsViewModel, LegalDocument } from '../viewModels/useDocumentsViewModel';
 
 const typeConfig: Record<
   string,
@@ -107,45 +94,21 @@ const fallback = {
   badge: 'bg-white/5 text-ink-300 border-white/10',
 };
 
-const formatDate = (d: string | null) => {
-  if (!d) return '—';
-  return new Date(d + 'T00:00:00').toLocaleDateString('es-CO', {
-    day: 'numeric',
-    month: 'long',
-    year: 'numeric',
-  });
-};
-
-const isExpired = (expiry: string | null) => {
-  if (!expiry) return false;
-  return new Date(expiry + 'T00:00:00') < new Date();
-};
-
-const expiresShortly = (expiry: string | null) => {
-  if (!expiry) return false;
-  const diff = new Date(expiry + 'T00:00:00').getTime() - Date.now();
-  return diff > 0 && diff < 1000 * 60 * 60 * 24 * 90; // 90 days
-};
-
-const getDocumentUrl = (path: string | null): string | null => {
-  if (!path) return null;
-  if (path.startsWith('http://') || path.startsWith('https://')) {
-    return path;
-  }
-  const { data } = supabase.storage
-    .from('digital-assets-statics-documents')
-    .getPublicUrl(path);
-
-  console.log(data?.publicUrl)
-
-  return data?.publicUrl || null;
-};
-
 interface DocumentCardProps {
   doc: LegalDocument;
+  isExpired: (expiry: string | null) => boolean;
+  expiresShortly: (expiry: string | null) => boolean;
+  getDocumentUrl: (path: string | null) => string | null;
+  formatDate: (date: string | null) => string;
 }
 
-function DocumentCard({ doc }: DocumentCardProps) {
+function DocumentCard({
+  doc,
+  isExpired,
+  expiresShortly,
+  getDocumentUrl,
+  formatDate,
+}: DocumentCardProps) {
   const cfg = typeConfig[doc.document_type] ?? fallback;
   const Icon = cfg.icon;
   const expired = isExpired(doc.expiry_date);
@@ -162,11 +125,15 @@ function DocumentCard({ doc }: DocumentCardProps) {
       <div className="p-6 flex-1 flex flex-col gap-4">
         {/* Header */}
         <div className="flex items-start justify-between gap-4">
-          <div className={`shrink-0 w-11 h-11 bg-ink-900 border ${cfg.border} flex items-center justify-center`}>
+          <div
+            className={`shrink-0 w-11 h-11 bg-ink-900 border ${cfg.border} flex items-center justify-center`}
+          >
             <Icon className={`w-5 h-5 ${cfg.color}`} />
           </div>
 
-          <span className={`text-[10px] font-display font-bold tracking-widest uppercase px-2.5 py-1 border ${cfg.badge}`}>
+          <span
+            className={`text-[10px] font-display font-bold tracking-widest uppercase px-2.5 py-1 border ${cfg.badge}`}
+          >
             {cfg.label}
           </span>
         </div>
@@ -194,11 +161,16 @@ function DocumentCard({ doc }: DocumentCardProps) {
           </div>
 
           {doc.expiry_date && (
-            <div className={`flex items-center gap-2 text-xs font-body ${expired ? 'text-red-400' : soonExpires ? 'text-amber-400' : 'text-ink-500'}`}>
-              {expired || soonExpires
-                ? <AlertCircle className="w-3.5 h-3.5 shrink-0" />
-                : <Clock className="w-3.5 h-3.5 shrink-0 text-ink-600" />
-              }
+            <div
+              className={`flex items-center gap-2 text-xs font-body ${
+                expired ? 'text-red-400' : soonExpires ? 'text-amber-400' : 'text-ink-500'
+              }`}
+            >
+              {expired || soonExpires ? (
+                <AlertCircle className="w-3.5 h-3.5 shrink-0" />
+              ) : (
+                <Clock className="w-3.5 h-3.5 shrink-0 text-ink-600" />
+              )}
               <span>
                 Vence: {formatDate(doc.expiry_date)}
                 {expired && ' — Vencido'}
@@ -241,33 +213,23 @@ function DocumentCard({ doc }: DocumentCardProps) {
   );
 }
 
-interface DocumentosPageProps {
+interface DocumentsPageProps {
   onBack: () => void;
 }
 
-export default function DocumentosPage({ onBack }: DocumentosPageProps) {
-  const [docs, setDocs] = useState<LegalDocument[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [filter, setFilter] = useState<string>('todos');
-
-  useEffect(() => {
-    window.scrollTo({ top: 0, behavior: 'instant' });
-    supabase
-      .from('legal_documents')
-      .select('*')
-      .order('sort_order', { ascending: true })
-      .then(({ data }) => {
-        if (data) setDocs(data);
-        setLoading(false);
-      });
-  }, []);
-
-  const typeKeys = ['todos', ...new Set(docs.map(d => d.document_type))];
-  const filtered = filter === 'todos' ? docs : docs.filter(d => d.document_type === filter);
-
-  const totalDocs = docs.length;
-  const validDocs = docs.filter(d => !isExpired(d.expiry_date)).length;
-  const withFile = docs.filter(d => d.file_url).length;
+export default function DocumentsPage({ onBack }: DocumentsPageProps) {
+  const {
+    documents,
+    loading,
+    filter,
+    setFilter,
+    typeKeys,
+    stats,
+    isExpired,
+    expiresShortly,
+    getDocumentUrl,
+    formatDate,
+  } = useDocumentsViewModel();
 
   return (
     <div className="min-h-screen bg-ink-900 text-white">
@@ -276,7 +238,7 @@ export default function DocumentosPage({ onBack }: DocumentosPageProps) {
         <div className="max-w-7xl mx-auto px-6 lg:px-10 py-16">
           <button
             onClick={onBack}
-            className="inline-flex items-center gap-2 font-display font-semibold text-xs tracking-widest uppercase text-ink-500 hover:text-white transition-colors mb-10 group"
+            className="inline-flex items-center gap-2 font-display font-semibold text-xs tracking-widest uppercase text-ink-500 hover:text-white transition-colors mb-10 group cursor-pointer"
           >
             <ArrowLeft className="w-4 h-4 group-hover:-translate-x-1 transition-transform" />
             Volver al Inicio
@@ -309,10 +271,10 @@ export default function DocumentosPage({ onBack }: DocumentosPageProps) {
           {/* Stats */}
           <div className="grid grid-cols-3 gap-px bg-white/5 mt-14">
             {[
-              { n: totalDocs, label: 'Documentos registrados' },
-              { n: validDocs, label: 'Documentos vigentes' },
-              { n: withFile, label: 'Disponibles para descarga' },
-            ].map(s => (
+              { n: stats.totalDocs, label: 'Documentos registrados' },
+              { n: stats.validDocs, label: 'Documentos vigentes' },
+              { n: stats.withFile, label: 'Disponibles para descarga' },
+            ].map((s) => (
               <div key={s.label} className="bg-ink-900 px-6 py-5">
                 <span className="font-display font-black text-3xl text-white">{s.n}</span>
                 <p className="section-label mt-1">{s.label}</p>
@@ -326,19 +288,20 @@ export default function DocumentosPage({ onBack }: DocumentosPageProps) {
       <div className="max-w-7xl mx-auto px-6 lg:px-10 py-12">
         {/* Filter bar */}
         <div className="flex flex-wrap items-center gap-2 mb-10">
-          {typeKeys.map(key => {
-            const cfg = key === 'todos' ? null : (typeConfig[key] ?? fallback);
+          {typeKeys.map((key) => {
+            const cfg = key === 'todos' ? null : typeConfig[key] ?? fallback;
             const isActive = filter === key;
             return (
               <button
                 key={key}
                 onClick={() => setFilter(key)}
-                className={`px-4 py-2 font-display font-semibold text-xs tracking-widest uppercase transition-all duration-200 border ${isActive
+                className={`px-4 py-2 font-display font-semibold text-xs tracking-widest uppercase transition-all duration-200 border cursor-pointer ${
+                  isActive
                     ? 'bg-brand-500 border-brand-400 text-ink-900'
                     : 'border-white/10 text-ink-500 hover:text-white hover:border-white/20'
-                  }`}
+                }`}
               >
-                {key === 'todos' ? 'Todos' : (cfg?.label ?? key)}
+                {key === 'todos' ? 'Todos' : cfg?.label ?? key}
               </button>
             );
           })}
@@ -352,16 +315,23 @@ export default function DocumentosPage({ onBack }: DocumentosPageProps) {
         )}
 
         {/* Document grid */}
-        {!loading && filtered.length === 0 && (
+        {!loading && documents.length === 0 && (
           <p className="text-center text-ink-600 py-24 font-body">
             No hay documentos en esta categoría.
           </p>
         )}
 
-        {!loading && filtered.length > 0 && (
+        {!loading && documents.length > 0 && (
           <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
-            {filtered.map(doc => (
-              <DocumentCard key={doc.id} doc={doc} />
+            {documents.map((doc) => (
+              <DocumentCard
+                key={doc.id}
+                doc={doc}
+                isExpired={isExpired}
+                expiresShortly={expiresShortly}
+                getDocumentUrl={getDocumentUrl}
+                formatDate={formatDate}
+              />
             ))}
           </div>
         )}

@@ -1,24 +1,5 @@
-import { useEffect, useState } from 'react';
 import { ChevronDown, Trophy, ImageOff, ArrowLeft } from 'lucide-react';
-import { supabase } from '../lib/supabase';
-
-interface Edition {
-  id: string;
-  year: number;
-  title: string;
-  description: string;
-  image_url: string;
-}
-
-interface Winner {
-  id: string;
-  year: number;
-  category: string;
-  category_label: string;
-  position: string;
-  group_name: string;
-  origin: string | null;
-}
+import { useHistoryViewModel, Edition, Winner } from '../viewModels/useHistoryViewModel';
 
 const CATEGORY_ORDER = ['gaita_larga', 'gaita_corta', 'tradicional', 'aparte'];
 
@@ -30,16 +11,17 @@ interface AccordionProps {
 }
 
 function Accordion({ edition, winners, open, onToggle }: AccordionProps) {
-  const yearWinners = winners.filter(w => w.year === edition.year);
+  const yearWinners = winners.filter((w) => w.year === edition.year);
   const hasWinners = yearWinners.length > 0;
 
   return (
-    <div className={`border-b border-white/8 transition-colors duration-300 ${open ? 'border-brand-500/30' : ''}`}>
+    <div
+      className={`border-b border-white/8 transition-colors duration-300 ${
+        open ? 'border-brand-500/30' : ''
+      }`}
+    >
       {/* Header row */}
-      <button
-        onClick={onToggle}
-        className="w-full flex items-center gap-6 py-7 text-left group"
-      >
+      <button onClick={onToggle} className="w-full flex items-center gap-6 py-7 text-left group cursor-pointer">
         {/* Year */}
         <span
           className={`font-display font-black text-[clamp(2rem,4vw,3.5rem)] leading-none tabular-nums transition-colors duration-300 w-28 shrink-0 ${
@@ -97,6 +79,7 @@ function Accordion({ edition, winners, open, onToggle }: AccordionProps) {
                 <img
                   src={edition.image_url}
                   alt={`Festival ${edition.year}`}
+                  loading="lazy"
                   className="w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-700 brightness-80"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-ink-900/60 to-transparent pointer-events-none" />
@@ -121,8 +104,8 @@ function Accordion({ edition, winners, open, onToggle }: AccordionProps) {
                 <div>
                   <span className="section-label block mb-3">Cuadro de Honor</span>
                   <div className="grid grid-cols-2 sm:grid-cols-4 gap-px bg-white/5">
-                    {CATEGORY_ORDER.map(cat => {
-                      const w = yearWinners.find(x => x.category === cat);
+                    {CATEGORY_ORDER.map((cat) => {
+                      const w = yearWinners.find((x) => x.category === cat);
                       return (
                         <div key={cat} className="bg-ink-900 p-4">
                           <p className="text-[10px] font-display font-semibold tracking-widest uppercase text-ink-600 mb-2">
@@ -155,32 +138,12 @@ function Accordion({ edition, winners, open, onToggle }: AccordionProps) {
   );
 }
 
-interface HistoriaPageProps {
+interface HistoryPageProps {
   onBack: () => void;
 }
 
-export default function HistoriaPage({ onBack }: HistoriaPageProps) {
-  const [editions, setEditions] = useState<Edition[]>([]);
-  const [winners, setWinners]   = useState<Winner[]>([]);
-  const [openYear, setOpenYear] = useState<number | null>(null);
-  const [loading, setLoading]   = useState(true);
-
-  useEffect(() => {
-    window.scrollTo({ top: 0, behavior: 'instant' });
-
-    Promise.all([
-      supabase.from('historia_editions').select('*').order('sort_order', { ascending: true }),
-      supabase.from('winners').select('*').order('sort_order', { ascending: true }),
-    ]).then(([edRes, wRes]) => {
-      if (edRes.data) setEditions(edRes.data);
-      if (wRes.data)  setWinners(wRes.data);
-      setLoading(false);
-      // open the first accordion by default
-      if (edRes.data && edRes.data.length > 0) setOpenYear(edRes.data[0].year);
-    });
-  }, []);
-
-  const toggle = (year: number) => setOpenYear(prev => (prev === year ? null : year));
+export default function HistoryPage({ onBack }: HistoryPageProps) {
+  const { editions, winners, openYear, loading, toggleYear } = useHistoryViewModel();
 
   return (
     <div className="min-h-screen bg-ink-900 text-white">
@@ -189,7 +152,7 @@ export default function HistoriaPage({ onBack }: HistoriaPageProps) {
         <div className="max-w-7xl mx-auto px-6 lg:px-10 py-16">
           <button
             onClick={onBack}
-            className="inline-flex items-center gap-2 font-display font-semibold text-xs tracking-widest uppercase text-ink-500 hover:text-white transition-colors mb-10 group"
+            className="inline-flex items-center gap-2 font-display font-semibold text-xs tracking-widest uppercase text-ink-500 hover:text-white transition-colors mb-10 group cursor-pointer"
           >
             <ArrowLeft className="w-4 h-4 group-hover:-translate-x-1 transition-transform" />
             Volver al Inicio
@@ -224,7 +187,7 @@ export default function HistoriaPage({ onBack }: HistoriaPageProps) {
               { n: '40+', label: 'Ediciones' },
               { n: '600+', label: 'Agrupaciones históricas' },
               { n: '500K+', label: 'Asistentes acumulados' },
-            ].map(s => (
+            ].map((s) => (
               <div key={s.label} className="bg-ink-900 px-6 py-5">
                 <span className="font-display font-black text-3xl text-white">{s.n}</span>
                 <p className="section-label mt-1">{s.label}</p>
@@ -241,13 +204,13 @@ export default function HistoriaPage({ onBack }: HistoriaPageProps) {
             <div className="w-8 h-8 border-2 border-ink-600 border-t-brand-500 rounded-full animate-spin" />
           </div>
         ) : (
-          editions.map(edition => (
+          editions.map((edition) => (
             <Accordion
               key={edition.id}
               edition={edition}
               winners={winners}
               open={openYear === edition.year}
-              onToggle={() => toggle(edition.year)}
+              onToggle={() => toggleYear(edition.year)}
             />
           ))
         )}

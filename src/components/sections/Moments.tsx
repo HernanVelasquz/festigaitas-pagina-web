@@ -1,47 +1,8 @@
-import { useEffect, useState, useRef } from 'react';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
+import { useMomentsViewModel } from '../../viewModels/useMomentsViewModel';
 
-interface Moment {
-  id: string;
-  image_url: string;
-  alt_text: string | null;
-}
-
-const LOCAL_MOMENTS: Moment[] = [
-  { id: '1', image_url: '/moment-one.jpeg', alt_text: 'Momento uno' },
-  { id: '2', image_url: '/moment-two.jpeg', alt_text: 'Momento dos' },
-  { id: '3', image_url: '/moment-three.jpeg', alt_text: 'Momento tres' },
-  { id: '4', image_url: '/moment-for.jpeg', alt_text: 'Momento cuatro' },
-  { id: '5', image_url: '/moment-five.jpeg', alt_text: 'Momento cinco' },
-  { id: '6', image_url: '/moment-six.jpeg', alt_text: 'Momento seis' },
-];
-
-export default function Momentos() {
-  const [moments] = useState<Moment[]>(LOCAL_MOMENTS);
-  const [offset, setOffset] = useState(0);
-  const trackRef = useRef<HTMLDivElement>(null);
-  const visible = 3;
-  const [inView, setInView] = useState(false);
-
-  useEffect(() => {
-    const el = trackRef.current;
-    if (!el) return;
-    const obs = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          setInView(true);
-          obs.unobserve(el);
-        }
-      },
-      { threshold: 0.05 }
-    );
-    obs.observe(el);
-    return () => obs.disconnect();
-  }, []);
-
-  const max = Math.max(0, moments.length - visible);
-  const prev = () => setOffset(o => Math.max(0, o - 1));
-  const next = () => setOffset(o => Math.min(max, o + 1));
+export default function Moments() {
+  const { moments, offset, trackRef, inView, max, prev, next } = useMomentsViewModel();
 
   return (
     <section id="experiencias" className="bg-ink-900 py-20 lg:py-28 overflow-hidden">
@@ -58,14 +19,14 @@ export default function Momentos() {
             <button
               onClick={prev}
               disabled={offset === 0}
-              className="w-10 h-10 border border-white/20 flex items-center justify-center text-white hover:border-brand-500 hover:text-brand-400 transition-colors disabled:opacity-30"
+              className="w-10 h-10 border border-white/20 flex items-center justify-center text-white hover:border-brand-500 hover:text-brand-400 transition-colors disabled:opacity-30 cursor-pointer"
             >
               <ChevronLeft className="w-5 h-5" />
             </button>
             <button
               onClick={next}
               disabled={offset >= max}
-              className="w-10 h-10 border border-white/20 flex items-center justify-center text-white hover:border-brand-500 hover:text-brand-400 transition-colors disabled:opacity-30"
+              className="w-10 h-10 border border-white/20 flex items-center justify-center text-white hover:border-brand-500 hover:text-brand-400 transition-colors disabled:opacity-30 cursor-pointer"
             >
               <ChevronRight className="w-5 h-5" />
             </button>
@@ -86,16 +47,19 @@ export default function Momentos() {
                   minWidth: 'calc(33.333% - 0.5rem)',
                   transform: inView ? 'translateY(0)' : 'translateY(3rem)',
                   opacity: inView ? 1 : 0,
-                  transitionDelay: `${i * 120}ms`
+                  transitionDelay: `${i * 120}ms`,
                 }}
               >
                 <img
                   src={m.image_url}
                   alt={m.alt_text || ''}
+                  loading="lazy"
                   className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-700 brightness-75 group-hover:brightness-90 group-hover:scale-105"
                 />
                 <div className="absolute bottom-4 left-4">
-                  <span className="font-display font-semibold text-xs tracking-widest text-white/50">0{i + 1}</span>
+                  <span className="font-display font-semibold text-xs tracking-widest text-white/50">
+                    0{i + 1}
+                  </span>
                 </div>
               </div>
             ))}
