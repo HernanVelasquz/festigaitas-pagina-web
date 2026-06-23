@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 
-export type Page = 'home' | 'documents' | 'history';
+export type Page = 'home' | 'documents' | 'history' | 'register';
 
 export function useNavigationViewModel() {
   const [currentPath, setCurrentPath] = useState<string>(window.location.pathname);
@@ -28,6 +28,8 @@ export function useNavigationViewModel() {
     page = 'documents';
   } else if (currentPath === '/history') {
     page = 'history';
+  } else if (currentPath === '/register') {
+    page = 'register';
   }
 
   return {

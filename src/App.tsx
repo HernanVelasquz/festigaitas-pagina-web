@@ -7,6 +7,7 @@ import { useNavigationViewModel } from './viewModels/useNavigationViewModel';
 const HomePage = lazy(() => import('./pages/HomePage'));
 const DocumentsPage = lazy(() => import('./pages/DocumentsPage'));
 const HistoryPage = lazy(() => import('./pages/HistoryPage'));
+const RegisterPage = lazy(() => import('./pages/RegisterPage'));
 
 function App() {
   const { page, navigate } = useNavigationViewModel();
@@ -25,6 +26,7 @@ function App() {
         {page === 'home' && <HomePage onNavigate={navigate} />}
         {page === 'documents' && <DocumentsPage onBack={() => navigate('/')} />}
         {page === 'history' && <HistoryPage onBack={() => navigate('/')} />}
+        {page === 'register' && <RegisterPage onBack={() => navigate('/')} />}
       </Suspense>
 
       {/* Persistent music player — state survives page navigation */}

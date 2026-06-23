@@ -12,6 +12,7 @@ const scrollLinks = [
 ];
 
 const pageLinks = [
+  { label: 'Registro', path: '/register', page: 'register' as const },
   { label: 'Documentos', path: '/documents', page: 'documents' as const },
 ];
 
