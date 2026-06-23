@@ -135,7 +135,7 @@ export default function RegisterPage({ onBack }: RegisterPageProps) {
             </div>
           )}
           <p className="text-xs text-ink-500 mt-4 font-body font-light">
-            Las inscripciones de este periodo abren el 25 de este mes a las 5:00 PM (Hora Colombia, UTC-05:00).
+            Las inscripciones de este concurso inician a partir del 25 de Junio de 2026 a las 12:00 AM (Hora Colombia).
           </p>
         </div>
 
