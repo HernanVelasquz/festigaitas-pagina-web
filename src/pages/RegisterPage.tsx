@@ -88,7 +88,7 @@ export default function RegisterPage({ onBack }: RegisterPageProps) {
           <span className="section-label block mb-4 text-brand-400">Apertura de inscripciones este mes</span>
           {timeLeft.isExpired ? (
             <div className="text-red-400 font-display font-bold text-xl uppercase tracking-wider">
-              Las inscripciones para este mes han abren
+              Las inscripciones
             </div>
           ) : (
             <div className="flex justify-center items-center gap-4 sm:gap-8">
