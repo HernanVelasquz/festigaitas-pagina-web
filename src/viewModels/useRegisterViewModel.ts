@@ -26,6 +26,7 @@ const ALLOWED_AUDIO_TYPES = ['audio/mpeg', 'audio/mp3'];
 // Form validation schema using Zod
 export const registerSchema = z.object({
   authorName: z.string().min(1, 'El nombre del autor es obligatorio'),
+  authorEmail: z.string().min(1, 'El correo electrónico es obligatorio').email('Ingresa un correo electrónico válido'),
   songName: z.string().min(1, 'El nombre de la canción es obligatorio'),
   rhythm: z.enum(['porro', 'cumbia', 'merengue', 'puya'], {
     required_error: 'Selecciona un ritmo válido',
@@ -47,6 +48,22 @@ export const registerSchema = z.object({
       (files) => !files || (files[0] && ALLOWED_IMAGE_TYPES.includes(files[0].type)),
       'Solo se permiten imágenes (JPG, PNG) o PDF'
     ),
+  rutFile: z
+    .custom<FileList>()
+    .refine((files) => files && files.length > 0, 'La copia del RUT es obligatoria')
+    .refine((files) => !files || (files[0] && files[0].size <= MAX_FILE_SIZE_DOC), 'El archivo no debe superar los 5MB')
+    .refine(
+      (files) => !files || (files[0] && ALLOWED_IMAGE_TYPES.includes(files[0].type)),
+      'Solo se permiten imágenes (JPG, PNG) o PDF'
+    ),
+  photoFile: z
+    .custom<FileList>()
+    .refine((files) => files && files.length > 0, 'La fotografía del autor es obligatoria')
+    .refine((files) => !files || (files[0] && files[0].size <= MAX_FILE_SIZE_DOC), 'El archivo no debe superar los 5MB')
+    .refine(
+      (files) => !files || (files[0] && ALLOWED_IMAGE_TYPES.includes(files[0].type)),
+      'Solo se permiten imágenes (JPG, PNG) o PDF'
+    ),
   audioFile: z
     .custom<FileList>()
     .refine((files) => files && files.length > 0, 'El archivo de audio es obligatorio')
@@ -54,6 +71,14 @@ export const registerSchema = z.object({
     .refine(
       (files) => !files || (files[0] && ALLOWED_AUDIO_TYPES.includes(files[0].type)),
       'Solo se permiten archivos de audio MP3'
+    ),
+  bankCertificateFile: z
+    .custom<FileList>()
+    .refine((files) => files && files.length > 0, 'La certificación bancaria es obligatoria')
+    .refine((files) => !files || (files[0] && files[0].size <= MAX_FILE_SIZE_DOC), 'El archivo no debe superar los 5MB')
+    .refine(
+      (files) => !files || (files[0] && files[0].type === 'application/pdf'),
+      'Solo se permiten archivos en formato PDF'
     ),
 });
 
@@ -105,18 +130,25 @@ export function useRegisterViewModel() {
       // 1. Upload files to Supabase Storage
       const lyricsUrl = await uploadFile(data.lyricsFile[0], 'lyrics');
       const idUrl = await uploadFile(data.idFile[0], 'identifications');
+      const rutUrl = await uploadFile(data.rutFile[0], 'rut_files');
+      const photoUrl = await uploadFile(data.photoFile[0], 'author_photos');
       const audioUrl = await uploadFile(data.audioFile[0], 'audio');
+      const bankCertificateUrl = await uploadFile(data.bankCertificateFile[0], 'bank_certificates');
 
       // 2. Save metadata to Supabase DB 'registrations'
       const { error } = await supabase.from('registrations').insert([
         {
           author_name: data.authorName,
+          author_email: data.authorEmail,
           song_name: data.songName,
           rhythm: data.rhythm,
           origin: data.origin,
           lyrics_url: lyricsUrl,
           id_url: idUrl,
+          rut_url: rutUrl,
+          photo_url: photoUrl,
           audio_url: audioUrl,
+          bank_certificate_url: bankCertificateUrl,
         },
       ]);
 

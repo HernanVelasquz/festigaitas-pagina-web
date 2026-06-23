@@ -50,7 +50,10 @@ export default function RegisterPage({ onBack }: RegisterPageProps) {
   const [openSection, setOpenSection] = useState<number | null>(0);
   const [lyricsName, setLyricsName] = useState<string | null>(null);
   const [idName, setIdName] = useState<string | null>(null);
+  const [rutName, setRutName] = useState<string | null>(null);
+  const [photoName, setPhotoName] = useState<string | null>(null);
   const [audioName, setAudioName] = useState<string | null>(null);
+  const [bankCertificateName, setBankCertificateName] = useState<string | null>(null);
 
   const toggleSection = (idx: number) => {
     setOpenSection((prev) => (prev === idx ? null : idx));
@@ -82,29 +85,53 @@ export default function RegisterPage({ onBack }: RegisterPageProps) {
         {/* Rules Accordion */}
         <div className="border-y border-white/5 mb-12">
           <AccordionSection
-            title="1. Requisitos para el Autor"
+            title="1. Requisitos para la presentacion de la Obra Musical (Art. 21 - Reglamento de Concursos 2026)"
             isOpen={openSection === 0}
             onToggle={() => toggleSection(0)}
           >
             <p>
-              El autor o compositor debe ser mayor de edad y de nacionalidad colombiana (o acreditar residencia legal superior a 5 años).
+              Se inscribirán todas las canciones o composiciones musicales cuya melodía y letra no hayan sido grabadas ni presentadas en este u otro evento o concurso.
             </p>
             <p>
-              Cada compositor podrá postular un máximo de <strong>una (1) obra</strong> por cada modalidad/ritmo.
+              Las obras se podrán presentar en cualquiera de las siguientes modalidades: <strong>Gaita Larga</strong> y <strong>Gaita Corta</strong>.
+            </p>
+            <p>
+              Podrán interpretarse en los siguientes ritmos tradicionales: <strong>Porro</strong>, <strong>Cumbia</strong>, <strong>Merengue</strong> y <strong>Puya</strong>.
+            </p>
+            <p>
+              La duración de la canción no debe exceder los <strong>cuatro (4) minutos</strong>.
+            </p>
+
+            <p className="text-brand-400 font-bold mt-2">
+              <strong>IMPORTANTE:</strong> La obra musical que exceda el tiempo establecido, quedará descalificada.
             </p>
           </AccordionSection>
 
           <AccordionSection
-            title="2. Especificaciones de la Obra"
+            title="2. Medios y Fechas de Inscripción (Art. 22 - Reglamento de Concursos 2026)"
             isOpen={openSection === 1}
             onToggle={() => toggleSection(1)}
           >
             <p>
-              La composición debe ser <strong>100% inédita</strong> (no haber sido publicada en medios físicos, digitales ni interpretada en conciertos públicos previos).
+              La inscripción se efectúa a través de los siguientes canales oficiales:
             </p>
-            <p>
-              La duración de la pista de audio debe estar contenida entre <strong>3:00 y 5:00 minutos</strong>.
+            <ul className="list-disc pl-5 space-y-1">
+              <li>
+                <strong>Modalidad Virtual:</strong> Diligenciando este formulario web de registro de obras, o enviando el audio de la canción e informando el nombre y ritmo a través de WeTransfer a <a href="mailto:inscripciones.2024.festigaitas@gmail.com" className="text-brand-400 hover:underline">inscripciones.2024.festigaitas@gmail.com</a>, adjuntando la letra original, fotocopia de cédula, fotocopia del RUT, certificado bancario y fotografía del autor.
+              </li>
+              <li>
+                <strong>Modalidad Presencial:</strong> En la Secretaría del Festival aportando el audio de la canción, la letra original, fotocopia de cédula, fotocopia del RUT, certificado bancario y fotografía del autor.
+              </li>
+              <li>
+                <strong>Correo Tradicional:</strong> Enviando en un solo paquete el audio de la canción (informando nombre y ritmo), la letra original, fotocopia de cédula, fotocopia del RUT, certificado bancario y fotografía del autor.
+              </li>
+            </ul>
+            <p className="mt-2">
+              El rango válido para las inscripciones va desde el <strong>1 de julio hasta el 31 de julio de 2026 a las 5:00 PM</strong>.
             </p>
+            <div className="bg-white/5 p-3 border-l-2 border-brand-400 text-xs mt-3 font-body font-light">
+              <strong>PARÁGRAFO:</strong> El audio y la letra de la canción entran a formar parte de los archivos del Festival Nacional de Gaitas “Francisco Llirene”, por lo que <strong>NO SE HARÁN DEVOLUCIONES</strong>.
+            </div>
           </AccordionSection>
 
           <AccordionSection
@@ -113,9 +140,12 @@ export default function RegisterPage({ onBack }: RegisterPageProps) {
             onToggle={() => toggleSection(2)}
           >
             <ul className="list-disc pl-5 space-y-1">
-              <li><strong>Letra de la canción:</strong> En formato PDF, Word (.doc, .docx). Máximo 5MB.</li>
-              <li><strong>Cédula de ciudadanía:</strong> Escaneada por ambas caras en un único PDF o imagen (JPG/PNG). Máximo 5MB.</li>
-              <li><strong>Audio de la obra (.mp3):</strong> Grabado con buena calidad y que contenga la interpretación vocal e instrumental definitiva. Máximo 15MB.</li>
+              <li><strong>Letra de la canción:</strong> En formato PDF, tamaño carta. (Máximo 5MB).</li>
+              <li><strong>Cédula de ciudadanía:</strong> Escaneada en PDF, ampliada al 150% de ambos lados. (Máximo 5MB).</li>
+              <li><strong>Fotocopia del RUT (Registro Unico Tributario):</strong> Escaneado en PDF. (Máximo 5MB). (Actualizado).</li>
+              <li><strong>Fotografia Artistica del Autor de la Obra Musical (Plano Medio o Medio Cuerpo en Excelente Calidad de Resolución y Vestido de Gaitero (Hombre) o Vestida de bailadora de Gaita (Mujer)):</strong> En formato de imagen (JPG/PNG). (Máximo 5MB).</li>
+              <li><strong>Archivo de audio (.mp3):</strong> Grabado con excelente calidad. (Máximo 15MB).</li>
+              <li><strong>Certificación Bancaria:</strong> En formato PDF. (Máximo 5MB).</li>
             </ul>
           </AccordionSection>
         </div>
@@ -131,7 +161,15 @@ export default function RegisterPage({ onBack }: RegisterPageProps) {
               </p>
             </div>
             <button
-              onClick={() => setSuccess(false)}
+              onClick={() => {
+                setSuccess(false);
+                setLyricsName(null);
+                setIdName(null);
+                setRutName(null);
+                setPhotoName(null);
+                setAudioName(null);
+                setBankCertificateName(null);
+              }}
               className="mt-2 px-6 py-2 bg-emerald-500 hover:bg-emerald-400 text-ink-900 font-display font-bold text-xs uppercase tracking-wider transition-colors cursor-pointer"
             >
               Inscribir otra canción
@@ -176,21 +214,39 @@ export default function RegisterPage({ onBack }: RegisterPageProps) {
               {/* Author Name */}
               <div>
                 <label className="block text-xs font-display font-bold uppercase tracking-wider text-ink-300 mb-2">
-                  Nombre del Autor / Compositor *
+                  Nombres y Apellidos del Autor / Compositor *
                 </label>
                 <input
                   type="text"
-                  placeholder="Ej: Francisco Llirene"
+                  placeholder="Ej: José Ángel Álvarez Alarcón"
                   {...register('authorName')}
-                  className={`w-full bg-ink-800 border px-4 py-3 text-sm text-white focus:outline-none focus:border-brand-400 transition-colors font-body ${
-                    errors.authorName ? 'border-red-500' : 'border-white/10'
-                  }`}
+                  className={`w-full bg-ink-800 border px-4 py-3 text-sm text-white focus:outline-none focus:border-brand-400 transition-colors font-body ${errors.authorName ? 'border-red-500' : 'border-white/10'
+                    }`}
                 />
                 {errors.authorName && (
                   <p className="text-xs text-red-400 mt-1 font-body">{errors.authorName.message}</p>
                 )}
               </div>
 
+              {/* Author Email */}
+              <div>
+                <label className="block text-xs font-display font-bold uppercase tracking-wider text-ink-300 mb-2">
+                  Correo Electrónico del Autor / Compositor *
+                </label>
+                <input
+                  type="email"
+                  placeholder="Ej: autor@correo.com"
+                  {...register('authorEmail')}
+                  className={`w-full bg-ink-800 border px-4 py-3 text-sm text-white focus:outline-none focus:border-brand-400 transition-colors font-body ${errors.authorEmail ? 'border-red-500' : 'border-white/10'
+                    }`}
+                />
+                {errors.authorEmail && (
+                  <p className="text-xs text-red-400 mt-1 font-body">{errors.authorEmail.message}</p>
+                )}
+              </div>
+            </div>
+
+            <div className="grid sm:grid-cols-2 gap-6">
               {/* Song Name */}
               <div>
                 <label className="block text-xs font-display font-bold uppercase tracking-wider text-ink-300 mb-2">
@@ -198,39 +254,13 @@ export default function RegisterPage({ onBack }: RegisterPageProps) {
                 </label>
                 <input
                   type="text"
-                  placeholder="Ej: El Soplo Ancestral"
+                  placeholder="Ej: Escrito en la Piel"
                   {...register('songName')}
-                  className={`w-full bg-ink-800 border px-4 py-3 text-sm text-white focus:outline-none focus:border-brand-400 transition-colors font-body ${
-                    errors.songName ? 'border-red-500' : 'border-white/10'
-                  }`}
+                  className={`w-full bg-ink-800 border px-4 py-3 text-sm text-white focus:outline-none focus:border-brand-400 transition-colors font-body ${errors.songName ? 'border-red-500' : 'border-white/10'
+                    }`}
                 />
                 {errors.songName && (
                   <p className="text-xs text-red-400 mt-1 font-body">{errors.songName.message}</p>
-                )}
-              </div>
-            </div>
-
-            <div className="grid sm:grid-cols-2 gap-6">
-              {/* Rhythm Dropdown */}
-              <div>
-                <label className="block text-xs font-display font-bold uppercase tracking-wider text-ink-300 mb-2">
-                  Ritmo *
-                </label>
-                <select
-                  {...register('rhythm')}
-                  className={`w-full bg-ink-800 border px-4 py-3 text-sm text-white focus:outline-none focus:border-brand-400 transition-colors font-body ${
-                    errors.rhythm ? 'border-red-500' : 'border-white/10'
-                  }`}
-                >
-                  <option value="">Selecciona un ritmo...</option>
-                  {rhythmOptions.map((opt) => (
-                    <option key={opt.value} value={opt.value}>
-                      {opt.label}
-                    </option>
-                  ))}
-                </select>
-                {errors.rhythm && (
-                  <p className="text-xs text-red-400 mt-1 font-body">{errors.rhythm.message}</p>
                 )}
               </div>
 
@@ -243,12 +273,35 @@ export default function RegisterPage({ onBack }: RegisterPageProps) {
                   type="text"
                   placeholder="Ej: Ovejas, Sucre"
                   {...register('origin')}
-                  className={`w-full bg-ink-800 border px-4 py-3 text-sm text-white focus:outline-none focus:border-brand-400 transition-colors font-body ${
-                    errors.origin ? 'border-red-500' : 'border-white/10'
-                  }`}
+                  className={`w-full bg-ink-800 border px-4 py-3 text-sm text-white focus:outline-none focus:border-brand-400 transition-colors font-body ${errors.origin ? 'border-red-500' : 'border-white/10'
+                    }`}
                 />
                 {errors.origin && (
                   <p className="text-xs text-red-400 mt-1 font-body">{errors.origin.message}</p>
+                )}
+              </div>
+            </div>
+
+            <div className="grid sm:grid-cols-2 gap-6">
+              {/* Rhythm Dropdown */}
+              <div>
+                <label className="block text-xs font-display font-bold uppercase tracking-wider text-ink-300 mb-2">
+                  Ritmo *
+                </label>
+                <select
+                  {...register('rhythm')}
+                  className={`w-full bg-ink-800 border px-4 py-3 text-sm text-white focus:outline-none focus:border-brand-400 transition-colors font-body ${errors.rhythm ? 'border-red-500' : 'border-white/10'
+                    }`}
+                >
+                  <option value="">Selecciona un ritmo...</option>
+                  {rhythmOptions.map((opt) => (
+                    <option key={opt.value} value={opt.value}>
+                      {opt.label}
+                    </option>
+                  ))}
+                </select>
+                {errors.rhythm && (
+                  <p className="text-xs text-red-400 mt-1 font-body">{errors.rhythm.message}</p>
                 )}
               </div>
             </div>
@@ -258,7 +311,7 @@ export default function RegisterPage({ onBack }: RegisterPageProps) {
               {/* Lyrics File */}
               <div>
                 <label className="block text-xs font-display font-bold uppercase tracking-wider text-ink-300 mb-2">
-                  Letra de la Canción (PDF, Word) *
+                  Letra de la Canción (PDF) *
                 </label>
                 <div className="relative">
                   <input
@@ -272,52 +325,18 @@ export default function RegisterPage({ onBack }: RegisterPageProps) {
                   />
                   <label
                     htmlFor="lyrics-input"
-                    className={`flex flex-col items-center justify-center border-2 border-dashed rounded p-4 text-center cursor-pointer hover:border-brand-400 hover:bg-white/[0.01] transition-all ${
-                      errors.lyricsFile ? 'border-red-500' : 'border-white/10'
-                    }`}
+                    className={`flex flex-col items-center justify-center border-2 border-dashed rounded p-4 text-center cursor-pointer hover:border-brand-400 hover:bg-white/[0.01] transition-all ${errors.lyricsFile ? 'border-red-500' : 'border-white/10'
+                      }`}
                   >
                     <FileText className="w-6 h-6 text-ink-500 mb-2" />
-                    <span className="text-xs font-body font-medium text-white truncate max-w-full">
+                    <span className="text-xs font-body font-medium text-white truncate max-w-full animate-fade-in">
                       {lyricsName || 'Seleccionar archivo'}
                     </span>
-                    <span className="text-[10px] font-body text-ink-500 mt-1 font-light">PDF, DOC, DOCX (Máx. 5MB)</span>
+                    <span className="text-[10px] font-body text-ink-500 mt-1 font-light">PDF (Tamaño Carta, Máx. 5MB)</span>
                   </label>
                 </div>
                 {errors.lyricsFile && (
                   <p className="text-xs text-red-400 mt-1 font-body">{errors.lyricsFile.message as string}</p>
-                )}
-              </div>
-
-              {/* ID File */}
-              <div>
-                <label className="block text-xs font-display font-bold uppercase tracking-wider text-ink-300 mb-2">
-                  Documento de Identidad *
-                </label>
-                <div className="relative">
-                  <input
-                    type="file"
-                    accept=".pdf,.jpg,.jpeg,.png"
-                    id="id-input"
-                    className="hidden"
-                    {...register('idFile', {
-                      onChange: (e) => setIdName(e.target.files?.[0]?.name || null),
-                    })}
-                  />
-                  <label
-                    htmlFor="id-input"
-                    className={`flex flex-col items-center justify-center border-2 border-dashed rounded p-4 text-center cursor-pointer hover:border-brand-400 hover:bg-white/[0.01] transition-all ${
-                      errors.idFile ? 'border-red-500' : 'border-white/10'
-                    }`}
-                  >
-                    <Upload className="w-6 h-6 text-ink-500 mb-2" />
-                    <span className="text-xs font-body font-medium text-white truncate max-w-full">
-                      {idName || 'Seleccionar archivo'}
-                    </span>
-                    <span className="text-[10px] font-body text-ink-500 mt-1 font-light">PDF, JPG, PNG (Máx. 5MB)</span>
-                  </label>
-                </div>
-                {errors.idFile && (
-                  <p className="text-xs text-red-400 mt-1 font-body">{errors.idFile.message as string}</p>
                 )}
               </div>
 
@@ -338,19 +357,148 @@ export default function RegisterPage({ onBack }: RegisterPageProps) {
                   />
                   <label
                     htmlFor="audio-input"
-                    className={`flex flex-col items-center justify-center border-2 border-dashed rounded p-4 text-center cursor-pointer hover:border-brand-400 hover:bg-white/[0.01] transition-all ${
-                      errors.audioFile ? 'border-red-500' : 'border-white/10'
-                    }`}
+                    className={`flex flex-col items-center justify-center border-2 border-dashed rounded p-4 text-center cursor-pointer hover:border-brand-400 hover:bg-white/[0.01] transition-all ${errors.audioFile ? 'border-red-500' : 'border-white/10'
+                      }`}
                   >
                     <Music className="w-6 h-6 text-ink-500 mb-2" />
-                    <span className="text-xs font-body font-medium text-white truncate max-w-full">
+                    <span className="text-xs font-body font-medium text-white truncate max-w-full animate-fade-in">
                       {audioName || 'Seleccionar archivo'}
                     </span>
-                    <span className="text-[10px] font-body text-ink-500 mt-1 font-light">MP3 (Máx. 15MB)</span>
+                    <span className="text-[10px] font-body text-ink-500 mt-1 font-light">MP3 (Excelente Calidad, Máx. 15MB)</span>
                   </label>
                 </div>
                 {errors.audioFile && (
                   <p className="text-xs text-red-400 mt-1 font-body">{errors.audioFile.message as string}</p>
+                )}
+              </div>
+
+              {/* Photo File */}
+              <div>
+                <label className="block text-xs font-display font-bold uppercase tracking-wider text-ink-300 mb-2">
+                  Fotografía del Autor *
+                </label>
+                <div className="relative">
+                  <input
+                    type="file"
+                    accept=".jpg,.jpeg,.png"
+                    id="photo-input"
+                    className="hidden"
+                    {...register('photoFile', {
+                      onChange: (e) => setPhotoName(e.target.files?.[0]?.name || null),
+                    })}
+                  />
+                  <label
+                    htmlFor="photo-input"
+                    className={`flex flex-col items-center justify-center border-2 border-dashed rounded p-4 text-center cursor-pointer hover:border-brand-400 hover:bg-white/[0.01] transition-all ${errors.photoFile ? 'border-red-500' : 'border-white/10'
+                      }`}
+                  >
+                    <Upload className="w-6 h-6 text-ink-500 mb-2" />
+                    <span className="text-xs font-body font-medium text-white truncate max-w-full animate-fade-in">
+                      {photoName || 'Seleccionar archivo'}
+                    </span>
+                    <span className="text-[10px] font-body text-ink-500 mt-1 font-light">JPG, PNG (Plano Medio, Máx. 5MB)</span>
+                  </label>
+                </div>
+                {errors.photoFile && (
+                  <p className="text-xs text-red-400 mt-1 font-body">{errors.photoFile.message as string}</p>
+                )}
+              </div>
+            </div>
+
+            <div className="grid sm:grid-cols-3 gap-6 pt-4">
+              {/* ID File */}
+              <div>
+                <label className="block text-xs font-display font-bold uppercase tracking-wider text-ink-300 mb-2">
+                  Documento de Identidad *
+                </label>
+                <div className="relative">
+                  <input
+                    type="file"
+                    accept=".pdf,.jpg,.jpeg,.png"
+                    id="id-input"
+                    className="hidden"
+                    {...register('idFile', {
+                      onChange: (e) => setIdName(e.target.files?.[0]?.name || null),
+                    })}
+                  />
+                  <label
+                    htmlFor="id-input"
+                    className={`flex flex-col items-center justify-center border-2 border-dashed rounded p-4 text-center cursor-pointer hover:border-brand-400 hover:bg-white/[0.01] transition-all ${errors.idFile ? 'border-red-500' : 'border-white/10'
+                      }`}
+                  >
+                    <Upload className="w-6 h-6 text-ink-500 mb-2" />
+                    <span className="text-xs font-body font-medium text-white truncate max-w-full animate-fade-in">
+                      {idName || 'Seleccionar archivo'}
+                    </span>
+                    <span className="text-[10px] font-body text-ink-500 mt-1 font-light">PDF (Ampliado al 150%, Máx. 5MB)</span>
+                  </label>
+                </div>
+                {errors.idFile && (
+                  <p className="text-xs text-red-400 mt-1 font-body">{errors.idFile.message as string}</p>
+                )}
+              </div>
+
+              {/* RUT File */}
+              <div>
+                <label className="block text-xs font-display font-bold uppercase tracking-wider text-ink-300 mb-2">
+                  Fotocopia del RUT *
+                </label>
+                <div className="relative">
+                  <input
+                    type="file"
+                    accept=".pdf,.jpg,.jpeg,.png"
+                    id="rut-input"
+                    className="hidden"
+                    {...register('rutFile', {
+                      onChange: (e) => setRutName(e.target.files?.[0]?.name || null),
+                    })}
+                  />
+                  <label
+                    htmlFor="rut-input"
+                    className={`flex flex-col items-center justify-center border-2 border-dashed rounded p-4 text-center cursor-pointer hover:border-brand-400 hover:bg-white/[0.01] transition-all ${errors.rutFile ? 'border-red-500' : 'border-white/10'
+                      }`}
+                  >
+                    <Upload className="w-6 h-6 text-ink-500 mb-2" />
+                    <span className="text-xs font-body font-medium text-white truncate max-w-full animate-fade-in">
+                      {rutName || 'Seleccionar archivo'}
+                    </span>
+                    <span className="text-[10px] font-body text-ink-500 mt-1 font-light">PDF (Escaneado, Máx. 5MB)</span>
+                  </label>
+                </div>
+                {errors.rutFile && (
+                  <p className="text-xs text-red-400 mt-1 font-body">{errors.rutFile.message as string}</p>
+                )}
+              </div>
+
+              {/* Bank Certificate File */}
+              <div>
+                <label className="block text-xs font-display font-bold uppercase tracking-wider text-ink-300 mb-2">
+                  Certificación Bancaria *
+                </label>
+                <div className="relative">
+                  <input
+                    type="file"
+                    accept=".pdf"
+                    id="bank-certificate-input"
+                    className="hidden"
+                    {...register('bankCertificateFile', {
+                      onChange: (e) => setBankCertificateName(e.target.files?.[0]?.name || null),
+                    })}
+                  />
+                  <label
+                    htmlFor="bank-certificate-input"
+                    className={`flex flex-col items-center justify-center border-2 border-dashed rounded p-4 text-center cursor-pointer hover:border-brand-400 hover:bg-white/[0.01] transition-all ${errors.bankCertificateFile ? 'border-red-500' : 'border-white/10'
+                      }`}
+                  >
+                    <FileText className="w-6 h-6 text-ink-500 mb-2" />
+                    <span className="text-xs font-body font-medium text-white truncate max-w-full animate-fade-in">
+                      {bankCertificateName || 'Seleccionar archivo'}
+                    </span>
+                    <span className="text-[10px] font-body text-ink-500 mt-1 font-light">PDF (Certificación Bancaria, Máx. 5MB)</span>
+                  </label>
+                </div>
+                {errors.bankCertificateFile && (
+                  <p className="text-xs text-red-400 mt-1 font-body">{errors.bankCertificateFile.message as string}</p>
                 )}
               </div>
             </div>
