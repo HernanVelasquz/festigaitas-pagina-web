@@ -45,6 +45,7 @@ export default function RegisterPage({ onBack }: RegisterPageProps) {
     errorMsg,
     setSuccess,
     rhythmOptions,
+    timeLeft,
   } = useRegisterViewModel();
 
   const [openSection, setOpenSection] = useState<number | null>(0);
@@ -79,6 +80,62 @@ export default function RegisterPage({ onBack }: RegisterPageProps) {
           </h1>
           <p className="text-ink-400 text-sm mt-3 max-w-xl font-body">
             Inscribe tu canción en el festival de gaitas más importante de Colombia. Por favor lee atentamente el reglamento antes de completar el formulario.
+          </p>
+        </div>
+
+        {/* Countdown Timer */}
+        <div className="mb-12 bg-ink-800/40 border border-white/5 p-6 rounded backdrop-blur-sm text-center">
+          <span className="section-label block mb-4 text-brand-400">Apertura de inscripciones este mes</span>
+          {timeLeft.isExpired ? (
+            <div className="text-red-400 font-display font-bold text-xl uppercase tracking-wider">
+              Las inscripciones para este mes han abren
+            </div>
+          ) : (
+            <div className="flex justify-center items-center gap-4 sm:gap-8">
+              {/* Days */}
+              <div className="flex flex-col items-center">
+                <span className="font-display font-black text-4xl sm:text-5xl text-white tracking-tight leading-none">
+                  {String(timeLeft.days).padStart(2, '0')}
+                </span>
+                <span className="text-[10px] font-body text-ink-400 uppercase tracking-widest mt-2 font-medium">Días</span>
+              </div>
+
+              {/* Divider */}
+              <span className="font-display font-light text-2xl sm:text-3xl text-white/20 select-none">:</span>
+
+              {/* Hours */}
+              <div className="flex flex-col items-center">
+                <span className="font-display font-black text-4xl sm:text-5xl text-white tracking-tight leading-none">
+                  {String(timeLeft.hours).padStart(2, '0')}
+                </span>
+                <span className="text-[10px] font-body text-ink-400 uppercase tracking-widest mt-2 font-medium">Horas</span>
+              </div>
+
+              {/* Divider */}
+              <span className="font-display font-light text-2xl sm:text-3xl text-white/20 select-none">:</span>
+
+              {/* Minutes */}
+              <div className="flex flex-col items-center">
+                <span className="font-display font-black text-4xl sm:text-5xl text-white tracking-tight leading-none">
+                  {String(timeLeft.minutes).padStart(2, '0')}
+                </span>
+                <span className="text-[10px] font-body text-ink-400 uppercase tracking-widest mt-2 font-medium">Minutos</span>
+              </div>
+
+              {/* Divider */}
+              <span className="font-display font-light text-2xl sm:text-3xl text-white/20 select-none">:</span>
+
+              {/* Seconds */}
+              <div className="flex flex-col items-center">
+                <span className="font-display font-black text-4xl sm:text-5xl text-brand-400 tracking-tight leading-none min-w-[3rem]">
+                  {String(timeLeft.seconds).padStart(2, '0')}
+                </span>
+                <span className="text-[10px] font-body text-ink-400 uppercase tracking-widest mt-2 font-medium">Segundos</span>
+              </div>
+            </div>
+          )}
+          <p className="text-xs text-ink-500 mt-4 font-body font-light">
+            Las inscripciones de este periodo abren el 25 de este mes a las 5:00 PM (Hora Colombia, UTC-05:00).
           </p>
         </div>
 

@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
@@ -84,10 +84,84 @@ export const registerSchema = z.object({
 
 export type RegisterFormData = z.infer<typeof registerSchema>;
 
+export interface TimeLeft {
+  days: number;
+  hours: number;
+  minutes: number;
+  seconds: number;
+  isExpired: boolean;
+}
+
 export function useRegisterViewModel() {
   const [submitting, setSubmitting] = useState(false);
   const [success, setSuccess] = useState(false);
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
+  const [timeLeft, setTimeLeft] = useState<TimeLeft>({
+    days: 0,
+    hours: 0,
+    minutes: 0,
+    seconds: 0,
+    isExpired: false,
+  });
+
+  useEffect(() => {
+    const getTargetDate = () => {
+      const now = new Date();
+      const year = now.getFullYear();
+      const month = String(now.getMonth() + 1).padStart(2, '0');
+      return `${year}-${month}-25T17:00:00-05:00`;
+    };
+
+    const targetIso = getTargetDate();
+    const targetTime = new Date(targetIso).getTime();
+    let offset = 0;
+
+    const syncServerTime = async () => {
+      try {
+        const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
+        const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
+        if (!supabaseUrl || !supabaseAnonKey) return;
+        const response = await fetch(`${supabaseUrl}/rest/v1/`, {
+          method: 'HEAD',
+          headers: { apikey: supabaseAnonKey },
+        });
+        const serverDateStr = response.headers.get('date');
+        if (serverDateStr) {
+          const serverTime = new Date(serverDateStr).getTime();
+          const clientTime = Date.now();
+          offset = serverTime - clientTime;
+        }
+      } catch (err) {
+        console.error('Error syncing server time:', err);
+      }
+    };
+
+    syncServerTime().then(() => {
+      calculateTime();
+    });
+
+    const calculateTime = () => {
+      const adjustedNow = Date.now() + offset;
+      const difference = targetTime - adjustedNow;
+
+      if (difference <= 0) {
+        setTimeLeft({ days: 0, hours: 0, minutes: 0, seconds: 0, isExpired: true });
+        return;
+      }
+
+      const days = Math.floor(difference / (1000 * 60 * 60 * 24));
+      const hours = Math.floor((difference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+      const minutes = Math.floor((difference % (1000 * 60 * 60)) / (1000 * 60));
+      const seconds = Math.floor((difference % (1000 * 60)) / 1000);
+
+      setTimeLeft({ days, hours, minutes, seconds, isExpired: false });
+    };
+
+    calculateTime();
+    const timer = setInterval(calculateTime, 1000);
+
+    return () => clearInterval(timer);
+  }, []);
 
   const {
     register,
@@ -175,5 +249,6 @@ export function useRegisterViewModel() {
     errorMsg,
     setSuccess,
     rhythmOptions: RHYTHM_OPTIONS,
+    timeLeft,
   };
 }
