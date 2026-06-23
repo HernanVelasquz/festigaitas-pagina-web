@@ -79,7 +79,7 @@ export default function RegisterPage({ onBack }: RegisterPageProps) {
             Registro de <span className="text-brand-400">Canciones Inéditas</span>
           </h1>
           <p className="text-ink-400 text-sm mt-3 max-w-xl font-body">
-            Inscribe tu canción en el festival de gaitas más importante de Colombia. Por favor lee atentamente el reglamento antes de diligenciar el formulario.
+            Inscribe tu canción en el festival de gaitas más importante de Colombia. Por favor lee atentamente los requisitos antes de diligenciar el formulario.
           </p>
         </div>
 
