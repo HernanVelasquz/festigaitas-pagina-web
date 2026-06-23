@@ -11,10 +11,10 @@ export default function Hero() {
 
       <div className="relative z-10 max-w-7xl mx-auto px-6 lg:px-10 w-full pt-24 pb-16 grid lg:grid-cols-2 gap-10 items-center">
         {/* Left */}
-        <div>
+        <div className="flex flex-col items-center text-center lg:text-center lg:items-center">
           <p className="section-label mb-8">Ovejas · Sucre · Colombia</p>
 
-          <h1 className="font-display font-black leading-none uppercase tracking-tight text-white">
+          <h1 className="font-display font-black leading-none uppercase tracking-tight text-white w-full">
             <span className="block text-[clamp(1.6rem,4vw,3.2rem)] tracking-widest text-ink-200">
               Festival Nacional de
             </span>
@@ -23,7 +23,7 @@ export default function Hero() {
                 version="1.0"
                 xmlns="http://www.w3.org/2000/svg"
                 viewBox="0 0 350.792256 142.382759"
-                className="h-[clamp(4.5rem,11vw,9rem)] w-auto fill-current"
+                className="h-[clamp(4.5rem,11vw,9rem)] w-auto fill-current mx-auto"
                 preserveAspectRatio="xMidYMid meet"
               >
                 <g
