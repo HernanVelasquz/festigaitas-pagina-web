@@ -85,7 +85,7 @@ export default function RegisterPage({ onBack }: RegisterPageProps) {
 
         {/* Countdown Timer */}
         <div className="mb-12 bg-ink-800/40 border border-white/5 p-6 rounded backdrop-blur-sm text-center">
-          <span className="section-label block mb-4 text-brand-400">Apertura de inscripciones este mes</span>
+          <span className="section-label block mb-4 text-brand-400">Apertura de inscripciones</span>
           {timeLeft.isExpired ? (
             <div className="text-red-400 font-display font-bold text-xl uppercase tracking-wider">
               Las inscripciones
