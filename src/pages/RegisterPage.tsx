@@ -143,7 +143,7 @@ export default function RegisterPage({ onBack }: RegisterPageProps) {
           )}
           <p className="text-xs text-ink-500 mt-4 font-body font-light">
             {registrationState === 'before_opening'
-              ? 'Las inscripciones de este concurso inician a partir del 25 de Junio de 2026 a las 5:00 PM (Hora Colombia).'
+              ? 'Las inscripciones de este concurso inician a partir del 25 de Junio de 2026 a las 12:00 AM (Hora Colombia).'
               : registrationState === 'open'
               ? 'Las inscripciones de este concurso cierran el 31 de Julio de 2026 a las 5:00 PM (Hora Colombia).'
               : 'El periodo de inscripciones ha finalizado.'}
