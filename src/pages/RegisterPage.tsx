@@ -46,6 +46,7 @@ export default function RegisterPage({ onBack }: RegisterPageProps) {
     setSuccess,
     rhythmOptions,
     timeLeft,
+    registrationState,
   } = useRegisterViewModel();
 
   const [openSection, setOpenSection] = useState<number | null>(0);
@@ -85,10 +86,16 @@ export default function RegisterPage({ onBack }: RegisterPageProps) {
 
         {/* Countdown Timer */}
         <div className="mb-12 bg-ink-800/40 border border-white/5 p-6 rounded backdrop-blur-sm text-center">
-          <span className="section-label block mb-4 text-brand-400">Apertura de inscripciones</span>
-          {timeLeft.isExpired ? (
+          <span className="section-label block mb-4 text-brand-400">
+            {registrationState === 'before_opening'
+              ? 'Apertura de inscripciones'
+              : registrationState === 'open'
+              ? 'Cierre de inscripciones'
+              : 'Inscripciones cerradas'}
+          </span>
+          {registrationState === 'closed' ? (
             <div className="text-red-400 font-display font-bold text-xl uppercase tracking-wider">
-              Las inscripciones
+              Las inscripciones han cerrado
             </div>
           ) : (
             <div className="flex justify-center items-center gap-4 sm:gap-8">
@@ -135,7 +142,11 @@ export default function RegisterPage({ onBack }: RegisterPageProps) {
             </div>
           )}
           <p className="text-xs text-ink-500 mt-4 font-body font-light">
-            Las inscripciones de este concurso inician a partir del 25 de Junio de 2026 a las 12:00 AM (Hora Colombia).
+            {registrationState === 'before_opening'
+              ? 'Las inscripciones de este concurso inician a partir del 25 de Junio de 2026 a las 5:00 PM (Hora Colombia).'
+              : registrationState === 'open'
+              ? 'Las inscripciones de este concurso cierran el 31 de Julio de 2026 a las 5:00 PM (Hora Colombia).'
+              : 'El periodo de inscripciones ha finalizado.'}
           </p>
         </div>
 
@@ -255,7 +266,7 @@ export default function RegisterPage({ onBack }: RegisterPageProps) {
             <div className="relative aspect-video w-full overflow-hidden border border-white/10 bg-black">
               <iframe
                 className="absolute inset-0 w-full h-full"
-                src="https://www.youtube.com/embed/D7POKdeQuvM"
+                src="https://www.youtube.com/embed/f2bTLaU1RXk"
                 title="Video instructivo de registro"
                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                 allowFullScreen
@@ -584,13 +595,19 @@ export default function RegisterPage({ onBack }: RegisterPageProps) {
             <div className="pt-6">
               <button
                 type="submit"
-                disabled={submitting}
+                disabled={submitting || registrationState !== 'open'}
                 className="w-full flex items-center justify-center h-12 font-display font-bold text-xs tracking-widest uppercase bg-brand-500 text-ink-900 border border-brand-400 hover:bg-brand-400 transition-colors disabled:opacity-50 cursor-pointer"
               >
                 {submitting ? (
                   <span className="w-5 h-5 border-2 border-current border-t-transparent rounded-full animate-spin mr-2" />
                 ) : null}
-                {submitting ? 'Enviando Registro...' : 'Enviar Registro de Obra'}
+                {submitting
+                  ? 'Enviando Registro...'
+                  : registrationState === 'before_opening'
+                  ? 'Inscripciones no iniciadas'
+                  : registrationState === 'closed'
+                  ? 'Inscripciones cerradas'
+                  : 'Enviar Registro de Obra'}
               </button>
             </div>
           </form>
