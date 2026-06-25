@@ -28,6 +28,10 @@ export const registerSchema = z.object({
   authorName: z.string().min(1, 'El nombre del autor es obligatorio'),
   authorEmail: z.string().min(1, 'El correo electrónico es obligatorio').email('Ingresa un correo electrónico válido'),
   songName: z.string().min(1, 'El nombre de la canción es obligatorio'),
+  authorPhone: z
+    .string()
+    .min(1, 'El número de teléfono es obligatorio')
+    .regex(/^[0-9]+$/, 'Ingresa un número de teléfono válido (solo números)'),
   rhythm: z.enum(['porro', 'cumbia', 'merengue', 'puya'], {
     required_error: 'Selecciona un ritmo válido',
   }),
@@ -172,13 +176,13 @@ export function useRegisterViewModel() {
     resolver: zodResolver(registerSchema),
   });
 
-  const uploadFile = async (file: File, folder: string): Promise<string> => {
-    const fileExt = file.name.split('.').pop();
-    const fileName = `${folder}/${Date.now()}_${Math.random().toString(36).substring(7)}.${fileExt}`;
-    
-    // Upload files to bucket 'registration-files'
+  const uploadFile = async (file: File, folder: string, authorPhone: string): Promise<string> => {
+    const currentYear = new Date().getFullYear();
+    const fileName = `${currentYear}/${authorPhone}/${folder}/${file.name}`;
+
+    // Upload files to bucket 'unreleased-song'
     const { error, data } = await supabase.storage
-      .from('registration-files')
+      .from('unreleased-song')
       .upload(fileName, file, {
         cacheControl: '3600',
         upsert: false,
@@ -190,7 +194,7 @@ export function useRegisterViewModel() {
 
     // Retrieve public url
     const { data: urlData } = supabase.storage
-      .from('registration-files')
+      .from('unreleased-song')
       .getPublicUrl(fileName);
 
     return urlData.publicUrl;
@@ -201,19 +205,21 @@ export function useRegisterViewModel() {
     setErrorMsg(null);
 
     try {
+      const phone = data.authorPhone;
       // 1. Upload files to Supabase Storage
-      const lyricsUrl = await uploadFile(data.lyricsFile[0], 'lyrics');
-      const idUrl = await uploadFile(data.idFile[0], 'identifications');
-      const rutUrl = await uploadFile(data.rutFile[0], 'rut_files');
-      const photoUrl = await uploadFile(data.photoFile[0], 'author_photos');
-      const audioUrl = await uploadFile(data.audioFile[0], 'audio');
-      const bankCertificateUrl = await uploadFile(data.bankCertificateFile[0], 'bank_certificates');
+      const lyricsUrl = await uploadFile(data.lyricsFile[0], 'lyrics', phone);
+      const idUrl = await uploadFile(data.idFile[0], 'identifications', phone);
+      const rutUrl = await uploadFile(data.rutFile[0], 'rut_files', phone);
+      const photoUrl = await uploadFile(data.photoFile[0], 'author_photos', phone);
+      const audioUrl = await uploadFile(data.audioFile[0], 'audio', phone);
+      const bankCertificateUrl = await uploadFile(data.bankCertificateFile[0], 'bank_certificates', phone);
 
       // 2. Save metadata to Supabase DB 'registrations'
-      const { error } = await supabase.from('registrations').insert([
+      const { error } = await supabase.from('unreleased_song').insert([
         {
           author_name: data.authorName,
           author_email: data.authorEmail,
+          author_phone: data.authorPhone,
           song_name: data.songName,
           rhythm: data.rhythm,
           origin: data.origin,
