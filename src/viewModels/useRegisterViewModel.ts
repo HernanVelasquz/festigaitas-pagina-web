@@ -88,6 +88,8 @@ export const registerSchema = z.object({
 
 export type RegisterFormData = z.infer<typeof registerSchema>;
 
+export type RegistrationState = 'before_opening' | 'open' | 'closed';
+
 export interface TimeLeft {
   days: number;
   hours: number;
@@ -100,6 +102,7 @@ export function useRegisterViewModel() {
   const [submitting, setSubmitting] = useState(false);
   const [success, setSuccess] = useState(false);
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
+  const [registrationState, setRegistrationState] = useState<RegistrationState>('before_opening');
   const [timeLeft, setTimeLeft] = useState<TimeLeft>({
     days: 0,
     hours: 0,
@@ -109,15 +112,8 @@ export function useRegisterViewModel() {
   });
 
   useEffect(() => {
-    const getTargetDate = () => {
-      const now = new Date();
-      const year = now.getFullYear();
-      const month = String(now.getMonth() + 1).padStart(2, '0');
-      return `${year}-${month}-25T17:00:00-05:00`;
-    };
-
-    const targetIso = getTargetDate();
-    const targetTime = new Date(targetIso).getTime();
+    const openingTime = new Date('2026-06-25T17:00:00-05:00').getTime();
+    const closingTime = new Date('2026-07-31T17:00:00-05:00').getTime();
     let offset = 0;
 
     const syncServerTime = async () => {
@@ -146,13 +142,29 @@ export function useRegisterViewModel() {
 
     const calculateTime = () => {
       const adjustedNow = Date.now() + offset;
-      const difference = targetTime - adjustedNow;
+      
+      let state: RegistrationState = 'before_opening';
+      let targetTime = openingTime;
 
-      if (difference <= 0) {
+      if (adjustedNow < openingTime) {
+        state = 'before_opening';
+        targetTime = openingTime;
+      } else if (adjustedNow < closingTime) {
+        state = 'open';
+        targetTime = closingTime;
+      } else {
+        state = 'closed';
+        targetTime = 0;
+      }
+
+      setRegistrationState(state);
+
+      if (state === 'closed') {
         setTimeLeft({ days: 0, hours: 0, minutes: 0, seconds: 0, isExpired: true });
         return;
       }
 
+      const difference = targetTime - adjustedNow;
       const days = Math.floor(difference / (1000 * 60 * 60 * 24));
       const hours = Math.floor((difference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
       const minutes = Math.floor((difference % (1000 * 60 * 60)) / (1000 * 60));
@@ -256,5 +268,6 @@ export function useRegisterViewModel() {
     setSuccess,
     rhythmOptions: RHYTHM_OPTIONS,
     timeLeft,
+    registrationState,
   };
 }
