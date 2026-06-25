@@ -174,7 +174,7 @@ export default function RegisterPage({ onBack }: RegisterPageProps) {
             </p>
             <ul className="list-disc pl-5 space-y-1">
               <li>
-                <strong>Modalidad Virtual:</strong> Diligenciando este formulario web de registro de obras, o enviando el audio de la canción e informando el nombre y ritmo a través de WeTransfer a <a href="mailto:inscripciones.2024.festigaitas@gmail.com" className="text-brand-400 hover:underline">inscripciones.2024.festigaitas@gmail.com</a>, adjuntando la letra original, fotocopia de cédula, fotocopia del RUT, certificado bancario y fotografía del autor.
+                <strong>Modalidad Virtual:</strong> Diligenciando <a href="#registration-form" className="text-brand-400 hover:underline">este formulario web de registro de obras</a>, o enviando la canción por medio del correo adjunto <a href="mailto:concursosfestigaitas@gmail.com" className="text-brand-400 hover:underline">concursosfestigaitas@gmail.com</a>, adjuntando la letra original, fotocopia de cédula, fotocopia del RUT, certificado bancario y fotografía del autor.
               </li>
               <li>
                 <strong>Modalidad Presencial:</strong> En la Secretaría del Festival aportando el audio de la canción, la letra original, fotocopia de cédula, fotocopia del RUT, certificado bancario y fotografía del autor.
@@ -269,7 +269,7 @@ export default function RegisterPage({ onBack }: RegisterPageProps) {
 
         {/* Form (Full Width) */}
         {!success && (
-          <form onSubmit={handleSubmit} className="space-y-6 max-w-3xl mx-auto">
+          <form id="registration-form" onSubmit={handleSubmit} className="space-y-6 max-w-3xl mx-auto">
             <div className="grid sm:grid-cols-2 gap-6">
               {/* Author Name */}
               <div>
@@ -307,20 +307,20 @@ export default function RegisterPage({ onBack }: RegisterPageProps) {
             </div>
 
             <div className="grid sm:grid-cols-2 gap-6">
-              {/* Song Name */}
+              {/* Phone Number */}
               <div>
                 <label className="block text-xs font-display font-bold uppercase tracking-wider text-ink-300 mb-2">
-                  Nombre de la Canción *
+                  Teléfono de Contacto *
                 </label>
                 <input
-                  type="text"
-                  placeholder="Ej: Escrito en la Piel"
-                  {...register('songName')}
-                  className={`w-full bg-ink-800 border px-4 py-3 text-sm text-white focus:outline-none focus:border-brand-400 transition-colors font-body ${errors.songName ? 'border-red-500' : 'border-white/10'
+                  type="tel"
+                  placeholder="Ej: 3001234567"
+                  {...register('authorPhone')}
+                  className={`w-full bg-ink-800 border px-4 py-3 text-sm text-white focus:outline-none focus:border-brand-400 transition-colors font-body ${errors.authorPhone ? 'border-red-500' : 'border-white/10'
                     }`}
                 />
-                {errors.songName && (
-                  <p className="text-xs text-red-400 mt-1 font-body">{errors.songName.message}</p>
+                {errors.authorPhone && (
+                  <p className="text-xs text-red-400 mt-1 font-body">{errors.authorPhone.message}</p>
                 )}
               </div>
 
@@ -343,6 +343,23 @@ export default function RegisterPage({ onBack }: RegisterPageProps) {
             </div>
 
             <div className="grid sm:grid-cols-2 gap-6">
+              {/* Song Name */}
+              <div>
+                <label className="block text-xs font-display font-bold uppercase tracking-wider text-ink-300 mb-2">
+                  Nombre de la Canción *
+                </label>
+                <input
+                  type="text"
+                  placeholder="Ej: Escrito en la Piel"
+                  {...register('songName')}
+                  className={`w-full bg-ink-800 border px-4 py-3 text-sm text-white focus:outline-none focus:border-brand-400 transition-colors font-body ${errors.songName ? 'border-red-500' : 'border-white/10'
+                    }`}
+                />
+                {errors.songName && (
+                  <p className="text-xs text-red-400 mt-1 font-body">{errors.songName.message}</p>
+                )}
+              </div>
+
               {/* Rhythm Dropdown */}
               <div>
                 <label className="block text-xs font-display font-bold uppercase tracking-wider text-ink-300 mb-2">
