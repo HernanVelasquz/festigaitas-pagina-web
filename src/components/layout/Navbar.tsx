@@ -47,16 +47,24 @@ export default function Navbar({ onNavigate, activePage }: NavbarProps) {
         scrolled ? 'bg-ink-900/95 backdrop-blur border-b border-white/5' : ''
       }`}
     >
-      <div className="max-w-7xl mx-auto px-6 lg:px-10 h-14 flex items-center justify-between">
+      <div className="max-w-7xl mx-auto px-6 lg:px-10 h-16 flex items-center justify-between">
         {/* Logo */}
         <button
           onClick={() => {
             setMobileOpen(false);
             onNavigate('/');
           }}
-          className="flex items-center transition-opacity hover:opacity-85"
+          className="flex items-center gap-3 transition-opacity hover:opacity-85"
         >
-          <img src="/logo.png" alt="Festival de Gaitas" className="h-9 w-auto object-contain" />
+          <img src="/logo.png" alt="Festival de Gaitas" className="h-12 w-auto object-contain" />
+          <div className="flex flex-col text-center items-center justify-center">
+            <span className="font-display font-bold text-xs sm:text-sm uppercase tracking-widest text-white leading-none">
+              Festival Nacional de Gaitas
+            </span>
+            <span className="font-display font-semibold text-[9px] sm:text-[10px] uppercase tracking-widest text-brand-400 mt-1 leading-none">
+              Francisco Llirene
+            </span>
+          </div>
         </button>
 
         {/* Desktop nav */}
