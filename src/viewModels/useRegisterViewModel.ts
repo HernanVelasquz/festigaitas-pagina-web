@@ -112,7 +112,7 @@ export function useRegisterViewModel() {
   });
 
   useEffect(() => {
-    const openingTime = new Date('2026-06-25T17:00:00-05:00').getTime();
+    const openingTime = new Date('2026-06-25T00:00:00-05:00').getTime();
     const closingTime = new Date('2026-07-31T17:00:00-05:00').getTime();
     let offset = 0;
 
