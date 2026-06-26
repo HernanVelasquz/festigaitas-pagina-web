@@ -266,7 +266,7 @@ export default function RegisterPage({ onBack }: RegisterPageProps) {
             <div className="relative aspect-video w-full overflow-hidden border border-white/10 bg-black">
               <iframe
                 className="absolute inset-0 w-full h-full"
-                src="https://www.youtube.com/embed/f2bTLaU1RXk"
+                src="https://www.youtube.com/embed/OaoHjVZ4uyA"
                 title="Video instructivo de registro"
                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                 allowFullScreen
@@ -284,7 +284,7 @@ export default function RegisterPage({ onBack }: RegisterPageProps) {
             <div className="grid sm:grid-cols-2 gap-6">
               {/* Author Name */}
               <div>
-                <label className="block text-xs font-display font-bold uppercase tracking-wider text-ink-300 mb-2">
+                <label className="block text-xs font-display font-bold uppercase tracking-wider text-white mb-2">
                   Nombres y Apellidos del Autor / Compositor *
                 </label>
                 <input
@@ -301,7 +301,7 @@ export default function RegisterPage({ onBack }: RegisterPageProps) {
 
               {/* Author Email */}
               <div>
-                <label className="block text-xs font-display font-bold uppercase tracking-wider text-ink-300 mb-2">
+                <label className="block text-xs font-display font-bold uppercase tracking-wider text-white mb-2">
                   Correo Electrónico del Autor / Compositor *
                 </label>
                 <input
@@ -320,7 +320,7 @@ export default function RegisterPage({ onBack }: RegisterPageProps) {
             <div className="grid sm:grid-cols-2 gap-6">
               {/* Phone Number */}
               <div>
-                <label className="block text-xs font-display font-bold uppercase tracking-wider text-ink-300 mb-2">
+                <label className="block text-xs font-display font-bold uppercase tracking-wider text-white mb-2">
                   Teléfono de Contacto *
                 </label>
                 <input
@@ -337,7 +337,7 @@ export default function RegisterPage({ onBack }: RegisterPageProps) {
 
               {/* Location Origin */}
               <div>
-                <label className="block text-xs font-display font-bold uppercase tracking-wider text-ink-300 mb-2">
+                <label className="block text-xs font-display font-bold uppercase tracking-wider text-white mb-2">
                   Procedencia (Municipio / Departamento) *
                 </label>
                 <input
@@ -356,7 +356,7 @@ export default function RegisterPage({ onBack }: RegisterPageProps) {
             <div className="grid sm:grid-cols-2 gap-6">
               {/* Song Name */}
               <div>
-                <label className="block text-xs font-display font-bold uppercase tracking-wider text-ink-300 mb-2">
+                <label className="block text-xs font-display font-bold uppercase tracking-wider text-white mb-2">
                   Nombre de la Canción *
                 </label>
                 <input
@@ -373,7 +373,7 @@ export default function RegisterPage({ onBack }: RegisterPageProps) {
 
               {/* Rhythm Dropdown */}
               <div>
-                <label className="block text-xs font-display font-bold uppercase tracking-wider text-ink-300 mb-2">
+                <label className="block text-xs font-display font-bold uppercase tracking-wider text-white mb-2">
                   Ritmo *
                 </label>
                 <select
@@ -398,7 +398,7 @@ export default function RegisterPage({ onBack }: RegisterPageProps) {
             <div className="grid sm:grid-cols-3 gap-6 pt-4">
               {/* Lyrics File */}
               <div>
-                <label className="block text-xs font-display font-bold uppercase tracking-wider text-ink-300 mb-2">
+                <label className="block text-xs font-display font-bold uppercase tracking-wider text-white mb-2">
                   Letra de la Canción (PDF) *
                 </label>
                 <div className="relative">
@@ -430,7 +430,7 @@ export default function RegisterPage({ onBack }: RegisterPageProps) {
 
               {/* Audio File */}
               <div>
-                <label className="block text-xs font-display font-bold uppercase tracking-wider text-ink-300 mb-2">
+                <label className="block text-xs font-display font-bold uppercase tracking-wider text-white mb-2">
                   Archivo de Audio (.mp3) *
                 </label>
                 <div className="relative">
@@ -462,7 +462,7 @@ export default function RegisterPage({ onBack }: RegisterPageProps) {
 
               {/* Photo File */}
               <div>
-                <label className="block text-xs font-display font-bold uppercase tracking-wider text-ink-300 mb-2">
+                <label className="block text-xs font-display font-bold uppercase tracking-wider text-white mb-2">
                   Fotografía del Autor *
                 </label>
                 <div className="relative">
@@ -496,7 +496,7 @@ export default function RegisterPage({ onBack }: RegisterPageProps) {
             <div className="grid sm:grid-cols-3 gap-6 pt-4">
               {/* ID File */}
               <div>
-                <label className="block text-xs font-display font-bold uppercase tracking-wider text-ink-300 mb-2">
+                <label className="block text-xs font-display font-bold uppercase tracking-wider text-white mb-2">
                   Documento de Identidad *
                 </label>
                 <div className="relative">
@@ -528,7 +528,7 @@ export default function RegisterPage({ onBack }: RegisterPageProps) {
 
               {/* RUT File */}
               <div>
-                <label className="block text-xs font-display font-bold uppercase tracking-wider text-ink-300 mb-2">
+                <label className="block text-xs font-display font-bold uppercase tracking-wider text-white mb-2">
                   Fotocopia del RUT *
                 </label>
                 <div className="relative">
@@ -560,7 +560,7 @@ export default function RegisterPage({ onBack }: RegisterPageProps) {
 
               {/* Bank Certificate File */}
               <div>
-                <label className="block text-xs font-display font-bold uppercase tracking-wider text-ink-300 mb-2">
+                <label className="block text-xs font-display font-bold uppercase tracking-wider text-white mb-2">
                   Certificación Bancaria *
                 </label>
                 <div className="relative">
