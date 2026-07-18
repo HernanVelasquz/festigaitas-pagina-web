@@ -10,7 +10,7 @@ type ExploreLink =
 
 const explore: ExploreLink[] = [
   { label: 'Programación 2026', href: '#' },
-  { label: 'Reglamento Competencia', href: '#' },
+  { label: 'Reglamento Competencia', path: '/concursos-de-gaitas' },
   { label: 'Prensa & Acreditaciones', href: '#' },
   { label: 'Documentos Legales', path: '/documents' },
 ];
