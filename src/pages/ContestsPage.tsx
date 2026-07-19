@@ -153,8 +153,8 @@ export default function ContestsPage({ onBack }: ContestsPageProps) {
           <button
             onClick={() => setActiveTab('rules')}
             className={`flex items-center gap-2 px-6 py-4 font-display font-bold text-sm uppercase tracking-wider transition-colors border-b-2 cursor-pointer ${activeTab === 'rules'
-                ? 'border-brand-400 text-brand-400'
-                : 'border-transparent text-ink-400 hover:text-white'
+              ? 'border-brand-400 text-brand-400'
+              : 'border-transparent text-ink-400 hover:text-white'
               }`}
           >
             <BookOpen className="w-4 h-4" />
@@ -163,8 +163,8 @@ export default function ContestsPage({ onBack }: ContestsPageProps) {
           <button
             onClick={() => setActiveTab('form')}
             className={`flex items-center gap-2 px-6 py-4 font-display font-bold text-sm uppercase tracking-wider transition-colors border-b-2 cursor-pointer ${activeTab === 'form'
-                ? 'border-brand-400 text-brand-400'
-                : 'border-transparent text-ink-400 hover:text-white'
+              ? 'border-brand-400 text-brand-400'
+              : 'border-transparent text-ink-400 hover:text-white'
               }`}
           >
             <FileCheck className="w-4 h-4" />
@@ -545,18 +545,18 @@ export default function ContestsPage({ onBack }: ContestsPageProps) {
                       type="button"
                       onClick={() => currentStep > s.step && setCurrentStep(s.step)}
                       className={`flex flex-col items-center gap-2 group cursor-pointer ${currentStep === s.step
-                          ? 'text-brand-400'
-                          : currentStep > s.step
-                            ? 'text-white'
-                            : 'text-ink-500'
+                        ? 'text-brand-400'
+                        : currentStep > s.step
+                          ? 'text-white'
+                          : 'text-ink-500'
                         }`}
                     >
                       <div
                         className={`w-8 h-8 rounded-full border flex items-center justify-center font-display font-bold text-xs transition-all ${currentStep === s.step
-                            ? 'bg-brand-500 border-brand-400 text-ink-900 scale-110 shadow-[0_0_10px_rgba(234,179,8,0.2)]'
-                            : currentStep > s.step
-                              ? 'bg-ink-800 border-white/20 text-white'
-                              : 'bg-ink-900 border-white/5 text-ink-500'
+                          ? 'bg-brand-500 border-brand-400 text-ink-900 scale-110 shadow-[0_0_10px_rgba(234,179,8,0.2)]'
+                          : currentStep > s.step
+                            ? 'bg-ink-800 border-white/20 text-white'
+                            : 'bg-ink-900 border-white/5 text-ink-500'
                           }`}
                       >
                         {s.step}
@@ -601,12 +601,16 @@ export default function ContestsPage({ onBack }: ContestsPageProps) {
                               Año de Creación *
                             </label>
                             <input
-                              type="text"
-                              placeholder="Ej: 2012"
-                              {...register('creationYear')}
-                              className={`w-full bg-ink-800 border px-4 py-3 text-sm text-white focus:outline-none focus:border-brand-400 transition-colors font-body ${errors.creationYear ? 'border-red-500' : 'border-white/10'
-                                }`}
-                            />
+                               type="text"
+                               placeholder="Ej: 2012"
+                               {...register('creationYear', {
+                                 onChange: (e) => {
+                                   e.target.value = e.target.value.replace(/[^0-9]/g, '');
+                                 }
+                               })}
+                               className={`w-full bg-ink-800 border px-4 py-3 text-sm text-white focus:outline-none focus:border-brand-400 transition-colors font-body ${errors.creationYear ? 'border-red-500' : 'border-white/10'
+                                 }`}
+                             />
                             {errors.creationYear && (
                               <p className="text-xs text-red-400 mt-1 font-body">{errors.creationYear.message}</p>
                             )}
@@ -751,12 +755,16 @@ export default function ContestsPage({ onBack }: ContestsPageProps) {
                               Cédula de Ciudadanía del Director *
                             </label>
                             <input
-                              type="text"
-                              placeholder="Ej: 1100223344"
-                              {...register('directorId')}
-                              className={`w-full bg-ink-800 border px-4 py-3 text-sm text-white focus:outline-none focus:border-brand-400 transition-colors font-body ${errors.directorId ? 'border-red-500' : 'border-white/10'
-                                }`}
-                            />
+                               type="text"
+                               placeholder="Ej: 1100223344"
+                               {...register('directorId', {
+                                 onChange: (e) => {
+                                   e.target.value = e.target.value.replace(/[^0-9]/g, '');
+                                 }
+                               })}
+                               className={`w-full bg-ink-800 border px-4 py-3 text-sm text-white focus:outline-none focus:border-brand-400 transition-colors font-body ${errors.directorId ? 'border-red-500' : 'border-white/10'
+                                 }`}
+                             />
                             {errors.directorId && (
                               <p className="text-xs text-red-400 mt-1 font-body">{errors.directorId.message}</p>
                             )}
@@ -769,12 +777,16 @@ export default function ContestsPage({ onBack }: ContestsPageProps) {
                               Teléfono del Director *
                             </label>
                             <input
-                              type="tel"
-                              placeholder="Ej: 3001234567"
-                              {...register('phone')}
-                              className={`w-full bg-ink-800 border px-4 py-3 text-sm text-white focus:outline-none focus:border-brand-400 transition-colors font-body ${errors.phone ? 'border-red-500' : 'border-white/10'
-                                }`}
-                            />
+                               type="tel"
+                               placeholder="Ej: 3001234567"
+                               {...register('phone', {
+                                 onChange: (e) => {
+                                   e.target.value = e.target.value.replace(/[^0-9]/g, '');
+                                 }
+                               })}
+                               className={`w-full bg-ink-800 border px-4 py-3 text-sm text-white focus:outline-none focus:border-brand-400 transition-colors font-body ${errors.phone ? 'border-red-500' : 'border-white/10'
+                                 }`}
+                             />
                             {errors.phone && (
                               <p className="text-xs text-red-400 mt-1 font-body">{errors.phone.message}</p>
                             )}
@@ -826,12 +838,16 @@ export default function ContestsPage({ onBack }: ContestsPageProps) {
                               Teléfono de Contacto *
                             </label>
                             <input
-                              type="tel"
-                              placeholder="Ej: 3019876543"
-                              {...register('contactPhone')}
-                              className={`w-full bg-ink-800 border px-4 py-3 text-sm text-white focus:outline-none focus:border-brand-400 transition-colors font-body ${errors.contactPhone ? 'border-red-500' : 'border-white/10'
-                                }`}
-                            />
+                               type="tel"
+                               placeholder="Ej: 3019876543"
+                               {...register('contactPhone', {
+                                 onChange: (e) => {
+                                   e.target.value = e.target.value.replace(/[^0-9]/g, '');
+                                 }
+                               })}
+                               className={`w-full bg-ink-800 border px-4 py-3 text-sm text-white focus:outline-none focus:border-brand-400 transition-colors font-body ${errors.contactPhone ? 'border-red-500' : 'border-white/10'
+                                 }`}
+                             />
                             {errors.contactPhone && (
                               <p className="text-xs text-red-400 mt-1 font-body">{errors.contactPhone.message}</p>
                             )}
@@ -1147,8 +1163,8 @@ export default function ContestsPage({ onBack }: ContestsPageProps) {
                               type="button"
                               onClick={() => setActiveMemberTab(i)}
                               className={`px-5 py-2.5 font-display font-bold text-xs uppercase tracking-widest transition-all border cursor-pointer flex items-center gap-2 shrink-0 ${activeMemberTab === i
-                                  ? 'bg-brand-500 border-brand-400 text-ink-900 shadow-[0_0_10px_rgba(234,179,8,0.15)] font-black'
-                                  : 'bg-ink-800/40 border-white/5 text-ink-400 hover:text-white hover:border-white/10'
+                                ? 'bg-brand-500 border-brand-400 text-ink-900 shadow-[0_0_10px_rgba(234,179,8,0.15)] font-black'
+                                : 'bg-ink-800/40 border-white/5 text-ink-400 hover:text-white hover:border-white/10'
                                 }`}
                             >
                               <span>{roleLabel}</span>
@@ -1215,12 +1231,12 @@ export default function ContestsPage({ onBack }: ContestsPageProps) {
                                 No. Documento *
                               </label>
                               <input
-                                type="text"
-                                value={activeMember.docNumber}
-                                onChange={(e) => updateMember(activeMember.id, 'docNumber', e.target.value)}
-                                placeholder="Ej: 11223344"
-                                className="w-full bg-ink-800 border border-white/10 px-4 py-3 text-sm text-white focus:outline-none focus:border-brand-400 transition-colors font-body"
-                              />
+                                 type="text"
+                                 value={activeMember.docNumber}
+                                 onChange={(e) => updateMember(activeMember.id, 'docNumber', e.target.value.replace(/[^0-9]/g, ''))}
+                                 placeholder="Ej: 11223344"
+                                 className="w-full bg-ink-800 border border-white/10 px-4 py-3 text-sm text-white focus:outline-none focus:border-brand-400 transition-colors font-body"
+                               />
                             </div>
 
                             <div>
@@ -1249,7 +1265,7 @@ export default function ContestsPage({ onBack }: ContestsPageProps) {
                               <input
                                 type="tel"
                                 value={activeMember.phone || ''}
-                                onChange={(e) => updateMember(activeMember.id, 'phone', e.target.value)}
+                                onChange={(e) => updateMember(activeMember.id, 'phone', e.target.value.replace(/[^0-9]/g, ''))}
                                 placeholder="Ej: 3009998877"
                                 className="w-full bg-ink-800 border border-white/10 px-4 py-3 text-sm text-white focus:outline-none focus:border-brand-400 transition-colors font-body"
                               />
@@ -1372,12 +1388,16 @@ export default function ContestsPage({ onBack }: ContestsPageProps) {
                             Documento de Identidad del Representante *
                           </label>
                           <input
-                            type="text"
-                            placeholder="Ej: C.C. 1100223344"
-                            {...register('representativeId')}
-                            className={`w-full bg-ink-800 border px-4 py-3 text-sm text-white focus:outline-none focus:border-brand-400 transition-colors font-body ${errors.representativeId ? 'border-red-500' : 'border-white/10'
-                              }`}
-                          />
+                             type="text"
+                             placeholder="Ej: C.C. 1100223344"
+                             {...register('representativeId', {
+                               onChange: (e) => {
+                                 e.target.value = e.target.value.replace(/[^0-9]/g, '');
+                               }
+                             })}
+                             className={`w-full bg-ink-800 border px-4 py-3 text-sm text-white focus:outline-none focus:border-brand-400 transition-colors font-body ${errors.representativeId ? 'border-red-500' : 'border-white/10'
+                               }`}
+                           />
                           {errors.representativeId && (
                             <p className="text-xs text-red-400 mt-1 font-body">{errors.representativeId.message}</p>
                           )}
