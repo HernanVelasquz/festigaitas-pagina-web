@@ -12,6 +12,7 @@ const scrollLinks = [
 ];
 
 const pageLinks = [
+  { label: 'Concursos de Gaitas', path: '/concursos-de-gaitas', page: 'contests' as const },
   { label: 'Registro Canción Inédita', path: '/register', page: 'register' as const },
   { label: 'Documentos', path: '/documents', page: 'documents' as const },
 ];
