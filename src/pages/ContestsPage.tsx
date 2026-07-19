@@ -16,10 +16,9 @@ import {
 import {
   useContestsViewModel,
   CATEGORY_OPTIONS,
-  MODALITY_OPTIONS,
   DOC_TYPES,
   GENDER_OPTIONS,
-  ROLE_OPTIONS
+  getMemberRolesForCategory
 } from '../viewModels/useContestsViewModel';
 
 interface AccordionItemProps {
@@ -29,17 +28,17 @@ interface AccordionItemProps {
   children: React.ReactNode;
 }
 
-function AccordionItem({ title, isOpen, onToggle, children }: AccordionItemProps) {
+const AccordionItem = ({ title, isOpen, onToggle, children }: AccordionItemProps) => {
   return (
-    <div className={`border-b border-white/5 transition-colors ${isOpen ? 'bg-white/[0.01]' : ''}`}>
+    <div className="border border-white/5 bg-white/[0.01]">
       <button
+        type="button"
         onClick={onToggle}
-        className="w-full flex items-center justify-between py-5 text-left font-display font-bold text-lg uppercase tracking-wider text-white hover:text-brand-400 transition-colors cursor-pointer"
+        className="w-full flex justify-between items-center p-5 text-left font-display font-bold uppercase tracking-wider hover:bg-white/[0.02] transition-colors"
       >
-        <span>{title}</span>
-        <ChevronDown className={`w-5 h-5 transition-transform duration-300 ${isOpen ? 'rotate-180 text-brand-400' : 'text-ink-500'}`} />
+        <span className="text-sm sm:text-base text-white">{title}</span>
+        <ChevronDown className={`w-5 h-5 text-brand-400 transition-transform ${isOpen ? 'rotate-180' : ''}`} />
       </button>
-
       <div className={`grid transition-all duration-300 ease-in-out ${isOpen ? 'grid-rows-[1fr] opacity-100' : 'grid-rows-[0fr] opacity-0'}`}>
         <div className="overflow-hidden">
           <div className="pb-6 text-ink-300 text-sm leading-relaxed font-body font-light space-y-3">
@@ -68,8 +67,15 @@ export default function ContestsPage({ onBack }: ContestsPageProps) {
     registrationState,
     members,
     updateMember,
-    watch
+    watch,
+    modalityOptions,
+    isValid,
+    trigger
   } = useContestsViewModel();
+
+  const category = watch('category');
+  const isModalityFixed = !!(category && !category.startsWith('parejas_bailadoras'));
+  const acceptRegulations = watch('acceptRegulations');
 
   const [activeTab, setActiveTab] = useState<'rules' | 'form'>('rules');
   const [openRule, setOpenRule] = useState<number | null>(0);
@@ -89,7 +95,31 @@ export default function ContestsPage({ onBack }: ContestsPageProps) {
     setOpenRule((prev) => (prev === idx ? null : idx));
   };
 
-  const nextStep = () => setCurrentStep((prev) => Math.min(prev + 1, 4));
+  const nextStep = async () => {
+    if (currentStep === 1) {
+      const step1Fields = [
+        'groupName', 'category', 'modality', 'originTown', 'originDept',
+        'address', 'creationYear', 'totalMembers', 'directorName',
+        'directorId', 'phone', 'email', 'contactName', 'contactPhone',
+        'contactEmail'
+      ] as const;
+      const isStep1Valid = await trigger(step1Fields);
+      if (!isStep1Valid) return;
+    } else if (currentStep === 2) {
+      const step2Fields = [
+        'reviewFile', 'photoFile', 'membersListFile', 'idsFile', 'epsFile'
+      ] as const;
+      const isStep2Valid = await trigger(step2Fields);
+      if (!isStep2Valid) return;
+    } else if (currentStep === 3) {
+      const isStep3Valid = members.every(
+        (m) => m.fullName.trim() !== '' && m.birthDate !== '' && m.docNumber.trim() !== ''
+      );
+      if (!isStep3Valid) return;
+    }
+    setCurrentStep((prev) => Math.min(prev + 1, 4));
+  };
+
   const prevStep = () => setCurrentStep((prev) => Math.max(prev - 1, 1));
 
   // Determine active member
@@ -122,22 +152,20 @@ export default function ContestsPage({ onBack }: ContestsPageProps) {
         <div className="flex border-b border-white/5 mb-10">
           <button
             onClick={() => setActiveTab('rules')}
-            className={`flex items-center gap-2 px-6 py-4 font-display font-bold text-sm uppercase tracking-wider transition-colors border-b-2 cursor-pointer ${
-              activeTab === 'rules'
+            className={`flex items-center gap-2 px-6 py-4 font-display font-bold text-sm uppercase tracking-wider transition-colors border-b-2 cursor-pointer ${activeTab === 'rules'
                 ? 'border-brand-400 text-brand-400'
                 : 'border-transparent text-ink-400 hover:text-white'
-            }`}
+              }`}
           >
             <BookOpen className="w-4 h-4" />
             Reglamento del Festival
           </button>
           <button
             onClick={() => setActiveTab('form')}
-            className={`flex items-center gap-2 px-6 py-4 font-display font-bold text-sm uppercase tracking-wider transition-colors border-b-2 cursor-pointer ${
-              activeTab === 'form'
+            className={`flex items-center gap-2 px-6 py-4 font-display font-bold text-sm uppercase tracking-wider transition-colors border-b-2 cursor-pointer ${activeTab === 'form'
                 ? 'border-brand-400 text-brand-400'
                 : 'border-transparent text-ink-400 hover:text-white'
-            }`}
+              }`}
           >
             <FileCheck className="w-4 h-4" />
             Formulario de Inscripción
@@ -418,8 +446,8 @@ export default function ContestsPage({ onBack }: ContestsPageProps) {
                 {registrationState === 'before_opening'
                   ? 'Apertura de inscripciones de agrupaciones'
                   : registrationState === 'open'
-                  ? 'Cierre de inscripciones de agrupaciones'
-                  : 'Inscripciones de agrupaciones cerradas'}
+                    ? 'Cierre de inscripciones de agrupaciones'
+                    : 'Inscripciones de agrupaciones cerradas'}
               </span>
               {registrationState === 'closed' ? (
                 <div className="text-red-400 font-display font-bold text-xl uppercase tracking-wider">
@@ -516,22 +544,20 @@ export default function ContestsPage({ onBack }: ContestsPageProps) {
                       key={s.step}
                       type="button"
                       onClick={() => currentStep > s.step && setCurrentStep(s.step)}
-                      className={`flex flex-col items-center gap-2 group cursor-pointer ${
-                        currentStep === s.step
+                      className={`flex flex-col items-center gap-2 group cursor-pointer ${currentStep === s.step
                           ? 'text-brand-400'
                           : currentStep > s.step
-                          ? 'text-white'
-                          : 'text-ink-500'
-                      }`}
+                            ? 'text-white'
+                            : 'text-ink-500'
+                        }`}
                     >
                       <div
-                        className={`w-8 h-8 rounded-full border flex items-center justify-center font-display font-bold text-xs transition-all ${
-                          currentStep === s.step
+                        className={`w-8 h-8 rounded-full border flex items-center justify-center font-display font-bold text-xs transition-all ${currentStep === s.step
                             ? 'bg-brand-500 border-brand-400 text-ink-900 scale-110 shadow-[0_0_10px_rgba(234,179,8,0.2)]'
                             : currentStep > s.step
-                            ? 'bg-ink-800 border-white/20 text-white'
-                            : 'bg-ink-900 border-white/5 text-ink-500'
-                        }`}
+                              ? 'bg-ink-800 border-white/20 text-white'
+                              : 'bg-ink-900 border-white/5 text-ink-500'
+                          }`}
                       >
                         {s.step}
                       </div>
@@ -544,7 +570,7 @@ export default function ContestsPage({ onBack }: ContestsPageProps) {
 
                 {/* Form starts */}
                 <form onSubmit={handleSubmit} className="space-y-10 py-6">
-                  
+
                   {/* STEP 1: GENERAL GROUP DATA */}
                   {currentStep === 1 && (
                     <div className="space-y-10 animate-fade-in">
@@ -562,9 +588,8 @@ export default function ContestsPage({ onBack }: ContestsPageProps) {
                               type="text"
                               placeholder="Ej: Gaiteros de Ovejas"
                               {...register('groupName')}
-                              className={`w-full bg-ink-800 border px-4 py-3 text-sm text-white focus:outline-none focus:border-brand-400 transition-colors font-body ${
-                                errors.groupName ? 'border-red-500' : 'border-white/10'
-                              }`}
+                              className={`w-full bg-ink-800 border px-4 py-3 text-sm text-white focus:outline-none focus:border-brand-400 transition-colors font-body ${errors.groupName ? 'border-red-500' : 'border-white/10'
+                                }`}
                             />
                             {errors.groupName && (
                               <p className="text-xs text-red-400 mt-1 font-body">{errors.groupName.message}</p>
@@ -579,9 +604,8 @@ export default function ContestsPage({ onBack }: ContestsPageProps) {
                               type="text"
                               placeholder="Ej: 2012"
                               {...register('creationYear')}
-                              className={`w-full bg-ink-800 border px-4 py-3 text-sm text-white focus:outline-none focus:border-brand-400 transition-colors font-body ${
-                                errors.creationYear ? 'border-red-500' : 'border-white/10'
-                              }`}
+                              className={`w-full bg-ink-800 border px-4 py-3 text-sm text-white focus:outline-none focus:border-brand-400 transition-colors font-body ${errors.creationYear ? 'border-red-500' : 'border-white/10'
+                                }`}
                             />
                             {errors.creationYear && (
                               <p className="text-xs text-red-400 mt-1 font-body">{errors.creationYear.message}</p>
@@ -596,9 +620,8 @@ export default function ContestsPage({ onBack }: ContestsPageProps) {
                             </label>
                             <select
                               {...register('category')}
-                              className={`w-full bg-ink-800 border px-4 py-3 text-sm text-white focus:outline-none focus:border-brand-400 transition-colors font-body ${
-                                errors.category ? 'border-red-500' : 'border-white/10'
-                              }`}
+                              className={`w-full bg-ink-800 border px-4 py-3 text-sm text-white focus:outline-none focus:border-brand-400 transition-colors font-body ${errors.category ? 'border-red-500' : 'border-white/10'
+                                }`}
                             >
                               <option value="">Selecciona la categoría...</option>
                               {CATEGORY_OPTIONS.map((opt) => (
@@ -618,12 +641,12 @@ export default function ContestsPage({ onBack }: ContestsPageProps) {
                             </label>
                             <select
                               {...register('modality')}
-                              className={`w-full bg-ink-800 border px-4 py-3 text-sm text-white focus:outline-none focus:border-brand-400 transition-colors font-body ${
-                                errors.modality ? 'border-red-500' : 'border-white/10'
-                              }`}
+                              disabled={!category}
+                              className={`w-full bg-ink-800 border px-4 py-3 text-sm text-white focus:outline-none focus:border-brand-400 transition-colors font-body ${errors.modality ? 'border-red-500' : 'border-white/10'
+                                } ${!category ? 'pointer-events-none opacity-50' : ''}`}
                             >
                               <option value="">Selecciona la modalidad...</option>
-                              {MODALITY_OPTIONS.map((opt) => (
+                              {modalityOptions.map((opt) => (
                                 <option key={opt.value} value={opt.value}>
                                   {opt.label}
                                 </option>
@@ -644,9 +667,8 @@ export default function ContestsPage({ onBack }: ContestsPageProps) {
                               type="text"
                               placeholder="Ej: Ovejas"
                               {...register('originTown')}
-                              className={`w-full bg-ink-800 border px-4 py-3 text-sm text-white focus:outline-none focus:border-brand-400 transition-colors font-body ${
-                                errors.originTown ? 'border-red-500' : 'border-white/10'
-                              }`}
+                              className={`w-full bg-ink-800 border px-4 py-3 text-sm text-white focus:outline-none focus:border-brand-400 transition-colors font-body ${errors.originTown ? 'border-red-500' : 'border-white/10'
+                                }`}
                             />
                             {errors.originTown && (
                               <p className="text-xs text-red-400 mt-1 font-body">{errors.originTown.message}</p>
@@ -661,9 +683,8 @@ export default function ContestsPage({ onBack }: ContestsPageProps) {
                               type="text"
                               placeholder="Ej: Sucre"
                               {...register('originDept')}
-                              className={`w-full bg-ink-800 border px-4 py-3 text-sm text-white focus:outline-none focus:border-brand-400 transition-colors font-body ${
-                                errors.originDept ? 'border-red-500' : 'border-white/10'
-                              }`}
+                              className={`w-full bg-ink-800 border px-4 py-3 text-sm text-white focus:outline-none focus:border-brand-400 transition-colors font-body ${errors.originDept ? 'border-red-500' : 'border-white/10'
+                                }`}
                             />
                             {errors.originDept && (
                               <p className="text-xs text-red-400 mt-1 font-body">{errors.originDept.message}</p>
@@ -680,9 +701,8 @@ export default function ContestsPage({ onBack }: ContestsPageProps) {
                               type="text"
                               placeholder="Ej: Calle 15 No. 21-11"
                               {...register('address')}
-                              className={`w-full bg-ink-800 border px-4 py-3 text-sm text-white focus:outline-none focus:border-brand-400 transition-colors font-body ${
-                                errors.address ? 'border-red-500' : 'border-white/10'
-                              }`}
+                              className={`w-full bg-ink-800 border px-4 py-3 text-sm text-white focus:outline-none focus:border-brand-400 transition-colors font-body ${errors.address ? 'border-red-500' : 'border-white/10'
+                                }`}
                             />
                             {errors.address && (
                               <p className="text-xs text-red-400 mt-1 font-body">{errors.address.message}</p>
@@ -718,9 +738,8 @@ export default function ContestsPage({ onBack }: ContestsPageProps) {
                               type="text"
                               placeholder="Ej: Pedro Castro"
                               {...register('directorName')}
-                              className={`w-full bg-ink-800 border px-4 py-3 text-sm text-white focus:outline-none focus:border-brand-400 transition-colors font-body ${
-                                errors.directorName ? 'border-red-500' : 'border-white/10'
-                              }`}
+                              className={`w-full bg-ink-800 border px-4 py-3 text-sm text-white focus:outline-none focus:border-brand-400 transition-colors font-body ${errors.directorName ? 'border-red-500' : 'border-white/10'
+                                }`}
                             />
                             {errors.directorName && (
                               <p className="text-xs text-red-400 mt-1 font-body">{errors.directorName.message}</p>
@@ -735,9 +754,8 @@ export default function ContestsPage({ onBack }: ContestsPageProps) {
                               type="text"
                               placeholder="Ej: 1100223344"
                               {...register('directorId')}
-                              className={`w-full bg-ink-800 border px-4 py-3 text-sm text-white focus:outline-none focus:border-brand-400 transition-colors font-body ${
-                                errors.directorId ? 'border-red-500' : 'border-white/10'
-                              }`}
+                              className={`w-full bg-ink-800 border px-4 py-3 text-sm text-white focus:outline-none focus:border-brand-400 transition-colors font-body ${errors.directorId ? 'border-red-500' : 'border-white/10'
+                                }`}
                             />
                             {errors.directorId && (
                               <p className="text-xs text-red-400 mt-1 font-body">{errors.directorId.message}</p>
@@ -754,9 +772,8 @@ export default function ContestsPage({ onBack }: ContestsPageProps) {
                               type="tel"
                               placeholder="Ej: 3001234567"
                               {...register('phone')}
-                              className={`w-full bg-ink-800 border px-4 py-3 text-sm text-white focus:outline-none focus:border-brand-400 transition-colors font-body ${
-                                errors.phone ? 'border-red-500' : 'border-white/10'
-                              }`}
+                              className={`w-full bg-ink-800 border px-4 py-3 text-sm text-white focus:outline-none focus:border-brand-400 transition-colors font-body ${errors.phone ? 'border-red-500' : 'border-white/10'
+                                }`}
                             />
                             {errors.phone && (
                               <p className="text-xs text-red-400 mt-1 font-body">{errors.phone.message}</p>
@@ -771,9 +788,8 @@ export default function ContestsPage({ onBack }: ContestsPageProps) {
                               type="email"
                               placeholder="Ej: director@gaiteros.com"
                               {...register('email')}
-                              className={`w-full bg-ink-800 border px-4 py-3 text-sm text-white focus:outline-none focus:border-brand-400 transition-colors font-body ${
-                                errors.email ? 'border-red-500' : 'border-white/10'
-                              }`}
+                              className={`w-full bg-ink-800 border px-4 py-3 text-sm text-white focus:outline-none focus:border-brand-400 transition-colors font-body ${errors.email ? 'border-red-500' : 'border-white/10'
+                                }`}
                             />
                             {errors.email && (
                               <p className="text-xs text-red-400 mt-1 font-body">{errors.email.message}</p>
@@ -797,9 +813,8 @@ export default function ContestsPage({ onBack }: ContestsPageProps) {
                               type="text"
                               placeholder="Ej: Maria Isabel Perez"
                               {...register('contactName')}
-                              className={`w-full bg-ink-800 border px-4 py-3 text-sm text-white focus:outline-none focus:border-brand-400 transition-colors font-body ${
-                                errors.contactName ? 'border-red-500' : 'border-white/10'
-                              }`}
+                              className={`w-full bg-ink-800 border px-4 py-3 text-sm text-white focus:outline-none focus:border-brand-400 transition-colors font-body ${errors.contactName ? 'border-red-500' : 'border-white/10'
+                                }`}
                             />
                             {errors.contactName && (
                               <p className="text-xs text-red-400 mt-1 font-body">{errors.contactName.message}</p>
@@ -814,9 +829,8 @@ export default function ContestsPage({ onBack }: ContestsPageProps) {
                               type="tel"
                               placeholder="Ej: 3019876543"
                               {...register('contactPhone')}
-                              className={`w-full bg-ink-800 border px-4 py-3 text-sm text-white focus:outline-none focus:border-brand-400 transition-colors font-body ${
-                                errors.contactPhone ? 'border-red-500' : 'border-white/10'
-                              }`}
+                              className={`w-full bg-ink-800 border px-4 py-3 text-sm text-white focus:outline-none focus:border-brand-400 transition-colors font-body ${errors.contactPhone ? 'border-red-500' : 'border-white/10'
+                                }`}
                             />
                             {errors.contactPhone && (
                               <p className="text-xs text-red-400 mt-1 font-body">{errors.contactPhone.message}</p>
@@ -833,9 +847,8 @@ export default function ContestsPage({ onBack }: ContestsPageProps) {
                               type="email"
                               placeholder="Ej: contacto@gaiteros.com"
                               {...register('contactEmail')}
-                              className={`w-full bg-ink-800 border px-4 py-3 text-sm text-white focus:outline-none focus:border-brand-400 transition-colors font-body ${
-                                errors.contactEmail ? 'border-red-500' : 'border-white/10'
-                              }`}
+                              className={`w-full bg-ink-800 border px-4 py-3 text-sm text-white focus:outline-none focus:border-brand-400 transition-colors font-body ${errors.contactEmail ? 'border-red-500' : 'border-white/10'
+                                }`}
                             />
                             {errors.contactEmail && (
                               <p className="text-xs text-red-400 mt-1 font-body">{errors.contactEmail.message}</p>
@@ -881,9 +894,8 @@ export default function ContestsPage({ onBack }: ContestsPageProps) {
                             />
                             <label
                               htmlFor="review-input"
-                              className={`flex flex-col items-center justify-center border-2 border-dashed rounded p-4 text-center cursor-pointer hover:border-brand-400 hover:bg-white/[0.01] transition-all min-h-[140px] ${
-                                errors.reviewFile ? 'border-red-500' : 'border-white/10'
-                              }`}
+                              className={`flex flex-col items-center justify-center border-2 border-dashed rounded p-4 text-center cursor-pointer hover:border-brand-400 hover:bg-white/[0.01] transition-all min-h-[140px] ${errors.reviewFile ? 'border-red-500' : 'border-white/10'
+                                }`}
                             >
                               <FileText className="w-6 h-6 text-ink-500 mb-2" />
                               <span className="text-xs font-body font-medium text-white truncate max-w-full">
@@ -914,9 +926,8 @@ export default function ContestsPage({ onBack }: ContestsPageProps) {
                             />
                             <label
                               htmlFor="photo-input"
-                              className={`flex flex-col items-center justify-center border-2 border-dashed rounded p-4 text-center cursor-pointer hover:border-brand-400 hover:bg-white/[0.01] transition-all min-h-[140px] ${
-                                errors.photoFile ? 'border-red-500' : 'border-white/10'
-                              }`}
+                              className={`flex flex-col items-center justify-center border-2 border-dashed rounded p-4 text-center cursor-pointer hover:border-brand-400 hover:bg-white/[0.01] transition-all min-h-[140px] ${errors.photoFile ? 'border-red-500' : 'border-white/10'
+                                }`}
                             >
                               <Upload className="w-6 h-6 text-ink-500 mb-2" />
                               <span className="text-xs font-body font-medium text-white truncate max-w-full">
@@ -947,9 +958,8 @@ export default function ContestsPage({ onBack }: ContestsPageProps) {
                             />
                             <label
                               htmlFor="logo-input"
-                              className={`flex flex-col items-center justify-center border-2 border-dashed rounded p-4 text-center cursor-pointer hover:border-brand-400 hover:bg-white/[0.01] transition-all min-h-[140px] ${
-                                errors.logoFile ? 'border-red-500' : 'border-white/10'
-                              }`}
+                              className={`flex flex-col items-center justify-center border-2 border-dashed rounded p-4 text-center cursor-pointer hover:border-brand-400 hover:bg-white/[0.01] transition-all min-h-[140px] ${errors.logoFile ? 'border-red-500' : 'border-white/10'
+                                }`}
                             >
                               <Upload className="w-6 h-6 text-ink-500 mb-2" />
                               <span className="text-xs font-body font-medium text-white truncate max-w-full">
@@ -980,9 +990,8 @@ export default function ContestsPage({ onBack }: ContestsPageProps) {
                             />
                             <label
                               htmlFor="members-list-input"
-                              className={`flex flex-col items-center justify-center border-2 border-dashed rounded p-4 text-center cursor-pointer hover:border-brand-400 hover:bg-white/[0.01] transition-all min-h-[140px] ${
-                                errors.membersListFile ? 'border-red-500' : 'border-white/10'
-                              }`}
+                              className={`flex flex-col items-center justify-center border-2 border-dashed rounded p-4 text-center cursor-pointer hover:border-brand-400 hover:bg-white/[0.01] transition-all min-h-[140px] ${errors.membersListFile ? 'border-red-500' : 'border-white/10'
+                                }`}
                             >
                               <FileText className="w-6 h-6 text-ink-500 mb-2" />
                               <span className="text-xs font-body font-medium text-white truncate max-w-full">
@@ -1013,9 +1022,8 @@ export default function ContestsPage({ onBack }: ContestsPageProps) {
                             />
                             <label
                               htmlFor="ids-input"
-                              className={`flex flex-col items-center justify-center border-2 border-dashed rounded p-4 text-center cursor-pointer hover:border-brand-400 hover:bg-white/[0.01] transition-all min-h-[140px] ${
-                                errors.idsFile ? 'border-red-500' : 'border-white/10'
-                              }`}
+                              className={`flex flex-col items-center justify-center border-2 border-dashed rounded p-4 text-center cursor-pointer hover:border-brand-400 hover:bg-white/[0.01] transition-all min-h-[140px] ${errors.idsFile ? 'border-red-500' : 'border-white/10'
+                                }`}
                             >
                               <FileText className="w-6 h-6 text-ink-500 mb-2" />
                               <span className="text-xs font-body font-medium text-white truncate max-w-full">
@@ -1046,9 +1054,8 @@ export default function ContestsPage({ onBack }: ContestsPageProps) {
                             />
                             <label
                               htmlFor="eps-input"
-                              className={`flex flex-col items-center justify-center border-2 border-dashed rounded p-4 text-center cursor-pointer hover:border-brand-400 hover:bg-white/[0.01] transition-all min-h-[140px] ${
-                                errors.epsFile ? 'border-red-500' : 'border-white/10'
-                              }`}
+                              className={`flex flex-col items-center justify-center border-2 border-dashed rounded p-4 text-center cursor-pointer hover:border-brand-400 hover:bg-white/[0.01] transition-all min-h-[140px] ${errors.epsFile ? 'border-red-500' : 'border-white/10'
+                                }`}
                             >
                               <FileText className="w-6 h-6 text-ink-500 mb-2" />
                               <span className="text-xs font-body font-medium text-white truncate max-w-full">
@@ -1079,9 +1086,8 @@ export default function ContestsPage({ onBack }: ContestsPageProps) {
                             />
                             <label
                               htmlFor="minors-auth-input"
-                              className={`flex flex-col items-center justify-center border-2 border-dashed rounded p-4 text-center cursor-pointer hover:border-brand-400 hover:bg-white/[0.01] transition-all min-h-[140px] ${
-                                errors.minorsAuthFile ? 'border-red-500' : 'border-white/10'
-                              }`}
+                              className={`flex flex-col items-center justify-center border-2 border-dashed rounded p-4 text-center cursor-pointer hover:border-brand-400 hover:bg-white/[0.01] transition-all min-h-[140px] ${errors.minorsAuthFile ? 'border-red-500' : 'border-white/10'
+                                }`}
                             >
                               <FileText className="w-6 h-6 text-ink-500 mb-2" />
                               <span className="text-xs font-body font-medium text-white truncate max-w-full">
@@ -1121,30 +1127,31 @@ export default function ContestsPage({ onBack }: ContestsPageProps) {
                       <div className="border-b border-white/5 pb-3">
                         <h3 className="font-display font-black text-2xl sm:text-3xl uppercase tracking-wider text-brand-400 flex items-center gap-2">
                           <Users className="w-6 h-6" />
-                          3. Relación de Integrantes (Exactamente 6)
+                          3. Relación de Integrantes (Exactamente {members.length})
                         </h3>
                       </div>
 
                       <p className="text-ink-400 text-sm font-body font-light">
-                        Registra la información de los 6 integrantes de tu agrupación. Selecciona cada número a continuación para diligenciar sus datos correspondientes.
+                        Registra la información de los {members.length} integrantes de tu agrupación. Selecciona cada rol a continuación para diligenciar sus datos correspondientes.
                       </p>
 
                       {/* Numeric Sub-tabs bar */}
                       <div className="flex gap-2.5 pb-2 overflow-x-auto border-b border-white/5">
                         {members.map((m, i) => {
                           const isCompleted = m.fullName.trim() !== '' && m.docNumber.trim() !== '';
+                          const roleLabels = getMemberRolesForCategory(category);
+                          const roleLabel = roleLabels[i] || `Integrante #${i + 1}`;
                           return (
                             <button
                               key={m.id}
                               type="button"
                               onClick={() => setActiveMemberTab(i)}
-                              className={`px-5 py-2.5 font-display font-bold text-xs uppercase tracking-widest transition-all border cursor-pointer flex items-center gap-2 shrink-0 ${
-                                activeMemberTab === i
+                              className={`px-5 py-2.5 font-display font-bold text-xs uppercase tracking-widest transition-all border cursor-pointer flex items-center gap-2 shrink-0 ${activeMemberTab === i
                                   ? 'bg-brand-500 border-brand-400 text-ink-900 shadow-[0_0_10px_rgba(234,179,8,0.15)] font-black'
                                   : 'bg-ink-800/40 border-white/5 text-ink-400 hover:text-white hover:border-white/10'
-                              }`}
+                                }`}
                             >
-                              <span>Integrante #{i + 1}</span>
+                              <span>{roleLabel}</span>
                               {isCompleted ? (
                                 <span className="w-1.5 h-1.5 rounded-full bg-emerald-400" />
                               ) : (
@@ -1185,7 +1192,7 @@ export default function ContestsPage({ onBack }: ContestsPageProps) {
                             </div>
                           </div>
 
-                          <div className="grid sm:grid-cols-4 gap-6">
+                          <div className="grid sm:grid-cols-3 gap-6">
                             <div>
                               <label className="block text-xs sm:text-sm font-display font-extrabold uppercase tracking-widest2 text-white mb-2">
                                 Tipo Doc. *
@@ -1228,23 +1235,6 @@ export default function ContestsPage({ onBack }: ContestsPageProps) {
                                 {GENDER_OPTIONS.map((g) => (
                                   <option key={g.value} value={g.value}>
                                     {g.label}
-                                  </option>
-                                ))}
-                              </select>
-                            </div>
-
-                            <div>
-                              <label className="block text-xs sm:text-sm font-display font-extrabold uppercase tracking-widest2 text-white mb-2">
-                                Instrumento / Rol *
-                              </label>
-                              <select
-                                value={activeMember.role}
-                                onChange={(e) => updateMember(activeMember.id, 'role', e.target.value)}
-                                className="w-full bg-ink-800 border border-white/10 px-4 py-3 text-sm text-white focus:outline-none focus:border-brand-400 transition-colors font-body"
-                              >
-                                {ROLE_OPTIONS.map((r) => (
-                                  <option key={r.value} value={r.value}>
-                                    {r.label}
                                   </option>
                                 ))}
                               </select>
@@ -1307,7 +1297,7 @@ export default function ContestsPage({ onBack }: ContestsPageProps) {
                             </div>
 
                             <div>
-                              {activeMemberTab < 5 ? (
+                              {activeMemberTab < members.length - 1 ? (
                                 <button
                                   type="button"
                                   onClick={() => setActiveMemberTab((prev) => prev + 1)}
@@ -1343,7 +1333,7 @@ export default function ContestsPage({ onBack }: ContestsPageProps) {
                           Como representante de la agrupación, certifico que la información suministrada es veraz y
                           que todos los integrantes conocen y aceptan el reglamento del Festival Nacional de Gaitas.
                         </p>
-                        
+
                         <div className="flex items-start gap-3 mt-4">
                           <input
                             type="checkbox"
@@ -1369,9 +1359,8 @@ export default function ContestsPage({ onBack }: ContestsPageProps) {
                             type="text"
                             placeholder="Ej: Pedro Castro"
                             {...register('representativeName')}
-                            className={`w-full bg-ink-800 border px-4 py-3 text-sm text-white focus:outline-none focus:border-brand-400 transition-colors font-body ${
-                              errors.representativeName ? 'border-red-500' : 'border-white/10'
-                            }`}
+                            className={`w-full bg-ink-800 border px-4 py-3 text-sm text-white focus:outline-none focus:border-brand-400 transition-colors font-body ${errors.representativeName ? 'border-red-500' : 'border-white/10'
+                              }`}
                           />
                           {errors.representativeName && (
                             <p className="text-xs text-red-400 mt-1 font-body">{errors.representativeName.message}</p>
@@ -1386,9 +1375,8 @@ export default function ContestsPage({ onBack }: ContestsPageProps) {
                             type="text"
                             placeholder="Ej: C.C. 1100223344"
                             {...register('representativeId')}
-                            className={`w-full bg-ink-800 border px-4 py-3 text-sm text-white focus:outline-none focus:border-brand-400 transition-colors font-body ${
-                              errors.representativeId ? 'border-red-500' : 'border-white/10'
-                            }`}
+                            className={`w-full bg-ink-800 border px-4 py-3 text-sm text-white focus:outline-none focus:border-brand-400 transition-colors font-body ${errors.representativeId ? 'border-red-500' : 'border-white/10'
+                              }`}
                           />
                           {errors.representativeId && (
                             <p className="text-xs text-red-400 mt-1 font-body">{errors.representativeId.message}</p>
@@ -1411,7 +1399,7 @@ export default function ContestsPage({ onBack }: ContestsPageProps) {
 
                         <button
                           type="submit"
-                          disabled={submitting || registrationState !== 'open'}
+                          disabled={submitting || registrationState !== 'open' || !isValid}
                           className="px-8 py-2.5 bg-brand-500 hover:bg-brand-400 text-ink-900 font-display font-bold text-xs uppercase tracking-widest transition-colors disabled:opacity-50 cursor-pointer"
                         >
                           {submitting ? (
@@ -1420,10 +1408,10 @@ export default function ContestsPage({ onBack }: ContestsPageProps) {
                           {submitting
                             ? 'Procesando Envío...'
                             : registrationState === 'before_opening'
-                            ? 'Inscripciones no iniciadas'
-                            : registrationState === 'closed'
-                            ? 'Inscripciones cerradas'
-                            : 'Enviar Inscripción de Agrupación'}
+                              ? 'Inscripciones no iniciadas'
+                              : registrationState === 'closed'
+                                ? 'Inscripciones cerradas'
+                                : 'Enviar Inscripción de Agrupación'}
                         </button>
                       </div>
                     </div>

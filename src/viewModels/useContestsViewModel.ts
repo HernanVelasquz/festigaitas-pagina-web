@@ -8,6 +8,8 @@ import { supabase } from '../lib/supabase';
 export const CATEGORY_OPTIONS = [
   { value: 'gaita_larga_profesional', label: 'Gaita Larga Profesional' },
   { value: 'gaita_larga_aficionado', label: 'Gaita Larga Aficionado' },
+  { value: 'gaita_larga_juvenil', label: 'Gaita Larga Juvenil' },
+  { value: 'gaita_larga_infantil', label: 'Gaita Larga Infantil' },
   { value: 'gaita_corta', label: 'Gaita Corta' },
   { value: 'parejas_bailadoras', label: 'Parejas Bailadoras' },
 ] as const;
@@ -38,15 +40,77 @@ export const GENDER_OPTIONS = [
 
 // Instrument / Role options
 export const ROLE_OPTIONS = [
-  { value: 'gaita_hembra', label: 'Gaita Hembra / Director' },
-  { value: 'gaita_macho', label: 'Gaita Macho / Maraca' },
+  { value: 'gaita_hembra', label: 'Gaita Hembra' },
+  { value: 'gaita_macho', label: 'Gaita Macho' },
   { value: 'tambor_alegre', label: 'Tambor Alegre' },
-  { value: 'tambor_llamador', label: 'Tambor Llamador' },
+  { value: 'tambor_llamador', label: 'Llamador' },
   { value: 'tambora', label: 'Tambora / Bombo' },
-  { value: 'voz', label: 'Voz / Canto' },
-  { value: 'bailador', label: 'Bailador / Bailadora' },
+  { value: 'voz', label: 'Cantante' },
+  { value: 'gaitero', label: 'Gaitero' },
+  { value: 'maracas', label: 'Maracas' },
+  { value: 'bailador', label: 'Bailador' },
+  { value: 'bailadora', label: 'Bailadora' },
   { value: 'director_no_interprete', label: 'Director (No Intérprete)' },
 ] as const;
+
+// Helper to get modalities based on category
+export interface ModalityOption {
+  value: string;
+  label: string;
+}
+
+export const getModalityOptions = (category: string): readonly ModalityOption[] => {
+  if (!category) return [];
+  if (category.startsWith('gaita_larga')) {
+    return [{ value: 'gaita_larga', label: 'Gaita larga' }] as const;
+  }
+  if (category === 'gaita_corta') {
+    return [{ value: 'gaita_corta_unica', label: 'Gaita corta Única' }] as const;
+  }
+  if (category === 'parejas_bailadoras') {
+    return [
+      { value: 'infantil', label: 'Infantil' },
+      { value: 'juvenil', label: 'Juvenil' },
+      { value: 'aficionada', label: 'Aficionada' },
+      { value: 'profesional', label: 'Profesional' },
+    ] as const;
+  }
+  return [];
+};
+
+// Helper to get roles/titles list based on category
+export const getMemberRolesForCategory = (category: string): string[] => {
+  if (!category) {
+    return ['Cantante', 'Gaita Hembra', 'Gaita Macho', 'Llamador', 'Tambor Alegre', 'Tambora/Bombo'];
+  }
+  if (category.startsWith('gaita_larga')) {
+    return ['Cantante', 'Gaita Hembra', 'Gaita Macho', 'Llamador', 'Tambor Alegre', 'Tambora/Bombo'];
+  }
+  if (category === 'gaita_corta') {
+    return ['Cantante', 'Gaitero', 'Maracas', 'Llamador', 'Tambor Alegre', 'Tambora/Bombo'];
+  }
+  if (category === 'parejas_bailadoras') {
+    return ['Bailador', 'Bailadora'];
+  }
+  return ['Cantante', 'Gaita Hembra', 'Gaita Macho', 'Llamador', 'Tambor Alegre', 'Tambora/Bombo'];
+};
+
+// Helper to map role label to DB role code
+export const getRoleCodeFromLabel = (label: string): string => {
+  switch (label) {
+    case 'Cantante': return 'voz';
+    case 'Gaita Hembra': return 'gaita_hembra';
+    case 'Gaita Macho': return 'gaita_macho';
+    case 'Llamador': return 'tambor_llamador';
+    case 'Tambor Alegre': return 'tambor_alegre';
+    case 'Tambora/Bombo': return 'tambora';
+    case 'Gaitero': return 'gaitero';
+    case 'Maracas': return 'maracas';
+    case 'Bailador': return 'bailador';
+    case 'Bailadora': return 'bailadora';
+    default: return '';
+  }
+};
 
 // Helper constants for file validation
 const MAX_FILE_SIZE_DOC = 5 * 1024 * 1024; // 5MB
@@ -266,19 +330,21 @@ export function useContestsViewModel() {
   const {
     register,
     handleSubmit,
-    formState: { errors },
+    formState: { errors, isValid },
     reset,
     setValue,
     watch,
+    trigger,
   } = useForm<ContestsFormData>({
     resolver: zodResolver(contestsSchema),
+    mode: 'onChange',
     defaultValues: {
       acceptRegulations: false,
       totalMembers: 6,
     },
   });
 
-  // Members Management (Fixed to 6, no-op adding/removing)
+  // Members Management
   const addMember = () => {};
   const removeMember = (_id: string) => {};
 
@@ -287,6 +353,43 @@ export function useContestsViewModel() {
       prev.map((m) => (m.id === id ? { ...m, [field]: value } : m))
     );
   };
+
+  const category = watch('category');
+  const modalityOptions = getModalityOptions(category);
+
+  // Category -> Modality reactivity
+  useEffect(() => {
+    setValue('modality', '');
+  }, [category, setValue]);
+
+  // Category -> Members count and roles reactivity
+  useEffect(() => {
+    const targetRoles = getMemberRolesForCategory(category);
+    setMembers((prev) => {
+      return targetRoles.map((roleLabel, index) => {
+        const existing = prev[index];
+        const roleCode = getRoleCodeFromLabel(roleLabel);
+        if (existing) {
+          return {
+            ...existing,
+            role: roleCode,
+          };
+        } else {
+          return {
+            id: `member-${index}-${Math.random().toString(36).substr(2, 5)}`,
+            fullName: '',
+            birthDate: '',
+            docType: 'CC',
+            docNumber: '',
+            gender: 'M',
+            role: roleCode,
+            phone: '',
+            email: '',
+          };
+        }
+      });
+    });
+  }, [category]);
 
   useEffect(() => {
     setValue('totalMembers', members.length);
@@ -394,15 +497,16 @@ export function useContestsViewModel() {
       }
 
       setSuccess(true);
+      const defaultRoles = getMemberRolesForCategory('');
       setMembers(
-        Array.from({ length: 6 }, (_, i) => ({
+        defaultRoles.map((roleLabel, i) => ({
           id: `member-${i}-${Math.random().toString(36).substr(2, 5)}`,
           fullName: '',
           birthDate: '',
           docType: 'CC',
           docNumber: '',
           gender: 'M',
-          role: i === 0 ? 'gaita_hembra' : i === 1 ? 'gaita_macho' : i === 2 ? 'tambor_alegre' : i === 3 ? 'tambor_llamador' : i === 4 ? 'tambora' : 'voz',
+          role: getRoleCodeFromLabel(roleLabel),
           phone: '',
           email: '',
         }))
@@ -421,6 +525,10 @@ export function useContestsViewModel() {
     }
   };
 
+  const isMembersValid = members.every(
+    (m) => m.fullName.trim() !== '' && m.birthDate !== '' && m.docNumber.trim() !== ''
+  );
+
   return {
     register,
     handleSubmit: handleSubmit(onSubmit),
@@ -437,5 +545,7 @@ export function useContestsViewModel() {
     updateMember,
     watch,
     setValue,
-  };
-}
+    modalityOptions,
+    trigger,
+    isValid: isValid && isMembersValid,
+  };}
