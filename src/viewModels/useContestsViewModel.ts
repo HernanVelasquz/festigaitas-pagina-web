@@ -395,13 +395,20 @@ export function useContestsViewModel() {
     setValue('totalMembers', members.length);
   }, [members, setValue]);
 
-  const uploadFile = async (file: File, folder: string, groupPhone: string): Promise<string> => {
+  const uploadFile = async (file: File, folder: string, groupName: string): Promise<string> => {
     const currentYear = new Date().getFullYear();
-    const cleanPhone = groupPhone.replace(/[^0-9]/g, '');
-    const fileName = `${currentYear}/${cleanPhone}/${folder}/${Date.now()}_${file.name.replace(/\s+/g, '_')}`;
+    const cleanGroupName = groupName
+      .toLowerCase()
+      .normalize("NFD")
+      .replace(/[\u0300-\u036f]/g, "") // Eliminar acentos
+      .replace(/[^a-z0-9]/g, '_')       // Reemplazar caracteres especiales por guiones bajos
+      .replace(/_+/g, '_')             // Evitar guiones bajos consecutivos
+      .replace(/^_+|_+$/g, '');        // Recortar guiones al inicio o final
+
+    const fileName = `${currentYear}/${cleanGroupName}/${folder}/${Date.now()}_${file.name.replace(/\s+/g, '_')}`;
 
     const { error } = await supabase.storage
-      .from('unreleased-song')
+      .from('group-registrations')
       .upload(fileName, file, {
         cacheControl: '3600',
         upsert: false,
@@ -412,7 +419,7 @@ export function useContestsViewModel() {
     }
 
     const { data: urlData } = supabase.storage
-      .from('unreleased-song')
+      .from('group-registrations')
       .getPublicUrl(fileName);
 
     return urlData.publicUrl;
@@ -433,19 +440,35 @@ export function useContestsViewModel() {
     }
 
     try {
-      const phone = data.phone;
+      const groupName = data.groupName;
+
+      // 0. Check for duplicate group name (case-insensitive)
+      const { data: existingGroups, error: checkError } = await supabase
+        .from('group_registrations')
+        .select('id')
+        .ilike('group_name', groupName.trim());
+
+      if (checkError) {
+        throw checkError;
+      }
+
+      if (existingGroups && existingGroups.length > 0) {
+        setErrorMsg('Esta agrupación ya se encuentra inscrita en el festival.');
+        setSubmitting(false);
+        return;
+      }
       
       // 1. Upload files to Supabase Storage
-      const reviewUrl = await uploadFile(data.reviewFile[0], 'artistic_reviews', phone);
-      const photoUrl = await uploadFile(data.photoFile[0], 'group_photos', phone);
+      const reviewUrl = await uploadFile(data.reviewFile[0], 'artistic_reviews', groupName);
+      const photoUrl = await uploadFile(data.photoFile[0], 'group_photos', groupName);
       const logoUrl = data.logoFile && data.logoFile.length > 0 
-        ? await uploadFile(data.logoFile[0], 'logos', phone) 
+        ? await uploadFile(data.logoFile[0], 'logos', groupName) 
         : '';
-      const membersListUrl = await uploadFile(data.membersListFile[0], 'members_lists', phone);
-      const idsUrl = await uploadFile(data.idsFile[0], 'group_identifications', phone);
-      const epsUrl = await uploadFile(data.epsFile[0], 'eps_certificates', phone);
+      const membersListUrl = await uploadFile(data.membersListFile[0], 'members_lists', groupName);
+      const idsUrl = await uploadFile(data.idsFile[0], 'group_identifications', groupName);
+      const epsUrl = await uploadFile(data.epsFile[0], 'eps_certificates', groupName);
       const minorsAuthUrl = data.minorsAuthFile && data.minorsAuthFile.length > 0
-        ? await uploadFile(data.minorsAuthFile[0], 'minors_authorizations', phone)
+        ? await uploadFile(data.minorsAuthFile[0], 'minors_authorizations', groupName)
         : '';
 
       // 2. Format the members data to a clean object representation
