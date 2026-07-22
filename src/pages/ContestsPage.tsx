@@ -606,16 +606,16 @@ export default function ContestsPage({ onBack }: ContestsPageProps) {
                               Año de Creación *
                             </label>
                             <input
-                               type="text"
-                               placeholder="Ej: 2012"
-                               {...register('creationYear', {
-                                 onChange: (e) => {
-                                   e.target.value = e.target.value.replace(/[^0-9]/g, '');
-                                 }
-                               })}
-                               className={`w-full bg-ink-800 border px-4 py-3 text-sm text-white focus:outline-none focus:border-brand-400 transition-colors font-body ${errors.creationYear ? 'border-red-500' : 'border-white/10'
-                                 }`}
-                             />
+                              type="text"
+                              placeholder="Ej: 2012"
+                              {...register('creationYear', {
+                                onChange: (e) => {
+                                  e.target.value = e.target.value.replace(/[^0-9]/g, '');
+                                }
+                              })}
+                              className={`w-full bg-ink-800 border px-4 py-3 text-sm text-white focus:outline-none focus:border-brand-400 transition-colors font-body ${errors.creationYear ? 'border-red-500' : 'border-white/10'
+                                }`}
+                            />
                             {errors.creationYear && (
                               <p className="text-xs text-red-400 mt-1 font-body">{errors.creationYear.message}</p>
                             )}
@@ -760,16 +760,16 @@ export default function ContestsPage({ onBack }: ContestsPageProps) {
                               Cédula de Ciudadanía del Director *
                             </label>
                             <input
-                               type="text"
-                               placeholder="Ej: 1100223344"
-                               {...register('directorId', {
-                                 onChange: (e) => {
-                                   e.target.value = e.target.value.replace(/[^0-9]/g, '');
-                                 }
-                               })}
-                               className={`w-full bg-ink-800 border px-4 py-3 text-sm text-white focus:outline-none focus:border-brand-400 transition-colors font-body ${errors.directorId ? 'border-red-500' : 'border-white/10'
-                                 }`}
-                             />
+                              type="text"
+                              placeholder="Ej: 1100223344"
+                              {...register('directorId', {
+                                onChange: (e) => {
+                                  e.target.value = e.target.value.replace(/[^0-9]/g, '');
+                                }
+                              })}
+                              className={`w-full bg-ink-800 border px-4 py-3 text-sm text-white focus:outline-none focus:border-brand-400 transition-colors font-body ${errors.directorId ? 'border-red-500' : 'border-white/10'
+                                }`}
+                            />
                             {errors.directorId && (
                               <p className="text-xs text-red-400 mt-1 font-body">{errors.directorId.message}</p>
                             )}
@@ -782,16 +782,16 @@ export default function ContestsPage({ onBack }: ContestsPageProps) {
                               Teléfono del Director *
                             </label>
                             <input
-                               type="tel"
-                               placeholder="Ej: 3001234567"
-                               {...register('phone', {
-                                 onChange: (e) => {
-                                   e.target.value = e.target.value.replace(/[^0-9]/g, '');
-                                 }
-                               })}
-                               className={`w-full bg-ink-800 border px-4 py-3 text-sm text-white focus:outline-none focus:border-brand-400 transition-colors font-body ${errors.phone ? 'border-red-500' : 'border-white/10'
-                                 }`}
-                             />
+                              type="tel"
+                              placeholder="Ej: 3001234567"
+                              {...register('phone', {
+                                onChange: (e) => {
+                                  e.target.value = e.target.value.replace(/[^0-9]/g, '');
+                                }
+                              })}
+                              className={`w-full bg-ink-800 border px-4 py-3 text-sm text-white focus:outline-none focus:border-brand-400 transition-colors font-body ${errors.phone ? 'border-red-500' : 'border-white/10'
+                                }`}
+                            />
                             {errors.phone && (
                               <p className="text-xs text-red-400 mt-1 font-body">{errors.phone.message}</p>
                             )}
@@ -843,16 +843,16 @@ export default function ContestsPage({ onBack }: ContestsPageProps) {
                               Teléfono de Contacto *
                             </label>
                             <input
-                               type="tel"
-                               placeholder="Ej: 3019876543"
-                               {...register('contactPhone', {
-                                 onChange: (e) => {
-                                   e.target.value = e.target.value.replace(/[^0-9]/g, '');
-                                 }
-                               })}
-                               className={`w-full bg-ink-800 border px-4 py-3 text-sm text-white focus:outline-none focus:border-brand-400 transition-colors font-body ${errors.contactPhone ? 'border-red-500' : 'border-white/10'
-                                 }`}
-                             />
+                              type="tel"
+                              placeholder="Ej: 3019876543"
+                              {...register('contactPhone', {
+                                onChange: (e) => {
+                                  e.target.value = e.target.value.replace(/[^0-9]/g, '');
+                                }
+                              })}
+                              className={`w-full bg-ink-800 border px-4 py-3 text-sm text-white focus:outline-none focus:border-brand-400 transition-colors font-body ${errors.contactPhone ? 'border-red-500' : 'border-white/10'
+                                }`}
+                            />
                             {errors.contactPhone && (
                               <p className="text-xs text-red-400 mt-1 font-body">{errors.contactPhone.message}</p>
                             )}
@@ -997,7 +997,7 @@ export default function ContestsPage({ onBack }: ContestsPageProps) {
                         {/* Members List File */}
                         <div>
                           <label className="block text-xs sm:text-sm font-display font-extrabold uppercase tracking-widest2 text-white mb-2 sm:min-h-[40px]">
-                            Listado Oficial Firmado *
+                            Firma del Director o Representante *
                           </label>
                           <div className="relative">
                             <input
@@ -1236,12 +1236,12 @@ export default function ContestsPage({ onBack }: ContestsPageProps) {
                                 No. Documento *
                               </label>
                               <input
-                                 type="text"
-                                 value={activeMember.docNumber}
-                                 onChange={(e) => updateMember(activeMember.id, 'docNumber', e.target.value.replace(/[^0-9]/g, ''))}
-                                 placeholder="Ej: 11223344"
-                                 className="w-full bg-ink-800 border border-white/10 px-4 py-3 text-sm text-white focus:outline-none focus:border-brand-400 transition-colors font-body"
-                               />
+                                type="text"
+                                value={activeMember.docNumber}
+                                onChange={(e) => updateMember(activeMember.id, 'docNumber', e.target.value.replace(/[^0-9]/g, ''))}
+                                placeholder="Ej: 11223344"
+                                className="w-full bg-ink-800 border border-white/10 px-4 py-3 text-sm text-white focus:outline-none focus:border-brand-400 transition-colors font-body"
+                              />
                             </div>
 
                             <div>
@@ -1458,16 +1458,16 @@ export default function ContestsPage({ onBack }: ContestsPageProps) {
                             Documento de Identidad del Representante *
                           </label>
                           <input
-                             type="text"
-                             placeholder="Ej: C.C. 1100223344"
-                             {...register('representativeId', {
-                               onChange: (e) => {
-                                 e.target.value = e.target.value.replace(/[^0-9]/g, '');
-                               }
-                             })}
-                             className={`w-full bg-ink-800 border px-4 py-3 text-sm text-white focus:outline-none focus:border-brand-400 transition-colors font-body ${errors.representativeId ? 'border-red-500' : 'border-white/10'
-                               }`}
-                           />
+                            type="text"
+                            placeholder="Ej: C.C. 1100223344"
+                            {...register('representativeId', {
+                              onChange: (e) => {
+                                e.target.value = e.target.value.replace(/[^0-9]/g, '');
+                              }
+                            })}
+                            className={`w-full bg-ink-800 border px-4 py-3 text-sm text-white focus:outline-none focus:border-brand-400 transition-colors font-body ${errors.representativeId ? 'border-red-500' : 'border-white/10'
+                              }`}
+                          />
                           {errors.representativeId && (
                             <p className="text-xs text-red-400 mt-1 font-body">{errors.representativeId.message}</p>
                           )}
