@@ -214,6 +214,7 @@ export const contestsSchema = z.object({
 
   // Declaration
   acceptRegulations: z.boolean().refine((val) => val === true, 'Debes aceptar los términos y el reglamento'),
+  acceptDataProcessing: z.boolean().refine((val) => val === true, 'Debes aceptar el Tratamiento de Datos Personales y la Autorización de Uso de Imagen'),
   representativeName: z.string().min(1, 'El nombre del representante es obligatorio'),
   representativeId: z.string().min(1, 'El documento del representante es obligatorio'),
 });
@@ -340,6 +341,7 @@ export function useContestsViewModel() {
     mode: 'onChange',
     defaultValues: {
       acceptRegulations: false,
+      acceptDataProcessing: false,
       totalMembers: 6,
     },
   });
@@ -511,6 +513,8 @@ export function useContestsViewModel() {
           minors_auth_url: minorsAuthUrl || null,
           representative_name: data.representativeName,
           representative_id: data.representativeId,
+          accept_regulations: data.acceptRegulations,
+          accept_data_processing: data.acceptDataProcessing,
           members: cleanMembers,
         },
       ]);
