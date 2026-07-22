@@ -76,6 +76,7 @@ export default function ContestsPage({ onBack }: ContestsPageProps) {
   const category = watch('category');
   const isModalityFixed = !!(category && !category.startsWith('parejas_bailadoras'));
   const acceptRegulations = watch('acceptRegulations');
+  const acceptDataProcessing = watch('acceptDataProcessing');
 
   const [activeTab, setActiveTab] = useState<'rules' | 'form'>('rules');
   const [openRule, setOpenRule] = useState<number | null>(0);
@@ -116,8 +117,11 @@ export default function ContestsPage({ onBack }: ContestsPageProps) {
         (m) => m.fullName.trim() !== '' && m.birthDate !== '' && m.docNumber.trim() !== ''
       );
       if (!isStep3Valid) return;
+    } else if (currentStep === 4) {
+      const isStep4Valid = await trigger('acceptDataProcessing');
+      if (!isStep4Valid) return;
     }
-    setCurrentStep((prev) => Math.min(prev + 1, 4));
+    setCurrentStep((prev) => Math.min(prev + 1, 5));
   };
 
   const prevStep = () => setCurrentStep((prev) => Math.max(prev - 1, 1));
@@ -538,7 +542,8 @@ export default function ContestsPage({ onBack }: ContestsPageProps) {
                     { step: 1, label: 'Datos Agrupación' },
                     { step: 2, label: 'Documentos' },
                     { step: 3, label: 'Integrantes' },
-                    { step: 4, label: 'Declaración' }
+                    { step: 4, label: 'Datos Personales' },
+                    { step: 5, label: 'Declaración' }
                   ].map((s) => (
                     <button
                       key={s.step}
@@ -1327,7 +1332,7 @@ export default function ContestsPage({ onBack }: ContestsPageProps) {
                                   onClick={nextStep}
                                   className="px-6 py-2.5 bg-brand-500 hover:bg-brand-400 text-ink-900 font-display font-bold text-xs uppercase tracking-widest transition-colors cursor-pointer"
                                 >
-                                  Siguiente: Declaración (Paso 4)
+                                  Siguiente: Datos Personales (Paso 4)
                                 </button>
                               )}
                             </div>
@@ -1337,11 +1342,76 @@ export default function ContestsPage({ onBack }: ContestsPageProps) {
                     </div>
                   )}
 
-                  {/* STEP 4: DECLARATION AND SUBMISSION */}
+                  {/* STEP 4: DATA PROCESSING AND IMAGE USE AUTHORIZATION */}
                   {currentStep === 4 && (
                     <div className="space-y-8 animate-fade-in">
                       <h3 className="font-display font-black text-2xl sm:text-3xl uppercase tracking-wider text-brand-400 border-b border-white/5 pb-3">
-                        4. Declaración Jurada y Firma de Representante
+                        4. Tratamiento de Datos y Autorización de Uso de Imagen
+                      </h3>
+
+                      <div className="p-6 bg-white/[0.01] border-l-2 border-brand-400 space-y-6">
+                        <p className="text-sm sm:text-base leading-relaxed font-body font-light text-ink-300">
+                          Al marcar la casilla de aceptación, actuando a nombre propio o como representante legal del menor de edad inscrito, autorizo de manera voluntaria y expresa a la <strong>Corporación Social Incluyamos (NIT 900.913.366-3)</strong> y al <strong>Ministerio de las Culturas, las Artes y los Saberes</strong>, para:
+                        </p>
+
+                        <div className="space-y-4 text-sm sm:text-base font-body font-light text-ink-300">
+                          <div className="flex gap-3">
+                            <span className="font-bold text-brand-400 shrink-0">1.</span>
+                            <p className="leading-relaxed">
+                              <strong>Uso de imagen:</strong> Captar, publicar y difundir (en medios digitales, impresos, televisión y redes sociales) mi imagen/voz o la del menor representado, obtenida durante las actividades, presentaciones y procesos del festival, con fines exclusivamente culturales, pedagógicos y de memoria institucional, sin que esto vulnere la intimidad ni genere derechos económicos.
+                            </p>
+                          </div>
+
+                          <div className="flex gap-3">
+                            <span className="font-bold text-brand-400 shrink-0">2.</span>
+                            <p className="leading-relaxed">
+                              <strong>Tratamiento de datos:</strong> Recolectar y tratar los datos personales suministrados en este formulario conforme a la Ley 1581 de 2012, garantizando en todo momento el respeto al interés superior y los derechos fundamentales de los niños, niñas y adolescentes (Ley 1098 de 2006).
+                            </p>
+                          </div>
+                        </div>
+
+                        <div className="flex items-start gap-3 mt-6 pt-4 border-t border-white/5">
+                          <input
+                            type="checkbox"
+                            id="acceptDataProcessing"
+                            {...register('acceptDataProcessing')}
+                            className="mt-1 w-4 h-4 accent-brand-400"
+                          />
+                          <label htmlFor="acceptDataProcessing" className="text-xs sm:text-sm font-body font-light text-ink-300 cursor-pointer">
+                            Comprendo los términos y acepto el Tratamiento de Datos Personales y la Autorización de Uso de Imagen. *
+                          </label>
+                        </div>
+                        {errors.acceptDataProcessing && (
+                          <p className="text-xs text-red-400 mt-1 font-body">{errors.acceptDataProcessing.message}</p>
+                        )}
+                      </div>
+
+                      <div className="flex justify-between pt-4">
+                        <button
+                          type="button"
+                          onClick={prevStep}
+                          className="px-6 py-2.5 bg-ink-800 hover:bg-ink-700 text-white font-display font-bold text-xs uppercase tracking-widest transition-colors cursor-pointer border border-white/10"
+                        >
+                          Atrás
+                        </button>
+
+                        <button
+                          type="button"
+                          onClick={nextStep}
+                          disabled={!acceptDataProcessing}
+                          className="px-6 py-2.5 bg-brand-500 hover:bg-brand-400 text-ink-900 font-display font-bold text-xs uppercase tracking-widest transition-colors cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
+                        >
+                          Siguiente: Declaración (Paso 5)
+                        </button>
+                      </div>
+                    </div>
+                  )}
+
+                  {/* STEP 5: DECLARATION AND SUBMISSION */}
+                  {currentStep === 5 && (
+                    <div className="space-y-8 animate-fade-in">
+                      <h3 className="font-display font-black text-2xl sm:text-3xl uppercase tracking-wider text-brand-400 border-b border-white/5 pb-3">
+                        5. Declaración Jurada y Firma de Representante
                       </h3>
 
                       <div className="p-6 bg-white/[0.01] border-l-2 border-brand-400 space-y-4">
@@ -1419,7 +1489,7 @@ export default function ContestsPage({ onBack }: ContestsPageProps) {
 
                         <button
                           type="submit"
-                          disabled={submitting || registrationState !== 'open' || !isValid}
+                          disabled={submitting || registrationState !== 'open' || !isValid || !acceptRegulations}
                           className="px-8 py-2.5 bg-brand-500 hover:bg-brand-400 text-ink-900 font-display font-bold text-xs uppercase tracking-widest transition-colors disabled:opacity-50 cursor-pointer"
                         >
                           {submitting ? (
