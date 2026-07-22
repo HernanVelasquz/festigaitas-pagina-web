@@ -12,7 +12,7 @@ const scrollLinks = [
 ];
 
 const pageLinks = [
-  { label: 'Concursos de Gaitas', path: '/concursos-de-gaitas', page: 'contests' as const },
+  { label: 'Concursos', path: '/concursos-de-gaitas', page: 'contests' as const },
   { label: 'Registro Canción Inédita', path: '/register', page: 'register' as const },
   { label: 'Documentos', path: '/documents', page: 'documents' as const },
 ];
@@ -44,9 +44,8 @@ export default function Navbar({ onNavigate, activePage }: NavbarProps) {
 
   return (
     <nav
-      className={`fixed inset-x-0 top-0 z-50 transition-all duration-500 ${
-        scrolled ? 'bg-ink-900/95 backdrop-blur border-b border-white/5' : ''
-      }`}
+      className={`fixed inset-x-0 top-0 z-50 transition-all duration-500 ${scrolled ? 'bg-ink-900/95 backdrop-blur border-b border-white/5' : ''
+        }`}
     >
       <div className="max-w-7xl mx-auto px-6 lg:px-10 h-16 flex items-center justify-between">
         {/* Logo */}
@@ -97,9 +96,8 @@ export default function Navbar({ onNavigate, activePage }: NavbarProps) {
                 className={
                   isRegister
                     ? `ml-2 px-4 py-1.5 rounded-full border border-brand-400 text-brand-400 font-display font-bold text-[10px] tracking-widest uppercase hover:bg-brand-400 hover:text-ink-900 transition-all duration-300 shadow-[0_0_15px_rgba(234,179,8,0.15)] hover:shadow-[0_0_20px_rgba(234,179,8,0.35)] cursor-pointer`
-                    : `px-4 py-2 font-display font-semibold text-xs tracking-widest uppercase transition-colors duration-200 cursor-pointer ${
-                        activePage === l.page ? 'text-brand-400' : 'text-ink-300 hover:text-white'
-                      }`
+                    : `px-4 py-2 font-display font-semibold text-xs tracking-widest uppercase transition-colors duration-200 cursor-pointer ${activePage === l.page ? 'text-brand-400' : 'text-ink-300 hover:text-white'
+                    }`
                 }
               >
                 {l.label}
@@ -145,9 +143,8 @@ export default function Navbar({ onNavigate, activePage }: NavbarProps) {
                   className={
                     isRegister
                       ? `block w-full text-center py-2 px-4 rounded border border-brand-400 text-brand-400 hover:bg-brand-400 hover:text-ink-900 font-display font-bold text-xs tracking-wider uppercase transition-colors mt-2 cursor-pointer`
-                      : `block w-full text-left py-2.5 font-display font-semibold text-sm tracking-wider uppercase transition-colors cursor-pointer ${
-                          activePage === l.page ? 'text-brand-400' : 'text-ink-300 hover:text-white'
-                        }`
+                      : `block w-full text-left py-2.5 font-display font-semibold text-sm tracking-wider uppercase transition-colors cursor-pointer ${activePage === l.page ? 'text-brand-400' : 'text-ink-300 hover:text-white'
+                      }`
                   }
                 >
                   {l.label}
