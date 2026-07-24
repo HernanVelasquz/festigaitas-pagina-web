@@ -574,7 +574,20 @@ export default function ContestsPage({ onBack }: ContestsPageProps) {
                 </div>
 
                 {/* Form starts */}
-                <form onSubmit={handleSubmit} className="space-y-10 py-6">
+                <form
+                  onSubmit={(e) => {
+                    e.preventDefault();
+                    if (currentStep === 5) {
+                      handleSubmit(e);
+                    }
+                  }}
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter' && currentStep !== 5) {
+                      e.preventDefault();
+                    }
+                  }}
+                  className="space-y-10 py-6"
+                >
 
                   {/* STEP 1: GENERAL GROUP DATA */}
                   {currentStep === 1 && (
@@ -906,6 +919,7 @@ export default function ContestsPage({ onBack }: ContestsPageProps) {
                           <div className="relative">
                             <input
                               type="file"
+                              multiple={false}
                               accept=".pdf,.doc,.docx"
                               id="review-input"
                               className="hidden"
@@ -938,6 +952,7 @@ export default function ContestsPage({ onBack }: ContestsPageProps) {
                           <div className="relative">
                             <input
                               type="file"
+                              multiple={false}
                               accept=".jpg,.jpeg,.png,.pdf"
                               id="photo-input"
                               className="hidden"
@@ -970,6 +985,7 @@ export default function ContestsPage({ onBack }: ContestsPageProps) {
                           <div className="relative">
                             <input
                               type="file"
+                              multiple={false}
                               accept=".jpg,.jpeg,.png,.pdf"
                               id="logo-input"
                               className="hidden"
@@ -1002,6 +1018,7 @@ export default function ContestsPage({ onBack }: ContestsPageProps) {
                           <div className="relative">
                             <input
                               type="file"
+                              multiple={false}
                               accept=".pdf,.doc,.docx"
                               id="members-list-input"
                               className="hidden"
@@ -1034,6 +1051,7 @@ export default function ContestsPage({ onBack }: ContestsPageProps) {
                           <div className="relative">
                             <input
                               type="file"
+                              multiple={false}
                               accept=".pdf"
                               id="ids-input"
                               className="hidden"
@@ -1066,6 +1084,7 @@ export default function ContestsPage({ onBack }: ContestsPageProps) {
                           <div className="relative">
                             <input
                               type="file"
+                              multiple={false}
                               accept=".pdf"
                               id="eps-input"
                               className="hidden"
@@ -1098,6 +1117,7 @@ export default function ContestsPage({ onBack }: ContestsPageProps) {
                           <div className="relative">
                             <input
                               type="file"
+                              multiple={false}
                               accept=".pdf"
                               id="minors-auth-input"
                               className="hidden"
@@ -1155,6 +1175,12 @@ export default function ContestsPage({ onBack }: ContestsPageProps) {
                       <p className="text-ink-400 text-sm font-body font-light">
                         Registra la información de los {members.length} integrantes de tu agrupación. Selecciona cada rol a continuación para diligenciar sus datos correspondientes.
                       </p>
+
+                      {category === 'comparsas' && (
+                        <div className="p-4 bg-brand-500/10 border border-brand-500/30 rounded text-brand-300 text-sm font-body font-medium">
+                          Nota: En los 25 cupos, están incluidos los cupos de los músicos.
+                        </div>
+                      )}
 
                       {/* Numeric Sub-tabs bar */}
                       <div className="flex gap-2.5 pb-2 overflow-x-auto border-b border-white/5">
