@@ -12,6 +12,7 @@ export const CATEGORY_OPTIONS = [
   { value: 'gaita_larga_infantil', label: 'Gaita Larga Infantil' },
   { value: 'gaita_corta', label: 'Gaita Corta' },
   { value: 'parejas_bailadoras', label: 'Parejas Bailadoras' },
+  { value: 'comparsas', label: 'Comparsas' },
 ] as const;
 
 // Modality options
@@ -21,6 +22,8 @@ export const MODALITY_OPTIONS = [
   { value: 'infantil', label: 'Infantil' },
   { value: 'juvenil', label: 'Juvenil' },
   { value: 'unica', label: 'Única / Abierta' },
+  { value: 'fantasia', label: 'Fantasía' },
+  { value: 'tradicional', label: 'Tradicional' },
 ] as const;
 
 // Document types for members
@@ -51,6 +54,7 @@ export const ROLE_OPTIONS = [
   { value: 'bailador', label: 'Bailador' },
   { value: 'bailadora', label: 'Bailadora' },
   { value: 'director_no_interprete', label: 'Director (No Intérprete)' },
+  { value: 'integrante', label: 'Integrante' },
 ] as const;
 
 // Helper to get modalities based on category
@@ -75,6 +79,12 @@ export const getModalityOptions = (category: string): readonly ModalityOption[] 
       { value: 'profesional', label: 'Profesional' },
     ] as const;
   }
+  if (category === 'comparsas') {
+    return [
+      { value: 'fantasia', label: 'Fantasía' },
+      { value: 'tradicional', label: 'Tradicional' },
+    ] as const;
+  }
   return [];
 };
 
@@ -92,11 +102,15 @@ export const getMemberRolesForCategory = (category: string): string[] => {
   if (category === 'parejas_bailadoras') {
     return ['Bailador', 'Bailadora'];
   }
+  if (category === 'comparsas') {
+    return Array.from({ length: 25 }, (_, i) => `Integrante ${i + 1}`);
+  }
   return ['Cantante', 'Gaita Hembra', 'Gaita Macho', 'Llamador', 'Tambor Alegre', 'Tambora/Bombo'];
 };
 
 // Helper to map role label to DB role code
 export const getRoleCodeFromLabel = (label: string): string => {
+  if (label.startsWith('Integrante')) return 'integrante';
   switch (label) {
     case 'Cantante': return 'voz';
     case 'Gaita Hembra': return 'gaita_hembra';
@@ -157,7 +171,7 @@ export const contestsSchema = z.object({
   // Files
   reviewFile: z
     .custom<FileList>()
-    .refine((files) => files && files.length > 0, 'La reseña artística es obligatoria')
+    .refine((files) => files && files.length === 1, 'La reseña artística es obligatoria y se permite únicamente 1 archivo')
     .refine((files) => !files || (files[0] && files[0].size <= MAX_FILE_SIZE_DOC), 'El archivo no debe superar los 5MB')
     .refine(
       (files) => !files || (files[0] && ALLOWED_DOC_TYPES.includes(files[0].type)),
@@ -165,7 +179,7 @@ export const contestsSchema = z.object({
     ),
   photoFile: z
     .custom<FileList>()
-    .refine((files) => files && files.length > 0, 'La fotografía artística es obligatoria')
+    .refine((files) => files && files.length === 1, 'La fotografía artística es obligatoria y se permite únicamente 1 archivo')
     .refine((files) => !files || (files[0] && files[0].size <= MAX_FILE_SIZE_DOC), 'La imagen no debe superar los 5MB')
     .refine(
       (files) => !files || (files[0] && ALLOWED_IMAGE_TYPES.includes(files[0].type)),
@@ -174,6 +188,7 @@ export const contestsSchema = z.object({
   logoFile: z
     .custom<FileList>()
     .optional()
+    .refine((files) => !files || files.length <= 1, 'Solo se permite adjuntar 1 archivo')
     .refine((files) => !files || files.length === 0 || (files[0] && files[0].size <= MAX_FILE_SIZE_DOC), 'El logo no debe superar los 5MB')
     .refine(
       (files) => !files || files.length === 0 || (files[0] && ALLOWED_IMAGE_TYPES.includes(files[0].type)),
@@ -181,7 +196,7 @@ export const contestsSchema = z.object({
     ),
   membersListFile: z
     .custom<FileList>()
-    .refine((files) => files && files.length > 0, 'El listado de integrantes firmado es obligatorio')
+    .refine((files) => files && files.length === 1, 'La firma del director es obligatoria y se permite únicamente 1 archivo')
     .refine((files) => !files || (files[0] && files[0].size <= MAX_FILE_SIZE_DOC), 'El archivo no debe superar los 5MB')
     .refine(
       (files) => !files || (files[0] && ALLOWED_DOC_TYPES.includes(files[0].type)),
@@ -189,7 +204,7 @@ export const contestsSchema = z.object({
     ),
   idsFile: z
     .custom<FileList>()
-    .refine((files) => files && files.length > 0, 'La copia de documentos de identidad es obligatoria')
+    .refine((files) => files && files.length === 1, 'La copia de documentos es obligatoria y se permite únicamente 1 archivo PDF')
     .refine((files) => !files || (files[0] && files[0].size <= MAX_FILE_SIZE_DOC), 'El archivo no debe superar los 5MB')
     .refine(
       (files) => !files || (files[0] && ALLOWED_DOC_TYPES.includes(files[0].type)),
@@ -197,7 +212,7 @@ export const contestsSchema = z.object({
     ),
   epsFile: z
     .custom<FileList>()
-    .refine((files) => files && files.length > 0, 'Los certificados de EPS son obligatorios')
+    .refine((files) => files && files.length === 1, 'Los certificados de EPS son obligatorios y se permite únicamente 1 archivo PDF')
     .refine((files) => !files || (files[0] && files[0].size <= MAX_FILE_SIZE_DOC), 'El archivo no debe superar los 5MB')
     .refine(
       (files) => !files || (files[0] && ALLOWED_DOC_TYPES.includes(files[0].type)),
@@ -206,6 +221,7 @@ export const contestsSchema = z.object({
   minorsAuthFile: z
     .custom<FileList>()
     .optional()
+    .refine((files) => !files || files.length <= 1, 'Solo se permite adjuntar 1 archivo')
     .refine((files) => !files || files.length === 0 || (files[0] && files[0].size <= MAX_FILE_SIZE_DOC), 'El archivo no debe superar los 5MB')
     .refine(
       (files) => !files || files.length === 0 || (files[0] && ALLOWED_DOC_TYPES.includes(files[0].type)),
@@ -428,6 +444,7 @@ export function useContestsViewModel() {
   };
 
   const onSubmit = async (data: ContestsFormData) => {
+    if (submitting) return;
     setSubmitting(true);
     setErrorMsg(null);
 
