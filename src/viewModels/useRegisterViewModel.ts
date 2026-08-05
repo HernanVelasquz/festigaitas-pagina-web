@@ -113,7 +113,7 @@ export function useRegisterViewModel() {
 
   useEffect(() => {
     const openingTime = new Date('2026-06-25T00:00:00-05:00').getTime();
-    const closingTime = new Date('2026-08-03T17:00:00-00:00').getTime();
+    const closingTime = new Date('2026-08-11T17:00:00-05:00').getTime();
     let offset = 0;
 
     const syncServerTime = async () => {
@@ -142,7 +142,7 @@ export function useRegisterViewModel() {
 
     const calculateTime = () => {
       const adjustedNow = Date.now() + offset;
-      
+
       let state: RegistrationState = 'before_opening';
       let targetTime = openingTime;
 

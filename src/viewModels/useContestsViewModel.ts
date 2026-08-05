@@ -252,7 +252,7 @@ export function useContestsViewModel() {
   const [success, setSuccess] = useState(false);
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
   const [registrationState, setRegistrationState] = useState<RegistrationState>('before_opening');
-  
+
   // Dynamic members list state (exactly 6)
   const [members, setMembers] = useState<Array<MemberFormData & { id: string }>>(() =>
     Array.from({ length: 6 }, (_, i) => ({
@@ -276,9 +276,28 @@ export function useContestsViewModel() {
     isExpired: false,
   });
 
+  const {
+    register,
+    handleSubmit,
+    formState: { errors, isValid },
+    reset,
+    setValue,
+    watch,
+    trigger,
+  } = useForm<ContestsFormData>({
+    resolver: zodResolver(contestsSchema),
+    mode: 'onChange',
+    defaultValues: {
+      acceptRegulations: false,
+      acceptDataProcessing: false,
+      totalMembers: 6,
+    },
+  });
+
+  const category = watch('category');
+
   useEffect(() => {
     const openingTime = new Date('2026-06-25T00:00:00-05:00').getTime();
-    const closingTime = new Date('2026-08-03T17:00:00-00:00').getTime();
     let offset = 0;
 
     const syncServerTime = async () => {
@@ -307,7 +326,12 @@ export function useContestsViewModel() {
 
     const calculateTime = () => {
       const adjustedNow = Date.now() + offset;
-      
+
+      const isExtendedCategory = category === 'comparsas' || category === 'parejas_bailadoras';
+      const closingTime = isExtendedCategory
+        ? new Date('2026-08-10T23:59:59-05:00').getTime()
+        : new Date('2026-07-31T17:00:00-05:00').getTime();
+
       let state: RegistrationState = 'before_opening';
       let targetTime = openingTime;
 
@@ -342,29 +366,11 @@ export function useContestsViewModel() {
     const timer = setInterval(calculateTime, 1000);
 
     return () => clearInterval(timer);
-  }, []);
-
-  const {
-    register,
-    handleSubmit,
-    formState: { errors, isValid },
-    reset,
-    setValue,
-    watch,
-    trigger,
-  } = useForm<ContestsFormData>({
-    resolver: zodResolver(contestsSchema),
-    mode: 'onChange',
-    defaultValues: {
-      acceptRegulations: false,
-      acceptDataProcessing: false,
-      totalMembers: 6,
-    },
-  });
+  }, [category]);
 
   // Members Management
-  const addMember = () => {};
-  const removeMember = (_id: string) => {};
+  const addMember = () => { };
+  const removeMember = (_id: string) => { };
 
   const updateMember = (id: string, field: keyof MemberFormData, value: string) => {
     setMembers((prev) =>
@@ -372,7 +378,6 @@ export function useContestsViewModel() {
     );
   };
 
-  const category = watch('category');
   const modalityOptions = getModalityOptions(category);
 
   // Category -> Modality reactivity
@@ -476,12 +481,12 @@ export function useContestsViewModel() {
         setSubmitting(false);
         return;
       }
-      
+
       // 1. Upload files to Supabase Storage
       const reviewUrl = await uploadFile(data.reviewFile[0], 'artistic_reviews', groupName);
       const photoUrl = await uploadFile(data.photoFile[0], 'group_photos', groupName);
-      const logoUrl = data.logoFile && data.logoFile.length > 0 
-        ? await uploadFile(data.logoFile[0], 'logos', groupName) 
+      const logoUrl = data.logoFile && data.logoFile.length > 0
+        ? await uploadFile(data.logoFile[0], 'logos', groupName)
         : '';
       const membersListUrl = await uploadFile(data.membersListFile[0], 'members_lists', groupName);
       const idsUrl = await uploadFile(data.idsFile[0], 'group_identifications', groupName);
@@ -592,4 +597,5 @@ export function useContestsViewModel() {
     modalityOptions,
     trigger,
     isValid: isValid && isMembersValid,
-  };}
+  };
+}
