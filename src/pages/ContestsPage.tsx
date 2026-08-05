@@ -97,6 +97,8 @@ export default function ContestsPage({ onBack }: ContestsPageProps) {
   };
 
   const nextStep = async () => {
+    if (registrationState !== 'open') return;
+
     if (currentStep === 1) {
       const step1Fields = [
         'groupName', 'category', 'modality', 'originTown', 'originDept',
@@ -310,7 +312,7 @@ export default function ContestsPage({ onBack }: ContestsPageProps) {
                       <li>A través de correo tradicional, para lo cual debe enviar en un solo paquete: audio de la canción informando el nombre y ritmo, letra original de la canción, fotocopia de cédula, fotocopia del Rut y fotografía del autor.</li>
                     </ul>
                     <div className="bg-amber-500/10 border-l-2 border-brand-400 p-3 my-2 text-xs">
-                      En todos los casos el rango válido para inscripciones va del <strong>26 de Junio hasta el 31 de julio de 2026 a las 5:00 pm</strong> y la duración de la canción no debe exceder los cuatro (4) minutos. PARÁGRAFO: El audio y la letra de la canción entran a formar parte de los archivos del Festival Nacional de Gaitas “Francisco Llirene”, por lo que NO SE HARÁN DEVOLUCIONES.
+                      En todos los casos el rango válido para inscripciones va del <strong>26 de Junio hasta el 31 de julio de 2026 a las 5:00 pm</strong> (excepto para Comparsas y Parejas Bailadoras, que se extiende hasta el 10 de Agosto a las 11:59:59 PM) y la duración de la canción no debe exceder los cuatro (4) minutos. PARÁGRAFO: El audio y la letra de la canción entran a formar parte de los archivos del Festival Nacional de Gaitas “Francisco Llirene”, por lo que NO SE HARÁN DEVOLUCIONES.
                     </div>
                     <p>
                       <strong>ARTÍCULO 23. Muestra de Formación Oral (Decimeros):</strong> Participarán las escuelas de formación en tradición oral que hayan sido invitadas por el Festival Nacional de Gaitas “Francisco Llirene” y deben estar inscritos ante la junta directiva diligenciando el formato de inscripción en la secretaría del festival.
@@ -413,7 +415,10 @@ export default function ContestsPage({ onBack }: ContestsPageProps) {
                     <Calendar className="w-5 h-5 text-ink-500 shrink-0 mt-0.5" />
                     <div>
                       <h4 className="text-xs uppercase font-bold text-brand-300">Cierre</h4>
-                      <p className="text-sm font-light text-ink-300">31 de Julio, 2026 - 5:00 PM</p>
+                      <p className="text-sm font-light text-ink-300">
+                        31 de Julio, 2026 - 5:00 PM<br/>
+                        <span className="text-xs text-brand-400 mt-1 block">Comparsas y Parejas Bailadoras:<br/>10 de Agosto - 12:00 de la noche</span>
+                      </p>
                     </div>
                   </div>
                   <div className="flex gap-3">
@@ -446,6 +451,9 @@ export default function ContestsPage({ onBack }: ContestsPageProps) {
           <div className="max-w-4xl mx-auto">
             {/* Countdown timer */}
             <div className="mb-12 bg-ink-800/40 border border-white/5 p-6 rounded backdrop-blur-sm text-center">
+              <div className="bg-brand-500/10 border border-brand-400/30 p-3 mb-6 rounded text-brand-300 text-sm font-body">
+                <strong>¡Ampliación de Inscripciones!</strong> Las categorías <em>Comparsas</em> y <em>Parejas Bailadoras</em> tienen plazo para inscribirse hasta el <strong>10 de Agosto a las 12:00 de la noche</strong>.
+              </div>
               <span className="section-label block mb-4 text-brand-400">
                 {registrationState === 'before_opening'
                   ? 'Apertura de inscripciones de agrupaciones'
@@ -895,9 +903,10 @@ export default function ContestsPage({ onBack }: ContestsPageProps) {
                         <button
                           type="button"
                           onClick={nextStep}
-                          className="px-6 py-2.5 bg-brand-500 hover:bg-brand-400 text-ink-900 font-display font-bold text-xs uppercase tracking-widest transition-colors cursor-pointer"
+                          disabled={registrationState !== 'open'}
+                          className="px-6 py-2.5 bg-brand-500 hover:bg-brand-400 disabled:bg-ink-700 disabled:text-ink-500 disabled:cursor-not-allowed text-ink-900 font-display font-bold text-xs uppercase tracking-widest transition-colors cursor-pointer"
                         >
-                          Siguiente: Documentos
+                          {registrationState === 'closed' && category ? 'Inscripciones Cerradas' : 'Siguiente: Documentos'}
                         </button>
                       </div>
                     </div>
