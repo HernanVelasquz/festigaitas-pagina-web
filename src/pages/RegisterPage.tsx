@@ -173,6 +173,9 @@ export default function RegisterPage({ onBack }: RegisterPageProps) {
             <p className="text-brand-400 font-bold mt-2">
               <strong>IMPORTANTE:</strong> La obra musical que exceda el tiempo establecido, quedará descalificada.
             </p>
+            <div className="bg-amber-500/10 border-l-2 border-brand-400 p-3 my-4 text-xs">
+              <strong>Nota Aclaratoria:</strong> Es requisito indispensable que la interpretación de la canción inédita sea realizada, única y exclusivamente, por los seis (6) integrantes oficiales de la agrupación.
+            </div>
           </AccordionSection>
 
           <AccordionSection

@@ -240,10 +240,10 @@ export default function ContestsPage({ onBack }: ContestsPageProps) {
                       <strong>ARTÍCULO 11.</strong> Los grupos en la modalidad Gaita Larga ejecutarán obligatoriamente en tarima entre los ritmos tradicionales de Gaita, Porro, Cumbia y Merengue. En la modalidad de Gaita Corta única se ejecutarán los ritmos tradicionales de cumbia, porro y opcional puya o merengue.
                     </p>
                     <p>
-                      <strong>ARTÍCULO 12. Alborada musical.</strong> Participan los grupos y parejas bailadoras invitados; recorriendo las principales calles del municipio sábado 10 de octubre de 2026, 5:00 am salida al lado de la tarima principal según recorrido definido por la junta directiva.
+                      <strong>ARTÍCULO 12. Alborada musical.</strong> Participan los grupos y parejas bailadoras invitados de manera obligatoria; recorriendo las principales calles del municipio sábado 10 de octubre de 2026, 5:00 am salida al lado de la tarima principal según recorrido definido por la junta directiva.
                     </p>
                     <p>
-                      <strong>ARTÍCULO 13. Desfile folclórico.</strong> Participan los grupos y Parejas bailadoras clasificados a la semifinal, comparsas invitadas, escuelas de gaitas infantiles y juveniles finalistas, cuyo recorrido inicia el día domingo 12 de octubre a las 3:00 pm en el parque de la bomba.
+                      <strong>ARTÍCULO 13. Desfile folclórico.</strong> Participan los grupos y Parejas bailadoras clasificados a la semifinal, comparsas invitadas, escuelas de gaitas infantiles y juveniles finalistas, cuyo recorrido inicia el día domingo 12 de octubre a las 2:00 pm en el parque de la bomba.
                     </p>
                     <div className="bg-white/5 p-3 border-l-2 border-brand-400 text-xs my-2">
                       <strong>PARÁGRAFO:</strong> Todos los grupos participantes deben traer una pancarta o pendón que los identifique durante su participación en la alborada y el desfile folclórico.
@@ -369,6 +369,9 @@ export default function ContestsPage({ onBack }: ContestsPageProps) {
                       <li><strong>Grupos Gaita Larga Aficionado/Profesional:</strong> Ejecutarán Gaita, Porro y optativo Cumbia o merengue. Máximo 12 minutos sumados los tres ritmos.</li>
                       <li><strong>Grupos Gaita Corta Única:</strong> Ritmos obligatorios Porro, cumbia y puya. Máximo 4 minutos por tema.</li>
                     </ul>
+                    <div className="bg-amber-500/10 border-l-2 border-brand-400 p-3 my-4 text-xs">
+                      <strong>Nota Aclaratoria Profesional:</strong> En la categoría profesional, durante las rondas de semifinal y final, será de carácter obligatorio interpretar una obra musical perteneciente al repertorio ovejero que haya sido destacada o grabada. Esta podrá ejecutarse en cualquiera de los siguientes ritmos: gaita, porro, merengue o cumbia.
+                    </div>
                   </div>
                 </AccordionItem>
 
@@ -416,8 +419,8 @@ export default function ContestsPage({ onBack }: ContestsPageProps) {
                     <div>
                       <h4 className="text-xs uppercase font-bold text-brand-300">Cierre</h4>
                       <p className="text-sm font-light text-ink-300">
-                        31 de Julio, 2026 - 5:00 PM<br/>
-                        <span className="text-xs text-brand-400 mt-1 block">Comparsas y Parejas Bailadoras:<br/>10 de Agosto - 12:00 de la noche</span>
+                        31 de Julio, 2026 - 5:00 PM<br />
+                        <span className="text-xs text-brand-400 mt-1 block">Comparsas y Parejas Bailadoras:<br />10 de Agosto - 12:00 de la noche</span>
                       </p>
                     </div>
                   </div>
