@@ -420,7 +420,7 @@ export default function ContestsPage({ onBack }: ContestsPageProps) {
                       <h4 className="text-xs uppercase font-bold text-brand-300">Cierre</h4>
                       <p className="text-sm font-light text-ink-300">
                         31 de Julio, 2026 - 5:00 PM<br />
-                        <span className="text-xs text-brand-400 mt-1 block">Comparsas y Parejas Bailadoras:<br />10 de Agosto - 12:00 de la noche</span>
+                        <span className="text-xs text-brand-400 mt-1 block">Comparsas y Parejas Bailadoras:<br />13 de Agosto - 12:00 de la noche</span>
                       </p>
                     </div>
                   </div>
@@ -455,7 +455,7 @@ export default function ContestsPage({ onBack }: ContestsPageProps) {
             {/* Countdown timer */}
             <div className="mb-12 bg-ink-800/40 border border-white/5 p-6 rounded backdrop-blur-sm text-center">
               <div className="bg-brand-500/10 border border-brand-400/30 p-3 mb-6 rounded text-brand-300 text-sm font-body">
-                <strong>¡Ampliación de Inscripciones!</strong> Las categorías <em>Comparsas</em> y <em>Parejas Bailadoras</em> tienen plazo para inscribirse hasta el <strong>10 de Agosto a las 12:00 de la noche</strong>.
+                <strong>¡Ampliación de Inscripciones!</strong> Las categorías <em>Comparsas</em> y <em>Parejas Bailadoras</em> tienen plazo para inscribirse hasta el <strong>13 de Agosto a las 12:00 de la noche</strong>.
               </div>
               <span className="section-label block mb-4 text-brand-400">
                 {registrationState === 'before_opening'
@@ -691,7 +691,17 @@ export default function ContestsPage({ onBack }: ContestsPageProps) {
                           </div>
                         </div>
 
-                        <div className="grid sm:grid-cols-2 gap-6">
+                        {/* Nota Aclaratoria para Comparsas */}
+                        {category === 'comparsas' && (
+                          <div className="bg-amber-500/10 border-l-4 border-brand-400 p-4 rounded mt-4">
+                            <h5 className="font-display font-bold text-brand-300 uppercase text-sm mb-1">Nota Aclaratoria - Comparsas</h5>
+                            <p className="text-xs text-ink-300 font-body leading-relaxed">
+                              Es obligatorio inscribir a todos los integrantes que participarán en el desfile folclórico. Las comparsas deberán realizar su presentación en la modalidad seleccionada (Fantasía o Tradicional) cumpliendo con los criterios de vestuario, ritmo, coordinación y expresión corporal evaluados por el jurado (Art. 19). El plazo de inscripción para esta categoría se extiende hasta el 13 de Agosto a las 12:00 de la noche.
+                            </p>
+                          </div>
+                        )}
+
+                        <div className="grid sm:grid-cols-2 gap-6 mt-6">
                           <div>
                             <label className="block text-xs sm:text-sm font-display font-extrabold uppercase tracking-widest2 text-white mb-2">
                               Municipio de procedencia *

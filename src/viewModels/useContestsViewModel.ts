@@ -329,7 +329,7 @@ export function useContestsViewModel() {
 
       const isExtendedCategory = category === 'comparsas' || category === 'parejas_bailadoras';
       const closingTime = isExtendedCategory
-        ? new Date('2026-08-10T23:59:59-05:00').getTime()
+        ? new Date('2026-08-13T23:59:59-05:00').getTime()
         : new Date('2026-07-31T17:00:00-05:00').getTime();
 
       let state: RegistrationState = 'before_opening';
