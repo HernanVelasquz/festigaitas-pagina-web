@@ -249,7 +249,7 @@ export default function ContestsPage({ onBack }: ContestsPageProps) {
                       <strong>PARÁGRAFO:</strong> Todos los grupos participantes deben traer una pancarta o pendón que los identifique durante su participación en la alborada y el desfile folclórico.
                     </div>
                     <p>
-                      <strong>ARTÍCULO 14.</strong> El número de participantes en tarima para el concurso de canción inédita no podrá superar los 7 integrantes entre músicos, cantante y compositor.
+                      <strong>ARTÍCULO 14.</strong> El número de participantes en tarima para el concurso de canción inédita no podrá superar los 6 integrantes entre músicos y cantante (El compositor podrá subir a tarima, si así lo considera, sin intervención en la presentación de la obra musical).
                     </p>
                     <p>
                       <strong>ARTÍCULO 15.</strong> Las Parejas Bailadoras realizarán sus presentaciones con el siguiente vestuario:
@@ -360,7 +360,7 @@ export default function ContestsPage({ onBack }: ContestsPageProps) {
                     </p>
                     <ul className="list-disc pl-5 space-y-1">
                       <li><strong>Grupos Gaita Larga Aficionado/Profesional:</strong> Ejecutarán de manera obligatoria Porro y optativo, máximo 8 minutos sumados los dos ritmos.</li>
-                      <li><strong>Grupos Gaita Corta Única:</strong> Ritmos obligatorios Porro y puya, máximo 4 minutos por tema.</li>
+                      <li><strong>Grupos Gaita Corta Única:</strong> Ritmos obligatorios Porro y optativo (cumbia o merengue), máximo 4 minutos por tema.</li>
                     </ul>
                     <p>
                       <strong>ARTÍCULO 29. RONDA FINAL: PRESENTACIÓN EN TARIMA.</strong> Lunes 12 de octubre:
@@ -385,7 +385,7 @@ export default function ContestsPage({ onBack }: ContestsPageProps) {
                     <ol className="list-decimal pl-5 space-y-1">
                       <li>No acudir a los tres llamados obligatorio en el sitio de presentación.</li>
                       <li>Incumplir, omitir o desconocer cualquiera de las normas establecidas en el presente reglamento.</li>
-                      <li>Cuando la Junta Directiva compruebe irregularidades o documentos adulterados en la inscripción de cualquier participante.</li>
+                      <li>Cuando la Junta Directiva compruebe irregularidades o documentos adulterados en la inscripción de cualquier participante, como tambien la inscripción de un mismo particiante en diferentes grupos, teniendo cuenta que sera valido, quien haya hecho la inscripcion primero.</li>
                       <li>Participar en estado de alteración normal del comportamiento, o bajo los efectos de drogas alucinógenas o estimulantes.</li>
                       <li>Dirigirse a cualquier participante, miembros de la Junta Directiva, socios del evento, Jurado o autoridades con frases irrespetuosas, ultrajantes o calumniosas.</li>
                       <li>Propiciar escándalo público o particular que atente contra la normalidad y la tranquilidad del evento.</li>
@@ -393,6 +393,7 @@ export default function ContestsPage({ onBack }: ContestsPageProps) {
                       <li>Saludar, complacer a alguien desde tarima y/o incitar al público a manifestarse o realizar promociones publicitarias.</li>
                       <li>La no participación en el desfile folclórico con todos sus integrantes debidamente uniformados.</li>
                       <li>No reunir un mínimo de decencia, buenos modales y comportamiento digno en lo personal como en lo artístico.</li>
+                      <li>La junta directiva tomará medidas disciplinarias para aquellos participantes que usen las redes sociales de manera irresponsable para lanzar comentarios que denigren o desdibujen el buen nombre del festival, teniendo en cuenta que toda queja, reclamo o sugerencia debe ser dirigida de manera personal, escrita o por medios electrónicos a la secretaria del festival.</li>
                     </ol>
                   </div>
                 </AccordionItem>
