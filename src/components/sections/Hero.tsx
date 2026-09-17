@@ -15,7 +15,7 @@ export default function Hero() {
           <p className="section-label mb-8">Ovejas · Sucre · Colombia</p>
 
           <h1 className="font-display font-black leading-none uppercase tracking-tight text-white w-full">
-            <span className="block text-[clamp(1.6rem,4vw,3.2rem)] tracking-widest text-ink-200">
+            <span className="block text-[clamp(1.6rem,4vw,3.2rem)] tracking-widest text-gold">
               Festival Nacional de
             </span>
             <span className="block text-copper mt-3">
@@ -47,24 +47,21 @@ export default function Hero() {
         </div>
 
         {/* Right — hero image */}
-        <div className="relative flex justify-end">
-          <div className="relative w-full max-w-md lg:max-w-none">
+        <div className="relative flex justify-center lg:justify-end">
+          <div className="relative w-full max-w-sm lg:max-w-[450px]">
             {/* Brand accent line */}
-            <div className="absolute left-0 top-0 w-1 h-3/4 bg-brand-500" />
+            <div className="absolute -left-4 top-10 w-1 h-2/3 bg-copper/50 rounded-full" />
 
             <img
-              src="/principal-image.jpeg"
-              alt="Músico en el Festival de Gaitas"
+              src="/afiche_2026.jpg"
+              alt="Afiche Festival de Gaitas 2026"
               fetchPriority="high"
-              className="w-full h-[60vh] lg:h-[80vh] object-cover object-center brightness-90 animate-fade-in-up"
+              className="w-full h-auto object-contain rounded-xl shadow-2xl shadow-ink-950/80 animate-fade-in-up relative z-10"
             />
 
-            {/* Fade bottom */}
-            <div className="absolute inset-x-0 bottom-0 h-1/3 bg-gradient-to-t from-ink-900 to-transparent" />
-
             {/* Year badge */}
-            <div className="absolute bottom-8 left-6">
-              <span className="font-display font-black text-7xl text-white/5 select-none leading-none">
+            <div className="absolute -bottom-8 -right-4 lg:-right-8 z-0">
+              <span className="font-display font-black text-8xl lg:text-9xl text-white/5 select-none leading-none mix-blend-overlay">
                 2026
               </span>
             </div>

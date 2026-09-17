@@ -1,6 +1,6 @@
 const milestones = [
   {
-    year: '1984',
+    year: '1985',
     title: 'El Primer Soplo',
     body: 'Nace en las plazas de Ovejas el pulso de una civilización que se negó a desaparecer para siempre. Comienza una de las tradiciones más vivas de la región Caribe.',
   },
@@ -24,11 +24,11 @@ export default function Timeline() {
           {milestones.map((m) => (
             <div key={m.year} className="py-10 md:py-0 md:px-12 first:md:pl-0 last:md:pr-0">
               <span className="section-label block mb-2">
-                {m.year === '1984'
+                {m.year === '1985'
                   ? 'Origen'
                   : m.year === '1995'
-                  ? 'Crecimiento'
-                  : 'Actualidad'}
+                    ? 'Crecimiento'
+                    : 'Actualidad'}
               </span>
               <span className="divider-brand" />
               <p className="font-display font-black text-[5rem] leading-none text-white/10 select-none -ml-1 mb-2">
