@@ -275,7 +275,7 @@ export default function ContestsPage({ onBack }: ContestsPageProps) {
                 >
                   <div className="space-y-4">
                     <p>
-                      <strong>ARTÍCULO 16.</strong> La mesa del jurado debe estar conformado por tres (3) personas. Con excepción que un jurado esté en condición de discapacidad y necesite apoyo de alguien más.
+                      <strong>ARTÍCULO 16.</strong> La mesa del jurado debe estar conformado por tres (3) personas. Con excepción que un jurado esté en condición de discapacidad y necesite apoyo de alguien más. 
                     </p>
                     <p>
                       <strong>ARTÍCULO 17.</strong> El jurado calificador elegirá los tres (3) primeros puestos en la ronda final en todos los concursos, teniendo en cuenta ritmo, melodía, autenticidad, afinación, acoplamiento y conservación de los patrones típicos de la gaita (instrumentación).
@@ -312,10 +312,10 @@ export default function ContestsPage({ onBack }: ContestsPageProps) {
                       <li>A través de correo tradicional, para lo cual debe enviar en un solo paquete: audio de la canción informando el nombre y ritmo, letra original de la canción, fotocopia de cédula, fotocopia del Rut y fotografía del autor.</li>
                     </ul>
                     <div className="bg-amber-500/10 border-l-2 border-brand-400 p-3 my-2 text-xs">
-                      En todos los casos el rango válido para inscripciones va del <strong>26 de Junio hasta el 31 de julio de 2026 a las 5:00 pm</strong> (excepto para Comparsas y Parejas Bailadoras, que se extiende hasta el 10 de Agosto a las 11:59:59 PM) y la duración de la canción no debe exceder los cuatro (4) minutos. PARÁGRAFO: El audio y la letra de la canción entran a formar parte de los archivos del Festival Nacional de Gaitas “Francisco Llirene”, por lo que NO SE HARÁN DEVOLUCIONES.
+                      En todos los casos el rango válido para inscripciones va del <strong>26 de junio hasta el 31 de julio de 2026 a las 5:00 pm</strong> (excepto para Comparsas y Parejas Bailadoras, que se extiende hasta el 10 de agosto a las 11:59:59 PM) y la duración de la canción no debe exceder los cuatro (4) minutos. PARÁGRAFO: El audio y la letra de la canción entran a formar parte de los archivos del Festival Nacional de Gaitas “Francisco Llirene”, por lo que NO SE HARÁN DEVOLUCIONES.
                     </div>
                     <p>
-                      <strong>ARTÍCULO 23. Muestra de Formación Oral (Decimeros):</strong> Participarán las escuelas de formación en tradición oral que hayan sido invitadas por el Festival Nacional de Gaitas “Francisco Llirene” y deben estar inscritos ante la junta directiva diligenciando el formato de inscripción en la secretaría del festival.
+                      <strong>ARTÍCULO 23. Muestra de Formación Oral (Decimeros):</strong> Participarán las escuelas de formación en tradición oral que hayan sido invitadas por el Festival Nacional de Gaitas “Francisco Llirene” y deben estar inscritos ante la junta directiva diligenciando el formato de inscripción en la secretaría del festival. (no aplica)
                     </p>
                     <p>
                       <strong>ARTÍCULO 24.</strong> Las canciones inscritas las escuchará en privado un Jurado Calificador que escogerá las 15 mejores canciones, que irán a las rondas clasificatorias en tarima.
@@ -330,7 +330,7 @@ export default function ContestsPage({ onBack }: ContestsPageProps) {
                 >
                   <div className="space-y-4">
                     <p>
-                      <strong>ARTÍCULO 25.</strong> Los grupos de gaita larga aficionado, profesional y corta única participarán en tres rondas clasificatorias a saber:
+                      <strong>ARTÍCULO 25.</strong> Los grupos de gaita larga aficionado, profesional y corta única participarán en tres rondas clasificatorias, a saber:
                     </p>
                     <ul className="list-disc pl-5 space-y-2">
                       <li><strong>Ronda inicial:</strong> Participarán todos los grupos invitados realizando una presentación en tarima oficial ejecutando dos temas y otra presentación ante jurado en los sitios escogidos por la organización para ejecutar 2 canciones. Clasifican los 10 grupos con calificación más alta.</li>
@@ -346,12 +346,23 @@ export default function ContestsPage({ onBack }: ContestsPageProps) {
                       <li><strong>Grupos de Gaita Larga Profesional:</strong> Sábado 10 de octubre de 2026, ritmos obligatorio Gaita y optativo (Cumbia o merengue). Máximo 4 minutos por tema.</li>
                       <li><strong>Escuelas de Gaita Categoría Infantil/Juvenil:</strong> Sábado 10 de octubre de 2026, ritmos obligatorios Gaita y optativo. Máximo 4 minutos por tema (clasificarán 5 a la final).</li>
                       <li><strong>Las Canciones Inéditas:</strong> Sábado 10 de octubre de 2026 clasificarán a la ronda semifinal las 10 Canciones con mayor puntaje.</li>
-                      <li><strong>Parejas Bailadoras de Gaitas:</strong> Sábado 10 de octubre de 2026, se presentarán por espacio de 1'30 minutos en ritmo de Gaita y 1'30 en ritmo de merengue.</li>
-                      <li><strong>Decimeros:</strong> Harán su presentación en las carpas del Festival el día domingo 11 de octubre.</li>
+                      <li><strong>Parejas Bailadoras de Gaitas:</strong> sábado 10 de octubre de 2026, se presentarán por espacio de 1'30 minutos en ritmo de Gaita y 1'30 en ritmo de merengue.</li>
+                      <li><strong>Decimeros:</strong> Harán su presentación en las carpas del Festival el día domingo 11 de octubre. (No aplica)</li>
                     </ul>
-                    <p>
-                      <strong>PRESENTACIÓN ANTE EL JURADO CALIFICADOR:</strong> Se presentan ante Jurado en sitio autorizado por la Junta Directiva a capela (Máximo 4 minutos por tema).
-                    </p>
+                    <div className="bg-white/5 p-4 rounded border border-white/10 my-4 space-y-3 text-sm">
+                      <p>
+                        <strong>PRESENTACIÓN ANTE EL JURADO CALIFICADOR:</strong> Los conjuntos gaiteros Categorías (profesional, aficionado y gaita corta) deberán presentarse ante el Jurado Calificador en los sitios previamente autorizados por la Junta Directiva, en el horario establecido de 2:00 p. m. a 3:00 p. m. La presentación dará inicio puntualmente a las 2:00 p. m., momento en el cual todos los conjuntos participantes deberán comenzar su interpretación de manera simultánea.
+                      </p>
+                      <p>
+                        Los ritmos a interpretar serán libres, de acuerdo con el repertorio y la propuesta musical de cada conjunto, respetando las características propias de la música de gaitas. Durante esta presentación, todos los integrantes deberán portar el traje tradicional de gaitas, acorde con la categoría y naturaleza de la agrupación.
+                      </p>
+                      <p>
+                        El Jurado Calificador realizará un recorrido por los diferentes sitios asignados a los conjuntos participantes, con el propósito de realizar la respectiva valoración y tomar nota de su participación.
+                      </p>
+                      <p>
+                        Esta presentación tendrá carácter participativo, por lo cual la calificación obtenida corresponderá exclusivamente a la participación del conjunto en esta actividad, de acuerdo con los criterios establecidos por el reglamento del Festival.
+                      </p>
+                    </div>
                     <p>
                       <strong>ARTÍCULO 27.</strong> Una vez sumados los puntajes de la ronda inicial, se conformará la lista de los diez (10) conjuntos gaiteros en las categorías Aficionadas, Profesionales y Corta Única, diez (10) parejas bailadoras y diez (10) canciones inéditas que clasifican a la ronda semifinal (para infantiles/juveniles se conforma la lista de 5 finalistas).
                     </p>
@@ -376,14 +387,14 @@ export default function ContestsPage({ onBack }: ContestsPageProps) {
                 </AccordionItem>
 
                 <AccordionItem
-                  title="6. Causales de Descalificación (Art. 30)"
+                  title="6. Causales de descalificación (Art. 30)"
                   isOpen={openRule === 5}
                   onToggle={() => toggleRule(5)}
                 >
                   <div className="space-y-3">
                     <p><strong>ARTÍCULO 30.</strong> Son causales de descalificación y eliminación de concursos las siguientes:</p>
                     <ol className="list-decimal pl-5 space-y-1">
-                      <li>No acudir a los tres llamados obligatorio en el sitio de presentación.</li>
+                      <li>No acudir a los tres llamados obligatorios en el sitio de presentación.</li>
                       <li>Incumplir, omitir o desconocer cualquiera de las normas establecidas en el presente reglamento.</li>
                       <li>Cuando la Junta Directiva compruebe irregularidades o documentos adulterados en la inscripción de cualquier participante, como tambien la inscripción de un mismo particiante en diferentes grupos, teniendo cuenta que sera valido, quien haya hecho la inscripcion primero.</li>
                       <li>Participar en estado de alteración normal del comportamiento, o bajo los efectos de drogas alucinógenas o estimulantes.</li>
@@ -394,6 +405,7 @@ export default function ContestsPage({ onBack }: ContestsPageProps) {
                       <li>La no participación en el desfile folclórico con todos sus integrantes debidamente uniformados.</li>
                       <li>No reunir un mínimo de decencia, buenos modales y comportamiento digno en lo personal como en lo artístico.</li>
                       <li>La junta directiva tomará medidas disciplinarias para aquellos participantes que usen las redes sociales de manera irresponsable para lanzar comentarios que denigren o desdibujen el buen nombre del festival, teniendo en cuenta que toda queja, reclamo o sugerencia debe ser dirigida de manera personal, escrita o por medios electrónicos a la secretaria del festival.</li>
+                      <li>Se prohíbe cualquier acto de ofrecimiento, entrega o promesa de dádivas, beneficios, incentivos o prebendas al jurado calificador, con el propósito de influir, directa o indirectamente, en su criterio o decisión durante el concurso.</li>
                     </ol>
                   </div>
                 </AccordionItem>

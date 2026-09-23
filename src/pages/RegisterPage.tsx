@@ -143,7 +143,7 @@ export default function RegisterPage({ onBack }: RegisterPageProps) {
           )}
           <p className="text-xs text-ink-500 mt-4 font-body font-light">
             {registrationState === 'before_opening'
-              ? 'Las inscripciones de este concurso inician a partir del 25 de Junio de 2026 a las 12:00 AM (Hora Colombia).'
+              ? 'Las inscripciones de este concurso inician a partir del 26 de Junio de 2026 a las 12:00 AM (Hora Colombia).'
               : registrationState === 'open'
               ? 'Las inscripciones de este concurso cierran el 31 de Julio de 2026 a las 5:00 PM (Hora Colombia).'
               : 'El periodo de inscripciones ha finalizado.'}
@@ -198,7 +198,7 @@ export default function RegisterPage({ onBack }: RegisterPageProps) {
               </li>
             </ul>
             <p className="mt-2">
-              El rango válido para las inscripciones va desde el <strong>25 de junio hasta el 31 de julio de 2026 a las 5:00 PM</strong>.
+              El rango válido para las inscripciones va desde el <strong>26 de junio hasta el 31 de julio de 2026 a las 5:00 PM</strong>.
             </p>
             <div className="bg-white/5 p-3 border-l-2 border-brand-400 text-xs mt-3 font-body font-light">
               <strong>PARÁGRAFO:</strong> El audio y la letra de la canción entran a formar parte de los archivos del Festival Nacional de Gaitas “Francisco Llirene”, por lo que <strong>NO SE HARÁN DEVOLUCIONES</strong>.
