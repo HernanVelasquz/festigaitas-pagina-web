@@ -243,7 +243,7 @@ export default function ContestsPage({ onBack }: ContestsPageProps) {
                       <strong>ARTÍCULO 12. Alborada musical.</strong> Participan los grupos y parejas bailadoras invitados de manera obligatoria; recorriendo las principales calles del municipio sábado 10 de octubre de 2026, 5:00 am salida al lado de la tarima principal según recorrido definido por la junta directiva.
                     </p>
                     <p>
-                      <strong>ARTÍCULO 13. Desfile folclórico.</strong> Participan los grupos y Parejas bailadoras clasificados a la semifinal, comparsas invitadas, escuelas de gaitas infantiles y juveniles finalistas, cuyo recorrido inicia el día domingo 12 de octubre a las 2:00 pm en el parque de la bomba.
+                      <strong>ARTÍCULO 13. Desfile folclórico.</strong> Participan los grupos y Parejas bailadoras clasificados a la semifinal, comparsas invitadas, cuyo recorrido inicia el día domingo 11 de octubre a la 1:00 pm en el parque de la bomba.
                     </p>
                     <div className="bg-white/5 p-3 border-l-2 border-brand-400 text-xs my-2">
                       <strong>PARÁGRAFO:</strong> Todos los grupos participantes deben traer una pancarta o pendón que los identifique durante su participación en la alborada y el desfile folclórico.
@@ -275,7 +275,7 @@ export default function ContestsPage({ onBack }: ContestsPageProps) {
                 >
                   <div className="space-y-4">
                     <p>
-                      <strong>ARTÍCULO 16.</strong> La mesa del jurado debe estar conformado por tres (3) personas. Con excepción que un jurado esté en condición de discapacidad y necesite apoyo de alguien más. 
+                      <strong>ARTÍCULO 16.</strong> La mesa del jurado debe estar conformado por tres (3) personas. Con excepción que un jurado esté en condición de discapacidad y necesite apoyo de alguien más.
                     </p>
                     <p>
                       <strong>ARTÍCULO 17.</strong> El jurado calificador elegirá los tres (3) primeros puestos en la ronda final en todos los concursos, teniendo en cuenta ritmo, melodía, autenticidad, afinación, acoplamiento y conservación de los patrones típicos de la gaita (instrumentación).
