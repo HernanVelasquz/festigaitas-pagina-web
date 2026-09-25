@@ -32,10 +32,32 @@ export const registerSchema = z.object({
     .string()
     .min(1, 'El número de teléfono es obligatorio')
     .regex(/^[0-9]+$/, 'Ingresa un número de teléfono válido (solo números)'),
+  authorId: z.string().min(1, 'El número de documento es obligatorio').regex(/^[0-9]+$/, 'Solo números'),
+  authorBirthDate: z.string().min(1, 'La fecha de nacimiento es obligatoria'),
+  hasDisability: z.boolean().default(false),
+  acceptsTerms: z.boolean().refine((val) => val === true, 'Debes aceptar los términos, condiciones y políticas de privacidad'),
   rhythm: z.enum(['porro', 'cumbia', 'merengue', 'puya'], {
     required_error: 'Selecciona un ritmo válido',
   }),
   origin: z.string().min(1, 'El campo de procedencia es obligatorio'),
+  legalRepresentativeName: z.string().optional(),
+  isProfessional: z.boolean().default(false),
+  minorAuthorizationFile: z
+    .custom<FileList>()
+    .optional()
+    .refine((files) => !files || files.length === 0 || (files[0] && files[0].size <= MAX_FILE_SIZE_DOC), 'El archivo no debe superar los 5MB')
+    .refine(
+      (files) => !files || files.length === 0 || (files[0] && [...ALLOWED_DOC_TYPES, ...ALLOWED_IMAGE_TYPES].includes(files[0].type)),
+      'Solo se permiten PDF o imágenes'
+    ),
+  paymentReceiptFile: z
+    .custom<FileList>()
+    .optional()
+    .refine((files) => !files || files.length === 0 || (files[0] && files[0].size <= MAX_FILE_SIZE_DOC), 'El archivo no debe superar los 5MB')
+    .refine(
+      (files) => !files || files.length === 0 || (files[0] && [...ALLOWED_DOC_TYPES, ...ALLOWED_IMAGE_TYPES].includes(files[0].type)),
+      'Solo se permiten PDF o imágenes'
+    ),
   lyricsFile: z
     .custom<FileList>()
     .refine((files) => files && files.length > 0, 'La letra de la canción es obligatoria')
@@ -225,13 +247,21 @@ export function useRegisterViewModel() {
       const photoUrl = await uploadFile(data.photoFile[0], 'author_photos', phone);
       const audioUrl = await uploadFile(data.audioFile[0], 'audio', phone);
       const bankCertificateUrl = await uploadFile(data.bankCertificateFile[0], 'bank_certificates', phone);
+      
+      const minorAuthUrl = data.minorAuthorizationFile && data.minorAuthorizationFile.length > 0
+        ? await uploadFile(data.minorAuthorizationFile[0], 'authorizations', phone) : null;
+      const paymentReceiptUrl = data.paymentReceiptFile && data.paymentReceiptFile.length > 0
+        ? await uploadFile(data.paymentReceiptFile[0], 'receipts', phone) : null;
 
       // 2. Save metadata to Supabase DB 'registrations'
       const { error } = await supabase.from('unreleased_song').insert([
         {
           author_name: data.authorName,
+          author_id: data.authorId,
+          author_birth_date: data.authorBirthDate,
           author_email: data.authorEmail,
           author_phone: data.authorPhone,
+          has_disability: data.hasDisability,
           song_name: data.songName,
           rhythm: data.rhythm,
           origin: data.origin,
@@ -241,6 +271,10 @@ export function useRegisterViewModel() {
           photo_url: photoUrl,
           audio_url: audioUrl,
           bank_certificate_url: bankCertificateUrl,
+          legal_representative_name: data.legalRepresentativeName,
+          is_professional: data.isProfessional,
+          minor_authorization_url: minorAuthUrl,
+          payment_receipt_url: paymentReceiptUrl,
         },
       ]);
 
