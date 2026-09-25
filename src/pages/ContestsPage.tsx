@@ -341,9 +341,9 @@ export default function ContestsPage({ onBack }: ContestsPageProps) {
                       <strong>ARTÍCULO 26. DESARROLLO DE LA RONDA INICIAL:</strong> Se presentan en tarima oficial todos los invitados por categoría y tipo de concursos.
                     </p>
                     <ul className="list-disc pl-5 space-y-1">
-                      <li><strong>Grupos de Gaita Corta Única:</strong> Viernes 9 de octubre de 2026, ritmos obligatorios Porro y optativo (puya o merengue). Máximo 8 minutos sumados los dos ritmos.</li>
-                      <li><strong>Grupos de Gaita Larga Aficionada:</strong> Viernes 9 de octubre de 2026, ritmos obligatorios Gaita y optativo (Cumbia o merengue). Máximo 8 minutos sumados los dos ritmos.</li>
-                      <li><strong>Grupos de Gaita Larga Profesional:</strong> Sábado 10 de octubre de 2026, ritmos obligatorio Gaita y optativo (Cumbia o merengue). Máximo 4 minutos por tema.</li>
+                      <li><strong>Grupos de Gaita Corta Única:</strong> Viernes 9 de octubre de 2026, ritmos obligatorios Porro y optativo (cumbia, merengue o puya). Máximo 8 minutos sumados los dos ritmos.</li>
+                      <li><strong>Grupos de Gaita Larga Aficionada:</strong> Viernes 9 de octubre de 2026, ritmos obligatorios Gaita y optativo (Porro o merengue). Máximo 8 minutos sumados los dos ritmos.</li>
+                      <li><strong>Grupos de Gaita Larga Profesional:</strong> Sábado 10 de octubre de 2026, ritmos obligatorio Gaita y optativo (Porro o merengue). Máximo 4 minutos por tema.</li>
                       <li><strong>Escuelas de Gaita Categoría Infantil/Juvenil:</strong> Sábado 10 de octubre de 2026, ritmos obligatorios Gaita y optativo. Máximo 4 minutos por tema (clasificarán 5 a la final).</li>
                       <li><strong>Las Canciones Inéditas:</strong> Sábado 10 de octubre de 2026 clasificarán a la ronda semifinal las 10 Canciones con mayor puntaje.</li>
                       <li><strong>Parejas Bailadoras de Gaitas:</strong> sábado 10 de octubre de 2026, se presentarán por espacio de 1'30 minutos en ritmo de Gaita y 1'30 en ritmo de merengue.</li>
@@ -402,7 +402,8 @@ export default function ContestsPage({ onBack }: ContestsPageProps) {
                       <li>Propiciar escándalo público o particular que atente contra la normalidad y la tranquilidad del evento.</li>
                       <li><strong>NO PARTICIPACIÓN DE UN REPRESENTANTE DEL GRUPO GAITERO</strong> en el Foro Institucional (se controlará asistencia).</li>
                       <li>Saludar, complacer a alguien desde tarima y/o incitar al público a manifestarse o realizar promociones publicitarias.</li>
-                      <li>La no participación en el desfile folclórico con todos sus integrantes debidamente uniformados.</li>
+                      <li>La no participación en el desfile folclórico con todos sus integrantes debidamente uniformados, excepto aquellas personas que cuenten con discapacidad física.</li>
+                      <li>La no participación en la alborada musical de las agrupaciones concursantes, excepto los cantantes, y/o aquellas personas que cuenten con discapacidad física.</li>
                       <li>No reunir un mínimo de decencia, buenos modales y comportamiento digno en lo personal como en lo artístico.</li>
                       <li>La junta directiva tomará medidas disciplinarias para aquellos participantes que usen las redes sociales de manera irresponsable para lanzar comentarios que denigren o desdibujen el buen nombre del festival, teniendo en cuenta que toda queja, reclamo o sugerencia debe ser dirigida de manera personal, escrita o por medios electrónicos a la secretaria del festival.</li>
                       <li>Se prohíbe cualquier acto de ofrecimiento, entrega o promesa de dádivas, beneficios, incentivos o prebendas al jurado calificador, con el propósito de influir, directa o indirectamente, en su criterio o decisión durante el concurso.</li>

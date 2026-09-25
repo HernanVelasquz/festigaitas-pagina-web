@@ -56,6 +56,8 @@ export default function RegisterPage({ onBack }: RegisterPageProps) {
   const [photoName, setPhotoName] = useState<string | null>(null);
   const [audioName, setAudioName] = useState<string | null>(null);
   const [bankCertificateName, setBankCertificateName] = useState<string | null>(null);
+  const [minorAuthName, setMinorAuthName] = useState<string | null>(null);
+  const [paymentReceiptName, setPaymentReceiptName] = useState<string | null>(null);
 
   const toggleSection = (idx: number) => {
     setOpenSection((prev) => (prev === idx ? null : idx));
@@ -243,6 +245,8 @@ export default function RegisterPage({ onBack }: RegisterPageProps) {
                 setPhotoName(null);
                 setAudioName(null);
                 setBankCertificateName(null);
+                setMinorAuthName(null);
+                setPaymentReceiptName(null);
               }}
               className="mt-2 px-6 py-2 bg-emerald-500 hover:bg-emerald-400 text-ink-900 font-display font-bold text-xs uppercase tracking-wider transition-colors cursor-pointer"
             >
@@ -321,6 +325,41 @@ export default function RegisterPage({ onBack }: RegisterPageProps) {
             </div>
 
             <div className="grid sm:grid-cols-2 gap-6">
+              {/* Document Number */}
+              <div>
+                <label className="block text-xs font-display font-bold uppercase tracking-wider text-white mb-2">
+                  Número de Documento (Cédula/TI) *
+                </label>
+                <input
+                  type="text"
+                  placeholder="Ej: 1001234567"
+                  {...register('authorId')}
+                  className={`w-full bg-ink-800 border px-4 py-3 text-sm text-white focus:outline-none focus:border-brand-400 transition-colors font-body ${errors.authorId ? 'border-red-500' : 'border-white/10'
+                    }`}
+                />
+                {errors.authorId && (
+                  <p className="text-xs text-red-400 mt-1 font-body">{errors.authorId.message as string}</p>
+                )}
+              </div>
+
+              {/* Birth Date */}
+              <div>
+                <label className="block text-xs font-display font-bold uppercase tracking-wider text-white mb-2">
+                  Fecha de Nacimiento *
+                </label>
+                <input
+                  type="date"
+                  {...register('authorBirthDate')}
+                  className={`w-full bg-ink-800 border px-4 py-3 text-sm text-white focus:outline-none focus:border-brand-400 transition-colors font-body [color-scheme:dark] ${errors.authorBirthDate ? 'border-red-500' : 'border-white/10'
+                    }`}
+                />
+                {errors.authorBirthDate && (
+                  <p className="text-xs text-red-400 mt-1 font-body">{errors.authorBirthDate.message as string}</p>
+                )}
+              </div>
+            </div>
+
+            <div className="grid sm:grid-cols-2 gap-6">
               {/* Phone Number */}
               <div>
                 <label className="block text-xs font-display font-bold uppercase tracking-wider text-white mb-2">
@@ -357,6 +396,23 @@ export default function RegisterPage({ onBack }: RegisterPageProps) {
             </div>
 
             <div className="grid sm:grid-cols-2 gap-6">
+              {/* Legal Representative Name */}
+              <div>
+                <label className="block text-xs font-display font-bold uppercase tracking-wider text-white mb-2">
+                  Nombre del Representante Legal / Director (Opcional)
+                </label>
+                <input
+                  type="text"
+                  placeholder="Ej: Juan Pérez"
+                  {...register('legalRepresentativeName')}
+                  className={`w-full bg-ink-800 border px-4 py-3 text-sm text-white focus:outline-none focus:border-brand-400 transition-colors font-body ${errors.legalRepresentativeName ? 'border-red-500' : 'border-white/10'
+                    }`}
+                />
+                {errors.legalRepresentativeName && (
+                  <p className="text-xs text-red-400 mt-1 font-body">{errors.legalRepresentativeName.message as string}</p>
+                )}
+              </div>
+
               {/* Song Name */}
               <div>
                 <label className="block text-xs font-display font-bold uppercase tracking-wider text-white mb-2">
@@ -592,6 +648,128 @@ export default function RegisterPage({ onBack }: RegisterPageProps) {
                   <p className="text-xs text-red-400 mt-1 font-body">{errors.bankCertificateFile.message as string}</p>
                 )}
               </div>
+            </div>
+
+            <div className="grid sm:grid-cols-2 gap-6 pt-4">
+              {/* Minor Authorization */}
+              <div>
+                <label className="block text-xs font-display font-bold uppercase tracking-wider text-white mb-2">
+                  Autorización de Menores (Si aplica)
+                </label>
+                <div className="relative">
+                  <input
+                    type="file"
+                    accept=".pdf,.jpg,.jpeg,.png"
+                    id="minor-auth-input"
+                    className="hidden"
+                    {...register('minorAuthorizationFile', {
+                      onChange: (e) => setMinorAuthName(e.target.files?.[0]?.name || null),
+                    })}
+                  />
+                  <label
+                    htmlFor="minor-auth-input"
+                    className={`flex flex-col items-center justify-center border-2 border-dashed rounded p-4 text-center cursor-pointer hover:border-brand-400 hover:bg-white/[0.01] transition-all ${errors.minorAuthorizationFile ? 'border-red-500' : 'border-white/10'
+                      }`}
+                  >
+                    <FileText className="w-6 h-6 text-ink-500 mb-2" />
+                    <span className="text-xs font-body font-medium text-white truncate max-w-full animate-fade-in">
+                      {minorAuthName || 'Seleccionar archivo (Opcional)'}
+                    </span>
+                    <span className="text-[10px] font-body text-ink-500 mt-1 font-light">PDF o Imagen (Máx. 5MB)</span>
+                  </label>
+                </div>
+                {errors.minorAuthorizationFile && (
+                  <p className="text-xs text-red-400 mt-1 font-body">{errors.minorAuthorizationFile.message as string}</p>
+                )}
+              </div>
+
+              {/* Payment Receipt */}
+              <div>
+                <label className="block text-xs font-display font-bold uppercase tracking-wider text-white mb-2">
+                  Comprobante de Inscripción (Si aplica)
+                </label>
+                <div className="relative">
+                  <input
+                    type="file"
+                    accept=".pdf,.jpg,.jpeg,.png"
+                    id="payment-receipt-input"
+                    className="hidden"
+                    {...register('paymentReceiptFile', {
+                      onChange: (e) => setPaymentReceiptName(e.target.files?.[0]?.name || null),
+                    })}
+                  />
+                  <label
+                    htmlFor="payment-receipt-input"
+                    className={`flex flex-col items-center justify-center border-2 border-dashed rounded p-4 text-center cursor-pointer hover:border-brand-400 hover:bg-white/[0.01] transition-all ${errors.paymentReceiptFile ? 'border-red-500' : 'border-white/10'
+                      }`}
+                  >
+                    <Upload className="w-6 h-6 text-ink-500 mb-2" />
+                    <span className="text-xs font-body font-medium text-white truncate max-w-full animate-fade-in">
+                      {paymentReceiptName || 'Seleccionar archivo (Opcional)'}
+                    </span>
+                    <span className="text-[10px] font-body text-ink-500 mt-1 font-light">PDF o Imagen (Máx. 5MB)</span>
+                  </label>
+                </div>
+                {errors.paymentReceiptFile && (
+                  <p className="text-xs text-red-400 mt-1 font-body">{errors.paymentReceiptFile.message as string}</p>
+                )}
+              </div>
+            </div>
+
+            {/* Checkboxes */}
+            <div className="space-y-4 pt-4 border-t border-white/5">
+              <label className="flex items-start gap-3 cursor-pointer group">
+                <div className="relative flex items-start">
+                  <input
+                    type="checkbox"
+                    {...register('isProfessional')}
+                    className="peer sr-only"
+                  />
+                  <div className="w-5 h-5 border border-white/20 bg-ink-800 rounded-sm peer-checked:bg-brand-500 peer-checked:border-brand-500 transition-all flex items-center justify-center mt-0.5">
+                    <CheckCircle className="w-3.5 h-3.5 text-ink-900 opacity-0 peer-checked:opacity-100 transition-opacity" />
+                  </div>
+                </div>
+                <div>
+                  <p className="text-sm font-body text-white group-hover:text-brand-400 transition-colors">Participación en categoría Profesional (Art. 7 y 15)</p>
+                  <p className="text-xs font-body text-ink-500 mt-0.5">Declaro haber ocupado el primer lugar en versiones anteriores u ostentar el título de categoría profesional.</p>
+                </div>
+              </label>
+
+              <label className="flex items-start gap-3 cursor-pointer group">
+                <div className="relative flex items-start">
+                  <input
+                    type="checkbox"
+                    {...register('hasDisability')}
+                    className="peer sr-only"
+                  />
+                  <div className="w-5 h-5 border border-white/20 bg-ink-800 rounded-sm peer-checked:bg-brand-500 peer-checked:border-brand-500 transition-all flex items-center justify-center mt-0.5">
+                    <CheckCircle className="w-3.5 h-3.5 text-ink-900 opacity-0 peer-checked:opacity-100 transition-opacity" />
+                  </div>
+                </div>
+                <div>
+                  <p className="text-sm font-body text-white group-hover:text-brand-400 transition-colors">Declaro tener una condición de discapacidad (Art. 30)</p>
+                  <p className="text-xs font-body text-ink-500 mt-0.5">Esto se utilizará para justificar inasistencia o exenciones en el desfile folclórico o alborada.</p>
+                </div>
+              </label>
+
+              <label className="flex items-start gap-3 cursor-pointer group">
+                <div className="relative flex items-start">
+                  <input
+                    type="checkbox"
+                    {...register('acceptsTerms')}
+                    className="peer sr-only"
+                  />
+                  <div className={`w-5 h-5 border rounded-sm transition-all flex items-center justify-center mt-0.5 ${errors.acceptsTerms ? 'border-red-500 bg-red-500/10' : 'border-white/20 bg-ink-800 peer-checked:bg-brand-500 peer-checked:border-brand-500'}`}>
+                    <CheckCircle className="w-3.5 h-3.5 text-ink-900 opacity-0 peer-checked:opacity-100 transition-opacity" />
+                  </div>
+                </div>
+                <div>
+                  <p className="text-sm font-body text-white group-hover:text-brand-400 transition-colors">Acepto los términos, condiciones y la política de tratamiento de datos personales (Habeas Data) *</p>
+                  {errors.acceptsTerms && (
+                    <p className="text-xs text-red-400 mt-1 font-body">{errors.acceptsTerms.message as string}</p>
+                  )}
+                </div>
+              </label>
             </div>
 
             {/* Submit Button */}
