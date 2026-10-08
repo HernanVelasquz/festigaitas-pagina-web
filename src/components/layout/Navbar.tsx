@@ -13,6 +13,7 @@ const scrollLinks = [
 
 const pageLinks = [
   { label: 'Concursos', path: '/concursos-de-gaitas', page: 'contests' as const },
+  { label: 'Revista', path: '/revista', page: 'magazine' as const },
   { label: 'Registro Canción Inédita', path: '/register', page: 'register' as const },
   { label: 'Documentos', path: '/documents', page: 'documents' as const },
 ];
