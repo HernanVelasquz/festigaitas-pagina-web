@@ -20,6 +20,8 @@
     "react": "^19.2.7",
     "react-dom": "^19.2.7",
     "react-hook-form": "^7.80.0",
+    "react-pageflip": "^2.0.3",
+    "react-pdf": "^11.0.0",
     "zod": "^4.4.3"
   },
   "devDependencies": {
@@ -27,6 +29,7 @@
     "@tailwindcss/vite": "^4.3.1",
     "@types/react": "^19.2.17",
     "@types/react-dom": "^19.2.3",
+    "@types/react-pdf": "^7.0.0",
     "@vitejs/plugin-react": "^6.0.2",
     "autoprefixer": "^10.5.0",
     "eslint": "^10.5.0",
