@@ -20,13 +20,13 @@ export default function MusicPlayer() {
 
   return (
     <div
-      className={`fixed bottom-6 right-6 z-50 flex flex-col items-end gap-2 transition-all duration-700 ${
+      className={`fixed bottom-3 right-3 md:bottom-6 md:right-6 z-[60] flex flex-col items-end gap-2 transition-all duration-700 origin-bottom-right scale-[0.75] md:scale-100 opacity-80 hover:opacity-100 ${
         visible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4 pointer-events-none'
       }`}
     >
       {/* Expanded label */}
       {expanded && (
-        <div className="flex flex-col gap-1 px-4 py-2 bg-ink-800/90 backdrop-blur border border-white/8 transition-all duration-300">
+        <div className="hidden md:flex flex-col gap-1 px-4 py-2 bg-ink-800/90 backdrop-blur border border-white/8 transition-all duration-300">
           <div className="flex items-center gap-2">
             {/* Animated bars */}
             <div className="flex items-end gap-[3px] h-3">
@@ -56,7 +56,7 @@ export default function MusicPlayer() {
       <div className="flex items-center gap-2">
         {/* Playlist navigation */}
         {firstClick && state !== 'idle' && (
-          <div className="flex items-center gap-1 bg-ink-800/90 backdrop-blur border border-white/8 p-0.5">
+          <div className="hidden md:flex items-center gap-1 bg-ink-800/90 backdrop-blur border border-white/8 p-0.5">
             <button
               onClick={handlePrev}
               className="w-8 h-8 flex items-center justify-center text-ink-400 hover:text-white transition-all duration-200"
