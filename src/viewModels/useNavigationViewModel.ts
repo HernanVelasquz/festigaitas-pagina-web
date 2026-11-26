@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 
-export type Page = 'home' | 'documents' | 'history' | 'register' | 'contests' | 'magazine';
+export type Page = 'home' | 'documents' | 'history' | 'register' | 'contests' | 'magazine' | 'strategic';
 
 export function useNavigationViewModel() {
   const [currentPath, setCurrentPath] = useState<string>(window.location.pathname);
@@ -34,6 +34,8 @@ export function useNavigationViewModel() {
     page = 'contests';
   } else if (currentPath === '/revista') {
     page = 'magazine';
+  } else if (currentPath === '/plataforma-estrategica') {
+    page = 'strategic';
   }
 
   return {

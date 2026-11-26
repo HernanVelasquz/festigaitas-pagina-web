@@ -9,6 +9,7 @@ type ExploreLink =
   | { label: string; path: string; href?: never };
 
 const explore: ExploreLink[] = [
+  { label: 'Plataforma Estratégica', path: '/plataforma-estrategica' },
   { label: 'Programación 2026', href: '#' },
   { label: 'Reglamento Competencia', path: '/concursos-de-gaitas' },
   { label: 'Prensa & Acreditaciones', href: '#' },

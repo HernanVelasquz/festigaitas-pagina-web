@@ -12,6 +12,7 @@ const scrollLinks = [
 ];
 
 const pageLinks = [
+  { label: 'Plataforma', path: '/plataforma-estrategica', page: 'strategic' as const },
   { label: 'Concursos', path: '/concursos-de-gaitas', page: 'contests' as const },
   { label: 'Revista', path: '/revista', page: 'magazine' as const },
   { label: 'Registro Canción Inédita', path: '/register', page: 'register' as const },
