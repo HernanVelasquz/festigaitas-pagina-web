@@ -10,6 +10,7 @@ const HistoryPage = lazy(() => import('./pages/HistoryPage'));
 const RegisterPage = lazy(() => import('./pages/RegisterPage'));
 const ContestsPage = lazy(() => import('./pages/ContestsPage'));
 const MagazinePage = lazy(() => import('./pages/MagazinePage'));
+const StrategicPlatformPage = lazy(() => import('./pages/StrategicPlatformPage'));
 
 function App() {
   const { page, navigate } = useNavigationViewModel();
@@ -31,6 +32,9 @@ function App() {
         {page === 'register' && <RegisterPage onBack={() => navigate('/')} />}
         {page === 'contests' && <ContestsPage onBack={() => navigate('/')} />}
         {page === 'magazine' && <MagazinePage onBack={() => navigate('/')} />}
+        {page === 'strategic' && (
+          <StrategicPlatformPage onBack={() => navigate('/')} onNavigate={navigate} />
+        )}
       </Suspense>
 
       {/* Persistent music player — state survives page navigation */}
